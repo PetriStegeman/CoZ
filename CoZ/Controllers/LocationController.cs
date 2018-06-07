@@ -1,4 +1,5 @@
 ﻿using CoZ.Models.Locations;
+using CoZ.Models.Monsters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +18,8 @@ namespace CoZ.Controllers
             //TODO Code to get the current location from database
             if (result.Monsters[0] != null)
             {
-                return View("/Battle/Index");
+                return RedirectToAction("Index", "Battle", result.Monsters[0]);
+                //return RedirectToAction("Index", "Battle", new Boar());
             }
             return View(result);
         }

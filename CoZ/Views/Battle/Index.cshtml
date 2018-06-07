@@ -5,5 +5,51 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Index</h2>
+<h2>A @Model.Name appeared!</h2>
+<p>The @Model.Name walks around, and hasn't spotted you yet.</p>
+<p>You turn around to walk away, but the sound of your movements pull the @Model.Name's attention.</p>
+<p>The @Model.Name attacks!</p>
 
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+
+<div class="row">
+    <div class="col-md-4">
+        <h2>@Model.Name</h2>
+    </div>
+    <div class="col-md-4">
+        <h2>Level: @Model.Level</h2>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <h2></h2>
+    </div>
+    <div class="col-md-4">
+        <h2>Health Points: @Model.Hp</h2>
+    </div>
+</div>
+
+<br />
+<br />
+
+<div class="row">
+    <div class="col-md-offset-10">
+        <p><a class="btn btn-default" href="">Fight &raquo;</a></p>
+    </div>
+    <div class="col-md-offset-9">
+        <p><a class="btn btn-default" href="">Use Magic &raquo;</a>---------|---------<a class="btn btn-default" href="">Defend &raquo;</a></p>
+    </div>
+    <div class="col-md-offset-10">
+        <p><a class="btn btn-default" href="">Run Away &raquo;</a></p>
+    </div>
+</div>

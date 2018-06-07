@@ -1,11 +1,55 @@
 ﻿@using CoZ.Models.Locations
 @model CoZ.Models.Locations.Location
-@{
-    ViewBag.Title = "Current Location";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-}
+    @{
+        ViewBag.Title = "Current Location";
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }
 
-<h2>You find yourself in @Model.ShortDescription</h2>
+    <h2>You find yourself in @Model.ShortDescription</h2>
 
-<h3>@Model.Description</h3>
+    <h3>@Model.Description</h3>
+
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+
+    <div class="row">
+        <div class="col-md-4">
+            <h2><a class="btn btn-default" href="">Look at your Stats &raquo;</a></h2>
+        </div>
+        <div class="col-md-4">
+            <h2><a class="btn btn-default" href="">Look at your Inventory &raquo;</a></h2>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4">
+            <h2><a class="btn btn-default" href="">Search for Items &raquo;</a></h2>
+        </div>
+        <div class="col-md-4">
+            <h2><a class="btn btn-default" href="">Camp and Rest &raquo;</a></h2>
+        </div>
+    </div>
+
+    <br />
+    <br />
+
+    <div class="row">
+        <div class="col-md-offset-10">
+            <p><a class="btn btn-default" href="">Go North &raquo;</a></p>
+        </div>
+        <div class="col-md-offset-9">
+            <p><a class="btn btn-default" href="">Go West &raquo;</a>-----------|-----------<a class="btn btn-default" href="">Go West &raquo;</a></p>
+        </div>
+        <div class="col-md-offset-10">
+            <p><a class="btn btn-default" href="">Go South &raquo;</a></p>
+        </div>
+    </div>
 

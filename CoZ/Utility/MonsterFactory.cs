@@ -12,13 +12,9 @@ namespace CoZ.Utility
         //20% chance to add Monster to Monsterlist of Location
         public static void CreateMonster(Location location)
         {
-            if (Rng.RandomNumberGenerator(20))
+            if (RngThreadSafe.Next(1, 100) <= 20)
             {
                 location.Monsters[0] = GetMonster();
-                if (Rng.RandomNumberGenerator(10))
-                {
-                    location.Monsters[1] = GetMonster();
-                }
             }
         }
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CoZ.Models.Monsters;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -11,7 +12,10 @@ namespace CoZ.Controllers
         // GET: Battle
         public ActionResult Index()
         {
-            return View();
+            //Tijdelijke boar creator
+            Monster monster = new Boar();
+            //TODO Haal uit de database de current location en daarvan de monster lijst en geef het monster weer
+            return View(monster);
         }
         
         //Redirect the user to the Location view after defeating the monster(s)
@@ -19,7 +23,7 @@ namespace CoZ.Controllers
         {
             //TODO Get current location from database
             //TODO Remove monster(s) from current location list
-            return View("/Location/Index");
+            return RedirectToAction("Index", "Location");
         }
     }
 }
