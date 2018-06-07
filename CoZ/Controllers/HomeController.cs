@@ -15,14 +15,28 @@ namespace CoZ.Controllers
 
         public ActionResult About()
         {
-            ViewBag.Message = "Your application description page.";
+            ViewBag.Message = "Conquest of Zork";
 
             return View();
         }
 
         public ActionResult Contact()
         {
-            ViewBag.Message = "Your contact page.";
+            ViewBag.Message = "Contact page.";
+
+            return View();
+        }
+
+        public ActionResult Manual()
+        {
+            ViewBag.Message = "Game Manual";
+
+            return View();
+        }
+
+        public ActionResult PatchNotes()
+        {
+            ViewBag.Message = "Patch Notes";
 
             return View();
         }
