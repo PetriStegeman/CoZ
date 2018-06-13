@@ -232,7 +232,9 @@
     <Compile Include="Repositories\MonsterContext.cs" />
     <Compile Include="Repositories\UserContext.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="Utility\MapFactory.cs" />
     <Compile Include="Utility\MonsterFactory.cs" />
+    <Compile Include="Utility\MountainFactory.cs" />
     <Compile Include="Utility\RiverFactory.cs" />
     <Compile Include="Utility\RngThreadSafe.cs" />
   </ItemGroup>
