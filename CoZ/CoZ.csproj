@@ -213,8 +213,12 @@
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\Items\Item.cs" />
     <Compile Include="Models\Locations\Forest.cs" />
+    <Compile Include="Models\Locations\Lake.cs" />
     <Compile Include="Models\Locations\Location.cs" />
+    <Compile Include="Models\Locations\Mountain.cs" />
+    <Compile Include="Models\Locations\Ocean.cs" />
     <Compile Include="Models\Locations\Plains.cs" />
+    <Compile Include="Models\Locations\River.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Map.cs" />
     <Compile Include="Models\Monsters\Boar.cs" />
@@ -229,6 +233,7 @@
     <Compile Include="Repositories\UserContext.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Utility\MonsterFactory.cs" />
+    <Compile Include="Utility\RiverFactory.cs" />
     <Compile Include="Utility\RngThreadSafe.cs" />
   </ItemGroup>
   <ItemGroup>
