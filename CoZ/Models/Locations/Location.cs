@@ -12,7 +12,7 @@ namespace CoZ.Models.Locations
         public string Description { get; set; }
         public string ShortDescription { get; set; }
         public bool IsVisited { get; set; }
-        public int altitude { get; set; }
+        public int Altitude { get; set; }
         public Item[] Items { get; set; }
         public Monster[] Monsters { get; set; }
     }

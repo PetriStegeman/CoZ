@@ -1,6 +1,9 @@
 ﻿using System.Data.Entity;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using CoZ.Models.Items;
+using CoZ.Models.Locations;
+using CoZ.Models.Monsters;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 
@@ -18,8 +21,15 @@ namespace CoZ.Models
         }
     }
 
+    //TODO add models voor game
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
+        public IDbSet<Character> Characters { get; set; }
+        public IDbSet<Location> Locations { get; set; }
+        public IDbSet<Monster> Monsters { get; set; }
+        public IDbSet<Item> Items { get; set; }
+        public IDbSet<Map> Maps { get; set; }
+
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)
         {

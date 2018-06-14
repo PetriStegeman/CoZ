@@ -1,4 +1,5 @@
-﻿using CoZ.Models.Locations;
+﻿using CoZ.Models;
+using CoZ.Models.Locations;
 using CoZ.Models.Monsters;
 using System;
 using System.Collections.Generic;
@@ -10,18 +11,46 @@ namespace CoZ.Controllers
 {
     public class LocationController : Controller
     {
-        // GET: Location
-        public ActionResult Index()
+        // GET: Current Location from character by character id
+        public ActionResult Index(int id)
         {
-            //Temporary code to give a location
-            Location result = new Forest();
-            //TODO Code to get the current location from database
+            Location result = null;
+            using (var DbContext = ApplicationDbContext.Create())
+            {
+                IQueryable<Character> characters = DbContext.Characters;
+                Character myChar = FindCharacter(id, characters);
+                result = CopyLocation(myChar.CurrentLocation);
+            }
             if (result.Monsters[0] != null)
             {
                 return RedirectToAction("Index", "Battle", result.Monsters[0]);
-                //return RedirectToAction("Index", "Battle", new Boar());
             }
             return View(result);
+        }
+
+        public Character FindCharacter(int id, IQueryable characters)
+        {
+            Character result = null;
+            foreach (Character c in characters)
+            {
+                if (c.Id == id)
+                {
+                    result = c;
+                }
+            }
+        return result;
+        }
+
+        public Location CopyLocation(Location input)
+        {
+            Location output = new Plains();
+            output.Altitude = input.Altitude;
+            output.Description = input.Description;
+            output.ShortDescription = input.ShortDescription;
+            output.Monsters = input.Monsters;
+            output.Items = input.Items;
+            output.IsVisited = input.IsVisited;
+            return output;
         }
     }
 }

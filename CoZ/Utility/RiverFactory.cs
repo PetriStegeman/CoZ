@@ -9,10 +9,13 @@ namespace CoZ.Utility
 {
     public class RiverFactory
     {
+        //DEZE CLASS IS NIET THREAD SAFE
+        //TODO MAAK THREAD SAFE
+        
         //River Logic Demands:
         //Starts at the source (check)
-        //Searches the neares tile that's of a lower altitude
-        //Isn't allowed to go up in altitude (check)
+        //Searches the neares tile that's of a lower Altitude
+        //Isn't allowed to go up in Altitude (check)
         //Searches for a route to another river, ocean or lake tile (check)
 
         private bool EndNoteFound = false;
@@ -103,7 +106,7 @@ namespace CoZ.Utility
         //Looks if any near tile is a suitable end node and returns all possible paths
         private void SearchNewPaths(int coördinateX, int coördinateY, List<int[]> localPath)
         {
-            var currentAltide = mapHolder.WorldMap[coördinateX, coördinateY].altitude;
+            var currentAltide = mapHolder.WorldMap[coördinateX, coördinateY].Altitude;
             SeekPath(1 + coördinateX, coördinateY, localPath);
             SeekPath(coördinateX - 1, coördinateY, localPath);
             SeekPath(coördinateX, 1 + coördinateY, localPath);
@@ -124,7 +127,7 @@ namespace CoZ.Utility
         {
             if (riverPath.Count < CurrentRiverLenght) // checks the old
             { riverPaths.Remove(riverPath); }
-            if (mapHolder.WorldMap[ArrayConverter(riverPath).Item1, ArrayConverter(riverPath).Item2].altitude > currentRiverAltide) // pakt de lokatie van de map zoals aangegeven in de coördinaten
+            if (mapHolder.WorldMap[ArrayConverter(riverPath).Item1, ArrayConverter(riverPath).Item2].Altitude > currentRiverAltide) // pakt de lokatie van de map zoals aangegeven in de coördinaten
             { riverPaths.Remove(riverPath); } // removes all riverPaths that don't go downward
             if (CheckCoördinateDuplicacy(riverPath))     //checks for dublicate positions in the path
             { riverPaths.Remove(riverPath); }
@@ -158,11 +161,11 @@ namespace CoZ.Utility
         //Looks if the new path is a viable path and adds it to the list if viable
         private void SeekPath(int coördinateX, int coördinateY, List<int[]> oldPath)
         {
-            if ((coördinateX >= 0 && coördinateX < mapHolder.WorldMap.Length) && (coördinateY >= 0 && coördinateY < mapHolder.WorldMap.Rank) && (mapHolder.WorldMap[coördinateX, coördinateY].altitude <= currentRiverAltide)) // checks if the move is invalid (out of bounds or higher altitude)
+            if ((coördinateX >= 0 && coördinateX < mapHolder.WorldMap.Length) && (coördinateY >= 0 && coördinateY < mapHolder.WorldMap.Rank) && (mapHolder.WorldMap[coördinateX, coördinateY].Altitude <= currentRiverAltide)) // checks if the move is invalid (out of bounds or higher Altitude)
             {
                 if ((mapHolder.WorldMap[coördinateX, coördinateY] is River) | (mapHolder.WorldMap[coördinateX, coördinateY] is Ocean) | (mapHolder.WorldMap[coördinateX, coördinateY] is Lake))
                 { EndNoteFound = true; }
-                if (mapHolder.WorldMap[coördinateX, coördinateY].altitude < currentRiverAltide)
+                if (mapHolder.WorldMap[coördinateX, coördinateY].Altitude < currentRiverAltide)
                 { altitudeChanged = true; }
                 int[] newCoördinate = new int[] { coördinateX, coördinateY };
                 List<int[]> newPath = new List<int[]>(oldPath)
