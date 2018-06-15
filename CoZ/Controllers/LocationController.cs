@@ -28,6 +28,69 @@ namespace CoZ.Controllers
             return View(result);
         }
 
+        public ActionResult GoNorth(int id)
+        {
+            Location result = null;
+            using (var DbContext = ApplicationDbContext.Create())
+            {
+                IQueryable<Character> characters = DbContext.Characters;
+                Character myChar = FindCharacter(id, characters);
+                myChar.YCoord += 1;
+                myChar.CurrentLocation = myChar.Map.WorldMap[myChar.XCoord, myChar.YCoord];
+                result = CopyLocation(myChar.CurrentLocation);
+                DbContext.SaveChanges();
+            }
+            return RedirectToAction("Index", result);
+        }
+
+        public ActionResult GoSouth(int id)
+        {
+            Location result = null;
+            using (var DbContext = ApplicationDbContext.Create())
+            {
+                IQueryable<Character> characters = DbContext.Characters;
+                Character myChar = FindCharacter(id, characters);
+                myChar.YCoord -= 1;
+                myChar.CurrentLocation = myChar.Map.WorldMap[myChar.XCoord, myChar.YCoord];
+                result = CopyLocation(myChar.CurrentLocation);
+                DbContext.SaveChanges();
+            }
+            return RedirectToAction("Index", result);
+        }
+
+        public ActionResult GoEast(int id)
+        {
+            Location result = null;
+            using (var DbContext = ApplicationDbContext.Create())
+            {
+                IQueryable<Character> characters = DbContext.Characters;
+                Character myChar = FindCharacter(id, characters);
+                myChar.XCoord += 1;
+                myChar.CurrentLocation = myChar.Map.WorldMap[myChar.XCoord, myChar.YCoord];
+                result = CopyLocation(myChar.CurrentLocation);
+                DbContext.SaveChanges();
+            }
+            return RedirectToAction("Index", result);
+        }
+
+        public ActionResult GoWest(int id)
+        {
+            Location result = null;
+            using (var DbContext = ApplicationDbContext.Create())
+            {
+                IQueryable<Character> characters = DbContext.Characters;
+                Character myChar = FindCharacter(id, characters);
+                myChar.XCoord -= 1;
+                myChar.CurrentLocation = myChar.Map.WorldMap[myChar.XCoord, myChar.YCoord];
+                result = CopyLocation(myChar.CurrentLocation);
+                DbContext.SaveChanges();
+            }
+            return RedirectToAction("Index", result);
+        }
+
+
+        //HELPER METHODS
+        //TODO MAKE REGION SOMETIME
         public Character FindCharacter(int id, IQueryable characters)
         {
             Character result = null;

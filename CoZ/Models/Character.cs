@@ -15,8 +15,9 @@ namespace CoZ.Models
         public Item[] Inventory { get; set; }
         public Location[][] KnownLocations { get; set; }
         public Location CurrentLocation { get; set; }
-        public int xCoord { get; set; }
-        public int yCoord { get; set; }
+        public Map Map { get; set; }
+        public int XCoord { get; set; }
+        public int YCoord { get; set; }
         //Statistics
         public int Experience { get; set; }
         public int Level { get; set; }
