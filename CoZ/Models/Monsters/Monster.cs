@@ -1,4 +1,5 @@
 ﻿using CoZ.Models.Items;
+using CoZ.Utility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,8 +21,7 @@ namespace CoZ.Models.Monsters
         {
             this.Loot = new Item[3];
             //ItemFactory.CreateItem(this);
-            Random rndm = new Random();
-            this.Gold = rndm.Next(1, this.Level * 3);
+            this.Gold = RngThreadSafe.Next(1, this.Level * 3);
         }
     }
 }
