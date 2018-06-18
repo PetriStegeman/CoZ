@@ -13,7 +13,7 @@ namespace CoZ.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "201806181155382_testing"; }
+            get { return "201806181249312_testing"; }
         }
         
         string IMigrationMetadata.Source

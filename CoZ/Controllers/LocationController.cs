@@ -29,6 +29,7 @@ namespace CoZ.Controllers
             return View(result);
         }
 
+        //Thread safe? wait for result from FindCharacter before using myChar
         public ActionResult GoNorth()
         {
             Location result = null;
@@ -36,9 +37,8 @@ namespace CoZ.Controllers
             {
                 string id = User.Identity.GetUserId();
                 Character myChar = FindCharacter(id, DbContext.Characters);
-                Location[][] locations = myChar.Map.WorldMap.ToArray();
                 myChar.YCoord += 1;
-                myChar.CurrentLocation = locations[myChar.XCoord][myChar.YCoord];
+                myChar.CurrentLocation = FindLocation(myChar.XCoord, myChar.YCoord, myChar.Map.WorldMap);
                 result = CopyLocation(myChar.CurrentLocation);
                 DbContext.SaveChanges();
             }
@@ -52,9 +52,8 @@ namespace CoZ.Controllers
             {
                 string id = User.Identity.GetUserId();
                 Character myChar = FindCharacter(id, DbContext.Characters);
-                Location[][] locations = myChar.Map.WorldMap.ToArray();
                 myChar.YCoord -= 1;
-                myChar.CurrentLocation = locations[myChar.XCoord][myChar.YCoord];
+                myChar.CurrentLocation = FindLocation(myChar.XCoord, myChar.YCoord, myChar.Map.WorldMap);
                 result = CopyLocation(myChar.CurrentLocation);
                 DbContext.SaveChanges();
             }
@@ -68,9 +67,8 @@ namespace CoZ.Controllers
             {
                 string id = User.Identity.GetUserId();
                 Character myChar = FindCharacter(id, DbContext.Characters);
-                Location[][] locations = myChar.Map.WorldMap.ToArray();
                 myChar.XCoord += 1;
-                myChar.CurrentLocation = locations[myChar.XCoord][myChar.YCoord];
+                myChar.CurrentLocation = FindLocation(myChar.XCoord, myChar.YCoord, myChar.Map.WorldMap);
                 result = CopyLocation(myChar.CurrentLocation);
                 DbContext.SaveChanges();
             }
@@ -84,9 +82,8 @@ namespace CoZ.Controllers
             {
                 string id = User.Identity.GetUserId();
                 Character myChar = FindCharacter(id, DbContext.Characters);
-                Location[][] locations = myChar.Map.WorldMap.ToArray();
                 myChar.XCoord -= 1;
-                myChar.CurrentLocation = locations[myChar.XCoord][myChar.YCoord];
+                myChar.CurrentLocation = FindLocation(myChar.XCoord, myChar.YCoord, myChar.Map.WorldMap);
                 result = CopyLocation(myChar.CurrentLocation);
                 DbContext.SaveChanges();
             }
@@ -96,23 +93,35 @@ namespace CoZ.Controllers
 
         //HELPER METHODS
         //TODO MAKE REGION SOMETIME
-
+        //Find Character based on UserId string
         public Character FindCharacter(string id, IQueryable<Character> characters)
         {
             Character result = null;
             foreach (Character c in characters)
             {
-                if (c.userId != null)
+                if (c.userId != null && c.userId.Equals(id))
                 {
-                    if (c.userId.Equals(id))
-                    {
-                        result = c;
-                    }
+                    result = c;
                 }
             }
             return result;
         }
 
+        //Find a location based on its x and y coords
+        public Location FindLocation(int x, int y, ICollection<Location> map)
+        {
+            Location result = null;
+            foreach (Location l in map)
+            {
+                if (l != null && l.XCoord == x && l.YCoord == y)
+                {
+                    result = l;
+                }
+            }
+            return result;
+        }
+
+        //Copy the characteristics of a Location from the DB
         public Location CopyLocation(Location input)
         {
             Location output = new Plains();

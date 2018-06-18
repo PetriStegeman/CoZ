@@ -10,6 +10,18 @@ namespace CoZ.Models.Locations
 {
     public class Plains : Location
     {
+        public Plains(int x, int y)
+        {
+            this.XCoord = x;
+            this.YCoord = y;
+            this.Items = new Item[3];
+            this.Description = "You find yourself in rolling plains";
+            this.ShortDescription = "a plains";
+            if (RngThreadSafe.Next(1, 5) == 1)
+            {
+                this.Monsters = new Monster[] { AddMonster() };
+            }
+        }
         public Plains()
         {
             this.Monsters = new Monster[3];

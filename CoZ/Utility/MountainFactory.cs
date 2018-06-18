@@ -1,4 +1,5 @@
-﻿using CoZ.Models;
+﻿/*
+using CoZ.Models;
 using CoZ.Models.Locations;
 using System;
 using System.Collections.Generic;
@@ -127,13 +128,6 @@ namespace CoZ.Utility
             return true;
         }
 
-        //Return a random int between 1 and x
-        //NOT THREADSAFE
-        int RngMountain(int x)
-        {
-            Random rndm = new Random();
-            int result = rndm.Next(1, x);
-            return result;
-        }
     }
 }
+*/

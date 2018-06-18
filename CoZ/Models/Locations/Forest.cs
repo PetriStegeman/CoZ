@@ -10,6 +10,18 @@ namespace CoZ.Models.Locations
 {
     public class Forest : Location
     {
+        public Forest(int x, int y)
+        {
+            this.XCoord = x;
+            this.YCoord = y;
+            this.Items = new Item[3];
+            this.Description = "You find yourself in a forest. ";
+            this.ShortDescription = "a forest";
+            if (RngThreadSafe.Next(1, 5) == 1)
+            {
+                this.Monsters = new Monster[] { AddMonster() };
+            }
+        }
         public Forest()
         {
             this.Items = new Item[3];
