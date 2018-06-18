@@ -12,10 +12,9 @@ namespace CoZ.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public int Gold { get; set; }
-        public Item[] Inventory { get; set; }
-        public Location[][] KnownLocations { get; set; }
-        public Location CurrentLocation { get; set; }
-        public Map Map { get; set; }
+        public virtual ICollection<Item> Inventory { get; set; }
+        public virtual Location CurrentLocation { get; set; }
+        public virtual Map Map { get; set; }
         public int XCoord { get; set; }
         public int YCoord { get; set; }
         //Statistics

@@ -8,6 +8,6 @@ namespace CoZ.Models
     public class User
     {
         public int Id { get; set; }
-        public Character[] Characters { get; set; }
+        public virtual ICollection<Character> Characters { get; set; }
     }
 }

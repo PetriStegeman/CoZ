@@ -21,9 +21,9 @@ namespace CoZ.Controllers
                 Character myChar = FindCharacter(id, characters);
                 result = CopyLocation(myChar.CurrentLocation);
             }
-            if (result.Monsters[0] != null)
+            if (result.Monsters.First<Monster>() != null)
             {
-                return RedirectToAction("Index", "Battle", result.Monsters[0]);
+                return RedirectToAction("Index", "Battle", result.Monsters.First<Monster>());
             }
             return View(result);
         }
@@ -35,8 +35,9 @@ namespace CoZ.Controllers
             {
                 IQueryable<Character> characters = DbContext.Characters;
                 Character myChar = FindCharacter(id, characters);
+                Location[][] locations = myChar.Map.WorldMap.ToArray();
                 myChar.YCoord += 1;
-                myChar.CurrentLocation = myChar.Map.WorldMap[myChar.XCoord, myChar.YCoord];
+                myChar.CurrentLocation = locations[myChar.XCoord][myChar.YCoord];
                 result = CopyLocation(myChar.CurrentLocation);
                 DbContext.SaveChanges();
             }
@@ -50,8 +51,9 @@ namespace CoZ.Controllers
             {
                 IQueryable<Character> characters = DbContext.Characters;
                 Character myChar = FindCharacter(id, characters);
+                Location[][] locations = myChar.Map.WorldMap.ToArray();
                 myChar.YCoord -= 1;
-                myChar.CurrentLocation = myChar.Map.WorldMap[myChar.XCoord, myChar.YCoord];
+                myChar.CurrentLocation = locations[myChar.XCoord][myChar.YCoord];
                 result = CopyLocation(myChar.CurrentLocation);
                 DbContext.SaveChanges();
             }
@@ -65,8 +67,9 @@ namespace CoZ.Controllers
             {
                 IQueryable<Character> characters = DbContext.Characters;
                 Character myChar = FindCharacter(id, characters);
+                Location[][] locations = myChar.Map.WorldMap.ToArray();
                 myChar.XCoord += 1;
-                myChar.CurrentLocation = myChar.Map.WorldMap[myChar.XCoord, myChar.YCoord];
+                myChar.CurrentLocation = locations[myChar.XCoord][myChar.YCoord];
                 result = CopyLocation(myChar.CurrentLocation);
                 DbContext.SaveChanges();
             }
@@ -80,8 +83,9 @@ namespace CoZ.Controllers
             {
                 IQueryable<Character> characters = DbContext.Characters;
                 Character myChar = FindCharacter(id, characters);
+                Location[][] locations = myChar.Map.WorldMap.ToArray();
                 myChar.XCoord -= 1;
-                myChar.CurrentLocation = myChar.Map.WorldMap[myChar.XCoord, myChar.YCoord];
+                myChar.CurrentLocation = locations[myChar.XCoord][myChar.YCoord];
                 result = CopyLocation(myChar.CurrentLocation);
                 DbContext.SaveChanges();
             }

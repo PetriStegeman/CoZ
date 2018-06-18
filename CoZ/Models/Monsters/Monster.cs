@@ -14,7 +14,7 @@ namespace CoZ.Models.Monsters
         public int Hp { get; set; }
         public int Strength { get; set; }
         public int Gold { get; set; }
-        public Item[] Loot { get; set; }
+        public virtual ICollection<Item> Loot { get; set; }
 
         //Random Loot and Random Gold assignment for new creature
         public void MonsterInit()

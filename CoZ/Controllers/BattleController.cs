@@ -53,7 +53,7 @@ namespace CoZ.Controllers
             }
             else if (monsterHp == 0)
             {
-                return View(""); //TODO Loot Screen? Terug naar location? 
+                return View(""); //TODO Loot Screen? Terug naar location? Add daar logic om monster uit lijst te verwijderen
             }
             else return View("Index", id);
         }

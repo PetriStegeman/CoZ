@@ -9,6 +9,7 @@ namespace CoZ.Models
     public class Map
     {
         public int Id { get; set; }
-        public Location[,] WorldMap { get; set; }
+        //public Location[,] WorldMap { get; set; }
+        public ICollection<Location[]> WorldMap { get; set; }
     }
 }
