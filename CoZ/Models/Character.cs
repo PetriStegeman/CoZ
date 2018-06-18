@@ -39,7 +39,7 @@ namespace CoZ.Models
             this.YCoord = 10;
         }
 
-        public Character() { }
+        public Character(){}
 
     }
 }

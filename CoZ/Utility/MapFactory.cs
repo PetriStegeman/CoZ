@@ -44,17 +44,18 @@ namespace CoZ.Utility
 
         public static Map CreateBigMap(string id)
         {
-            Map worldMap = new Map();
-            worldMap.WorldMap = new Collection<Location>();
-            for (int i = 0; i <= 60; i++)
+            Map result = new Map();
+            ICollection<Location> map = new List<Location>();
+            for (int i = 0; i < 60; i++)
             {
                 for (int j = 0; j < 60; j++)
                 {
                     Location location = GetTile(i, j);
-                    worldMap.WorldMap.Add(location);
+                    map.Add(location);
                 }
             }
-            return worldMap;
+            result.WorldMap = map;
+            return result;
         }
 
         private static Location GetTile(int x, int y)
