@@ -9,6 +9,7 @@ namespace CoZ.Models.Locations
 {
     public abstract class Location
     {
+        public int Id { get; set; }
         public string Description { get; set; }
         public string ShortDescription { get; set; }
         public bool IsVisited { get; set; }

@@ -9,6 +9,7 @@ namespace CoZ.Models.Monsters
 {
     public abstract class Monster
     {
+        public int Id { get; set; }
         public string Name { get; set; }
         public int Level { get; set; }
         public int Hp { get; set; }
