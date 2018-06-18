@@ -1,5 +1,6 @@
 ﻿using CoZ.Models;
 using CoZ.Models.Monsters;
+using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System;
 using System.Collections.Generic;
@@ -12,12 +13,13 @@ namespace CoZ.Controllers
     public class BattleController : Controller
     {
         // GET: Battle
-        public ActionResult Index(int id)
+        public ActionResult Index()
         {
             Monster result = null;
             using (var DbContext = ApplicationDbContext.Create())
             {
-                Character myChar = DbContext.Characters.Find(id);
+                string id = User.Identity.GetUserId();
+                Character myChar = DbContext.Characters.Where(c => c.userId == id).First();
                 Monster monster = myChar.CurrentLocation.Monsters.First();
                 result = MonsterCopy(monster);
             }
@@ -33,13 +35,13 @@ namespace CoZ.Controllers
         }
 
         //PartialView implementeren?
-        public ActionResult Attack(int id)
+        public ActionResult Attack()
         {
             int monsterHp = 0;
             int characterHp = 0;
             using (var DbContext = ApplicationDbContext.Create())
             {
-                Character myChar = DbContext.Characters.Find(id);
+                Character myChar = DbContext.Characters.Find();
                 Monster monster = myChar.CurrentLocation.Monsters.First();
                 myChar.CurrentHp -= monster.Strength;
                 monster.Hp -= myChar.Strength;
@@ -55,7 +57,7 @@ namespace CoZ.Controllers
             {
                 return View(""); //TODO Loot Screen? Terug naar location? Add daar logic om monster uit lijst te verwijderen
             }
-            else return View("Index", id);
+            else return View("Index");
         }
 
         //HELPER METHODES

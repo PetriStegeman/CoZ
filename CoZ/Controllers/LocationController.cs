@@ -19,12 +19,13 @@ namespace CoZ.Controllers
             using (var DbContext = ApplicationDbContext.Create())
             {
                 string id = User.Identity.GetUserId();
-                Character myChar = FindCharacter(id, DbContext.Characters);
+                //Character myChar = FindCharacter(id, DbContext.Characters);
+                Character myChar = DbContext.Characters.Where(c => c.userId == id).First();
                 result = CopyLocation(myChar.CurrentLocation);
             }
             if (result.Monsters.Count != 0)
             {
-                return RedirectToAction("Index", "Battle", result.Monsters.First());
+                return RedirectToAction("Index", "Battle");
             }
             return View(result);
         }
@@ -36,9 +37,11 @@ namespace CoZ.Controllers
             using (var DbContext = ApplicationDbContext.Create())
             {
                 string id = User.Identity.GetUserId();
-                Character myChar = FindCharacter(id, DbContext.Characters);
+                //Character myChar = FindCharacter(id, DbContext.Characters);
+                Character myChar = DbContext.Characters.Where(c => c.userId.Equals(id)).First();
                 myChar.YCoord += 1;
-                myChar.CurrentLocation = FindLocation(myChar.XCoord, myChar.YCoord, myChar.Map.WorldMap);
+                //myChar.CurrentLocation = FindLocation(myChar.XCoord, myChar.YCoord, myChar.Map.WorldMap);
+                myChar.CurrentLocation = DbContext.Locations.Where(l => l.XCoord == myChar.XCoord && l.YCoord == myChar.YCoord).First();
                 result = CopyLocation(myChar.CurrentLocation);
                 DbContext.SaveChanges();
             }
