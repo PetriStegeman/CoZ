@@ -52,7 +52,7 @@ namespace CoZ.Utility
             {
                 Location[] location = new Location[60];
                 worldMap.WorldMap.Add(location);
-                for (int j = 0; j <= 60; j++)
+                for (int j = 0; j < 60; j++)
                 {
                     location[j] = GetTile();
                 }
@@ -69,7 +69,7 @@ namespace CoZ.Utility
                 case 2: result = new Plains(); break;
                 case 3: result = new Forest(); break;
                 case 4: result = new Forest(); break;
-                case 5: result = new Forest(); break;
+                default: result = new Forest(); break;
             }
             return result;
         }

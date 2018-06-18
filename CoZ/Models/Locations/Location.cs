@@ -16,5 +16,7 @@ namespace CoZ.Models.Locations
         public int Altitude { get; set; }
         public virtual ICollection<Item> Items { get; set; }
         public virtual ICollection<Monster> Monsters { get; set; }
+
+        public abstract Monster AddMonster();
     }
 }

@@ -12,7 +12,7 @@ namespace CoZ.Controllers
     public class LocationController : Controller
     {
         // GET: Current Location from character by character id
-        public ActionResult Index(int id)
+        public ActionResult Index(int? id)
         {
             Location result = null;
             using (var DbContext = ApplicationDbContext.Create())
@@ -28,7 +28,7 @@ namespace CoZ.Controllers
             return View(result);
         }
 
-        public ActionResult GoNorth(int id)
+        public ActionResult GoNorth(int? id)
         {
             Location result = null;
             using (var DbContext = ApplicationDbContext.Create())
@@ -44,7 +44,7 @@ namespace CoZ.Controllers
             return RedirectToAction("Index", result);
         }
 
-        public ActionResult GoSouth(int id)
+        public ActionResult GoSouth(int? id)
         {
             Location result = null;
             using (var DbContext = ApplicationDbContext.Create())
@@ -60,7 +60,7 @@ namespace CoZ.Controllers
             return RedirectToAction("Index", result);
         }
 
-        public ActionResult GoEast(int id)
+        public ActionResult GoEast(int? id)
         {
             Location result = null;
             using (var DbContext = ApplicationDbContext.Create())
@@ -76,7 +76,7 @@ namespace CoZ.Controllers
             return RedirectToAction("Index", result);
         }
 
-        public ActionResult GoWest(int id)
+        public ActionResult GoWest(int? id)
         {
             Location result = null;
             using (var DbContext = ApplicationDbContext.Create())
@@ -95,7 +95,7 @@ namespace CoZ.Controllers
 
         //HELPER METHODS
         //TODO MAKE REGION SOMETIME
-        public Character FindCharacter(int id, IQueryable characters)
+        public Character FindCharacter(int? id, IQueryable characters)
         {
             Character result = null;
             foreach (Character c in characters)

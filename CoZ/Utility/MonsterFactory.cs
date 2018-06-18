@@ -1,4 +1,5 @@
-﻿using CoZ.Models.Locations;
+﻿/*
+using CoZ.Models.Locations;
 using CoZ.Models.Monsters;
 using System;
 using System.Collections.Generic;
@@ -28,3 +29,4 @@ namespace CoZ.Utility
         }
     }
 }
+*/
