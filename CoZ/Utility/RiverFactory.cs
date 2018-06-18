@@ -1,4 +1,4 @@
-﻿using CoZ.Models;
+﻿/*using CoZ.Models;
 using CoZ.Models.Locations;
 using System;
 using System.Collections.Generic;
@@ -29,12 +29,12 @@ namespace CoZ.Utility
         public void CreateRiver(int coördinateX, int coördinateY, Map map)
         {
             List<int[]> FinalRiverPath = FindRiverPath(coördinateX, coördinateY, map);
-
+            Location[][] worldMap = map.WorldMap.ToArray();
             foreach (int[] coördinate in FinalRiverPath)
             {
                 coördinateX = coördinate[0];
                 coördinateY = coördinate[1];
-                map.WorldMap[coördinateX, coördinateY] = new River();
+                worldMap[coördinateX, coördinateY] = new River();
             }
 
             CleanUp();
@@ -188,3 +188,4 @@ namespace CoZ.Utility
         }
     }
 }
+*/

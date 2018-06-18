@@ -14,7 +14,7 @@ namespace CoZ.Utility
         {
             if (RngThreadSafe.Next(1, 100) <= 20)
             {
-                location.Monsters[0] = GetMonster();
+                location.Monsters.Add(GetMonster());
             }
         }
 

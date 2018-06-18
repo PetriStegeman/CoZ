@@ -14,18 +14,19 @@ namespace CoZ.Utility
         //TODO MAKE WORK 
         void CreateMountainRange(int x, int y, Map map)
         {
-            map.WorldMap[x, y] = new Mountain();                     //Create starting tile
+            Location[][] worldMap = map.WorldMap.ToArray();
+            worldMap[x][y] = new Mountain();                     //Create starting tile
             List<Location> mountains = new List<Location>();
-            mountains.Add(map.WorldMap[x, y]);                       //Add starting tile to list of whole mountain range
+            mountains.Add(worldMap[x][y]);                       //Add starting tile to list of whole mountain range
             for (int i = 0; i < RngMountain(4); i++)                //Mountain range will be a length of 1-4, decided by rng helper method RngMountain
             {
-                NextTile(mountains, map);                           //Select the next tile that will be used as the next starting point
+                NextTile(mountains, worldMap);                           //Select the next tile that will be used as the next starting point
             }
             //AddFoothills(mountains, map);                         //Add Foothills surrounding every mountain tile
         }
 
         //Select the next base tile the mountainrange will expand from
-        void NextTile(List<Location> mountains, Map map)
+        void NextTile(List<Location> mountains, Location[][] map)
         {
             Location location = null;
             switch (RngMountain(mountains.Count))               //Let the mountain range expand from a random mountain that already belongs to the mountain range
@@ -50,13 +51,13 @@ namespace CoZ.Utility
         }
 
         //Find the coordinates of the tile that the mountainrange will expand from and call the method to add a mountain from that position
-        void CoordFinder(Location location, List<Location> mountains, Map map)
+        void CoordFinder(Location location, List<Location> mountains, Location[][] map)
         {
-            for (int i = 0; i < map.WorldMap.Length; i++)
+            for (int i = 0; i < map.Length; i++)
             {
-                for (int j = 0; j < map.WorldMap.Rank; j++)
+                for (int j = 0; j < map.Rank; j++)
                 {
-                    if (map.WorldMap[i, j] == location)
+                    if (map[i][j] == location)
                     {
                         AddMountain(i, j, mountains, map);          //Use the coordinates of the found location and use them to add a mountain on an adjacent tile
                     }
@@ -65,7 +66,7 @@ namespace CoZ.Utility
         }
 
         //randomly select a location surrounding the tile you expand from, and make sure it does not already belong to the mountain range
-        void AddMountain(int x, int y, List<Location> mountains, Map map)
+        void AddMountain(int x, int y, List<Location> mountains, Location[][] map)
         {
             switch (RngMountain(4))                                         //1 in 4 random number
             {
@@ -98,16 +99,16 @@ namespace CoZ.Utility
         }
 
         //Return true and add mountain if it can be added to the mountain range
-        bool AddMountainCheck(int x, int y, List<Location> mountains, Map map)
+        bool AddMountainCheck(int x, int y, List<Location> mountains, Location[][] map)
         {
-            if (x < 0 || x >= map.WorldMap.Length || y < 0 || y >= map.WorldMap.Rank)
+            if (x < 0 || x >= map.Length || y < 0 || y >= map.Rank)
             {
                 return false;                                           //Prevent indexoutofbounds exception by not allowing the action of the index is out of bounds
             }
-            else if (MountainChecker(mountains, map.WorldMap[x, y]))     //If the potential mountain tile is not part of the mountain range return true
+            else if (MountainChecker(mountains, map[x][y]))     //If the potential mountain tile is not part of the mountain range return true
             {
-                map.WorldMap[x, y] = new Mountain();                     //Add a mountain to the map and the mountains list.
-                mountains.Add(map.WorldMap[x, y]);
+                map[x][y] = new Mountain();                     //Add a mountain to the map and the mountains list.
+                mountains.Add(map[x][y]);
                 return true;
             }
             else return false;                                           //Returns false if no mountain is added and the tile can not be extended unto

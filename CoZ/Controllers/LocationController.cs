@@ -23,7 +23,7 @@ namespace CoZ.Controllers
             }
             if (result.Monsters.First<Monster>() != null)
             {
-                return RedirectToAction("Index", "Battle", result.Monsters.First<Monster>());
+                return RedirectToAction("Index", "Battle", result.Monsters.First());
             }
             return View(result);
         }

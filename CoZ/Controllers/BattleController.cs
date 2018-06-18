@@ -18,7 +18,7 @@ namespace CoZ.Controllers
             using (var DbContext = ApplicationDbContext.Create())
             {
                 Character myChar = DbContext.Characters.Find(id);
-                Monster monster = DbContext.Characters.Find(id).CurrentLocation.Monsters[0];
+                Monster monster = myChar.CurrentLocation.Monsters.First();
                 result = MonsterCopy(monster);
             }
             return View(result);
@@ -40,7 +40,7 @@ namespace CoZ.Controllers
             using (var DbContext = ApplicationDbContext.Create())
             {
                 Character myChar = DbContext.Characters.Find(id);
-                Monster monster = DbContext.Characters.Find(id).CurrentLocation.Monsters[0];
+                Monster monster = myChar.CurrentLocation.Monsters.First();
                 myChar.CurrentHp -= monster.Strength;
                 monster.Hp -= myChar.Strength;
                 monsterHp = monster.Hp;
