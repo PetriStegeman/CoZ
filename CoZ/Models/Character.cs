@@ -10,8 +10,8 @@ namespace CoZ.Models
 {
     public class Character
     {
-        public int Id { get; set; }
-        public string userId { get; set; }
+        public int CharacterId { get; set; }
+        public string UserId { get; set; }
         public string Name { get; set; }
         public int Gold { get; set; }
         public virtual ICollection<Item> Inventory { get; set; }
@@ -33,7 +33,7 @@ namespace CoZ.Models
         public Character(string id)
         {
             this.Map = MapFactory.CreateBigMap(id);
-            this.userId = id;
+            this.UserId = id;
             this.CurrentLocation = new StartingLocation();
             this.XCoord = 10;
             this.YCoord = 10;

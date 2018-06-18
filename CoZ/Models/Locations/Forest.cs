@@ -14,22 +14,22 @@ namespace CoZ.Models.Locations
         {
             this.XCoord = x;
             this.YCoord = y;
-            this.Items = new Item[3];
+            this.Items = new List<Item>();
             this.Description = "You find yourself in a forest. ";
             this.ShortDescription = "a forest";
             if (RngThreadSafe.Next(1, 5) == 1)
             {
-                this.Monsters = new Monster[] { AddMonster() };
+                this.Monsters = new List<Monster>() { AddMonster() };
             }
         }
         public Forest()
         {
-            this.Items = new Item[3];
+            this.Items = new List<Item>();
             this.Description = "You find yourself in a forest. ";
             this.ShortDescription = "a forest";
             if (RngThreadSafe.Next(1, 5)==1)
             {
-                this.Monsters = new Monster[] {AddMonster()};
+                this.Monsters = new List<Monster>(){AddMonster()};
             }
         }
 

@@ -19,8 +19,7 @@ namespace CoZ.Controllers
             using (var DbContext = ApplicationDbContext.Create())
             {
                 string id = User.Identity.GetUserId();
-                //Character myChar = FindCharacter(id, DbContext.Characters);
-                Character myChar = DbContext.Characters.Where(c => c.userId == id).First();
+                Character myChar = DbContext.Characters.Where(c => c.UserId == id).First();
                 result = CopyLocation(myChar.CurrentLocation);
             }
             if (result.Monsters.Count != 0)
@@ -37,10 +36,8 @@ namespace CoZ.Controllers
             using (var DbContext = ApplicationDbContext.Create())
             {
                 string id = User.Identity.GetUserId();
-                //Character myChar = FindCharacter(id, DbContext.Characters);
-                Character myChar = DbContext.Characters.Where(c => c.userId.Equals(id)).First();
+                Character myChar = DbContext.Characters.Where(c => c.UserId.Equals(id)).First();
                 myChar.YCoord += 1;
-                //myChar.CurrentLocation = FindLocation(myChar.XCoord, myChar.YCoord, myChar.Map.WorldMap);
                 myChar.CurrentLocation = DbContext.Locations.Where(l => l.XCoord == myChar.XCoord && l.YCoord == myChar.YCoord).First();
                 result = CopyLocation(myChar.CurrentLocation);
                 DbContext.SaveChanges();
@@ -54,9 +51,9 @@ namespace CoZ.Controllers
             using (var DbContext = ApplicationDbContext.Create())
             {
                 string id = User.Identity.GetUserId();
-                Character myChar = FindCharacter(id, DbContext.Characters);
+                Character myChar = DbContext.Characters.Where(c => c.UserId.Equals(id)).First();
                 myChar.YCoord -= 1;
-                myChar.CurrentLocation = FindLocation(myChar.XCoord, myChar.YCoord, myChar.Map.WorldMap);
+                myChar.CurrentLocation = DbContext.Locations.Where(l => l.XCoord == myChar.XCoord && l.YCoord == myChar.YCoord).First();
                 result = CopyLocation(myChar.CurrentLocation);
                 DbContext.SaveChanges();
             }
@@ -69,9 +66,9 @@ namespace CoZ.Controllers
             using (var DbContext = ApplicationDbContext.Create())
             {
                 string id = User.Identity.GetUserId();
-                Character myChar = FindCharacter(id, DbContext.Characters);
+                Character myChar = DbContext.Characters.Where(c => c.UserId.Equals(id)).First();
                 myChar.XCoord += 1;
-                myChar.CurrentLocation = FindLocation(myChar.XCoord, myChar.YCoord, myChar.Map.WorldMap);
+                myChar.CurrentLocation = DbContext.Locations.Where(l => l.XCoord == myChar.XCoord && l.YCoord == myChar.YCoord).First();
                 result = CopyLocation(myChar.CurrentLocation);
                 DbContext.SaveChanges();
             }
@@ -84,44 +81,13 @@ namespace CoZ.Controllers
             using (var DbContext = ApplicationDbContext.Create())
             {
                 string id = User.Identity.GetUserId();
-                Character myChar = FindCharacter(id, DbContext.Characters);
+                Character myChar = DbContext.Characters.Where(c => c.UserId.Equals(id)).First();
                 myChar.XCoord -= 1;
-                myChar.CurrentLocation = FindLocation(myChar.XCoord, myChar.YCoord, myChar.Map.WorldMap);
+                myChar.CurrentLocation = DbContext.Locations.Where(l => l.XCoord == myChar.XCoord && l.YCoord == myChar.YCoord).First();
                 result = CopyLocation(myChar.CurrentLocation);
                 DbContext.SaveChanges();
             }
             return RedirectToAction("Index", result);
-        }
-
-
-        //HELPER METHODS
-        //TODO MAKE REGION SOMETIME
-        //Find Character based on UserId string
-        public Character FindCharacter(string id, IQueryable<Character> characters)
-        {
-            Character result = null;
-            foreach (Character c in characters)
-            {
-                if (c.userId != null && c.userId.Equals(id))
-                {
-                    result = c;
-                }
-            }
-            return result;
-        }
-
-        //Find a location based on its x and y coords
-        public Location FindLocation(int x, int y, ICollection<Location> map)
-        {
-            Location result = null;
-            foreach (Location l in map)
-            {
-                if (l != null && l.XCoord == x && l.YCoord == y)
-                {
-                    result = l;
-                }
-            }
-            return result;
         }
 
         //Copy the characteristics of a Location from the DB

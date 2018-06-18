@@ -14,7 +14,7 @@ namespace CoZ.Models.Locations
         {
             this.XCoord = x;
             this.YCoord = y;
-            this.Items = new Item[3];
+            this.Items = new List<Item>();
             this.Description = "You find yourself in rolling plains";
             this.ShortDescription = "a plains";
             if (RngThreadSafe.Next(1, 5) == 1)

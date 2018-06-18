@@ -9,7 +9,7 @@ namespace CoZ.Models.Locations
 {
     public abstract class Location
     {
-        public int Id { get; set; }
+        public int LocationId { get; set; }
         public int XCoord { get; set; }
         public int YCoord { get; set; }
         public string Description { get; set; }
@@ -18,6 +18,7 @@ namespace CoZ.Models.Locations
         public int Altitude { get; set; }
         public virtual ICollection<Item> Items { get; set; }
         public virtual ICollection<Monster> Monsters { get; set; }
+        //public virtual Character Character { get; set; }
 
         public abstract Monster AddMonster();
         //public abstract Item AddItem();

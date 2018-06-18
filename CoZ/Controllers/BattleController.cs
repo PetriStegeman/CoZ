@@ -1,4 +1,5 @@
 ﻿using CoZ.Models;
+using CoZ.Models.Locations;
 using CoZ.Models.Monsters;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
@@ -19,9 +20,17 @@ namespace CoZ.Controllers
             using (var DbContext = ApplicationDbContext.Create())
             {
                 string id = User.Identity.GetUserId();
-                Character myChar = DbContext.Characters.Where(c => c.userId == id).First();
-                Monster monster = myChar.CurrentLocation.Monsters.First();
-                result = MonsterCopy(monster);
+                Character myChar = DbContext.Characters.Where(c => c.UserId == id).First();
+                Location currentLocation = DbContext.Locations.Where(l => l.XCoord == myChar.XCoord && l.YCoord == myChar.YCoord).First();
+                if (DbContext.Monsters.Where(c => c.Location.LocationId == currentLocation.LocationId).Count() != 0)
+                {
+                    Monster monster = DbContext.Monsters.Where(c => c.Location.LocationId == currentLocation.LocationId).First();
+                    result = MonsterCopy(monster);
+                }
+            }
+            if (result == null)
+            {
+                RedirectToAction("Index", "Location");
             }
             return View(result);
         }
