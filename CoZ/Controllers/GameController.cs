@@ -1,8 +1,10 @@
 ﻿using CoZ.Models;
 using CoZ.Models.Locations;
 using CoZ.Utility;
+using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -12,28 +14,22 @@ namespace CoZ.Controllers
     public class GameController : Controller
     {
         // GET: Game
-        public ActionResult Index(int? id)
+        public ActionResult Index()
         {
-            return View(id);
+            return View();
         }
 
         //Generate data to start a new game
-        public ActionResult Create(int? id)
+        public ActionResult Create()
         {
-            int charId = 0;
             using (var DbContext = ApplicationDbContext.Create())
             {
-                Character character = new Character();
-                character.Map = MapFactory.CreateBigMap();
-                Location[][] locations = character.Map.WorldMap.ToArray();
-                character.CurrentLocation = locations[21][19];
-                character.XCoord = 21;
-                character.YCoord = 19;
-                charId = character.Id;
+                string id = User.Identity.GetUserId();
+                Character character = new Character(id);
                 DbContext.Characters.Add(character);
                 DbContext.SaveChanges();
             }
-            return RedirectToAction("Index", "Location", charId);
+            return RedirectToAction("Index", "Location");
         }
     }
 }

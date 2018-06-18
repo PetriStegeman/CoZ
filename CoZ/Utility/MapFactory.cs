@@ -10,7 +10,7 @@ namespace CoZ.Utility
 {
     public class MapFactory
     {
-        public static Map CreateSmallMap()
+        public static Map CreateSmallMap(string id)
         {
             Map worldMap = new Map();
             worldMap.WorldMap = new Collection<Location[]>();
@@ -27,7 +27,7 @@ namespace CoZ.Utility
         }
 
         //Generate a 2D array that functions as a map, 40x40
-        public static Map CreateMediumMap()
+        public static Map CreateMediumMap(string id)
         {
             Map worldMap = new Map();
             worldMap.WorldMap = new Collection<Location[]>();
@@ -44,7 +44,7 @@ namespace CoZ.Utility
         }
 
         //Generate a 2D array that functions as a map, 60x60
-        public static Map CreateBigMap()
+        public static Map CreateBigMap(string id)
         {
             Map worldMap = new Map();
             worldMap.WorldMap = new Collection<Location[]>();
