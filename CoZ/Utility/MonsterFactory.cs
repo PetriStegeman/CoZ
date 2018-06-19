@@ -1,4 +1,5 @@
-﻿using CoZ.Models.Locations;
+﻿/*
+using CoZ.Models.Locations;
 using CoZ.Models.Monsters;
 using System;
 using System.Collections.Generic;
@@ -14,7 +15,7 @@ namespace CoZ.Utility
         {
             if (RngThreadSafe.Next(1, 100) <= 20)
             {
-                location.Monsters[0] = GetMonster();
+                location.Monsters.Add(GetMonster());
             }
         }
 
@@ -28,3 +29,4 @@ namespace CoZ.Utility
         }
     }
 }
+*/

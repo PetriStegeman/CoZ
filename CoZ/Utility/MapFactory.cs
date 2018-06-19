@@ -2,6 +2,7 @@
 using CoZ.Models.Locations;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Web;
 
@@ -9,64 +10,64 @@ namespace CoZ.Utility
 {
     public class MapFactory
     {
-        public static Map CreateSmallMap()
+        public static Map CreateSmallMap(string id)
         {
             Map worldMap = new Map();
-            worldMap.WorldMap = new Location[20, 20];
-            for (int i = 0; i < worldMap.WorldMap.Length; i++)
+            worldMap.WorldMap = new Collection<Location>();
+            for (int i = 0; i <= 20; i++)
             {
-                for (int j = 0; j < worldMap.WorldMap.Length; j++)
+                for (int j = 0; j < 20; j++)
                 {
-
-                    worldMap.WorldMap[i, j] = GetTile();
+                    Location location = GetTile(i, j);
+                    worldMap.WorldMap.Add(location);
                 }
             }
             return worldMap;
         }
 
-        //Generate a 2D array that functions as a map, 40x40
-        public static Map CreateMediumMap()
+        public static Map CreateMediumMap(string id)
         {
-            Map worldMap = new Map();
-            worldMap.WorldMap = new Location[40, 40];
-            for (int i = 0; i < worldMap.WorldMap.Length; i++)
             {
-                for (int j = 0; j < worldMap.WorldMap.Length; j++)
+                Map worldMap = new Map();
+                worldMap.WorldMap = new Collection<Location>();
+                for (int i = 0; i <= 40; i++)
                 {
-
-                    worldMap.WorldMap[i, j] = GetTile();
+                    for (int j = 0; j < 40; j++)
+                    {
+                        Location location = GetTile(i, j);
+                        worldMap.WorldMap.Add(location);
+                    }
                 }
+                return worldMap;
             }
-            return worldMap;
         }
 
-        //Generate a 2D array that functions as a map, 60x60
-        public static Map CreateBigMap()
+        public static Map CreateBigMap(string id)
         {
-            Map worldMap = new Map();
-            worldMap.WorldMap = new Location[60, 60];
-            for (int i = 0; i < worldMap.WorldMap.Length; i++)
+            Map result = new Map();
+            ICollection<Location> map = new List<Location>();
+            for (int i = 0; i < 6; i++)
             {
-                for (int j = 0; j < worldMap.WorldMap.Length; j++)
+                for (int j = 0; j < 6; j++)
                 {
-
-                    worldMap.WorldMap[i, j] = GetTile();
+                    Location location = GetTile(i, j);
+                    map.Add(location);
                 }
             }
-            return worldMap;
+            result.WorldMap = map;
+            return result;
         }
 
-        private static Location GetTile()
+        private static Location GetTile(int x, int y)
         {
             Location result = null;
-            Random rnd = new Random();
-            switch (rnd.Next(1, 5))
+            switch (RngThreadSafe.Next(1,5))
             {
-                case 1: result = new Forest(); break;
-                case 2: result = new Forest(); break;
-                case 3: result = new Forest(); break;
-                case 4: result = new Forest(); break;
-                case 5: result = new Forest(); break;
+                case 1: result = new Forest(x, y); break;
+                case 2: result = new Plains(x, y); break;
+                case 3: result = new Forest(x, y); break;
+                case 4: result = new Forest(x, y); break;
+                default: result = new Forest(x, y); break;
             }
             return result;
         }

@@ -1,5 +1,6 @@
 ﻿using CoZ.Models.Items;
 using CoZ.Models.Locations;
+using CoZ.Utility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,13 +10,12 @@ namespace CoZ.Models
 {
     public class Character
     {
-        public int Id { get; set; }
+        public int CharacterId { get; set; }
+        public string UserId { get; set; }
         public string Name { get; set; }
         public int Gold { get; set; }
-        public Item[] Inventory { get; set; }
-        public Location[][] KnownLocations { get; set; }
-        public Location CurrentLocation { get; set; }
-        public Map Map { get; set; }
+        public virtual ICollection<Item> Inventory { get; set; }
+        public virtual Map Map { get; set; }
         public int XCoord { get; set; }
         public int YCoord { get; set; }
         //Statistics
@@ -28,5 +28,18 @@ namespace CoZ.Models
         public int Strength { get; set; }
         public int Magic { get; set; }
         public int Insanity { get; set; }
+
+        public Character(string id)
+        {
+            this.Map = MapFactory.CreateBigMap(id);
+            this.UserId = id;
+            this.XCoord = 10;
+            this.YCoord = 10;
+            this.CurrentHp = 10;
+            this.MaxHp = 10;
+            this.Strength = this.Level + 3;
+        }
+
+        public Character(){}
     }
 }
