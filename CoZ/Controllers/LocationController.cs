@@ -93,6 +93,18 @@ namespace CoZ.Controllers
             return RedirectToAction("Index", result);
         }
 
+        public ActionResult Camp()
+        {
+            using (var DbContext = ApplicationDbContext.Create())
+            {
+                string id = User.Identity.GetUserId();
+                Character myChar = DbContext.Characters.Where(c => c.UserId.Equals(id)).First();
+                myChar.CurrentHp = myChar.MaxHp;
+                DbContext.SaveChanges();
+            }
+            return View();
+        }
+
         //Copy the characteristics of a Location from the DB
         public Location CopyLocation(Location input)
         {

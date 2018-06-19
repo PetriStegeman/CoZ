@@ -36,10 +36,16 @@ namespace CoZ.Controllers
         }
         
         //Redirect the user to the Location view after defeating the monster(s)
-        public ActionResult ReDirect()
+        public ActionResult RunAWay()
         {
-            //TODO Get current location from database
-            //TODO Remove monster(s) from current location list
+            using (var DbContext = ApplicationDbContext.Create())
+            {
+                string id = User.Identity.GetUserId();
+                Character myChar = DbContext.Characters.Where(c => c.UserId == id).First();
+                Location currentLocation = DbContext.Locations.Where(l => l.XCoord == myChar.XCoord && l.YCoord == myChar.YCoord).First();
+                currentLocation.Monsters.Clear();
+                DbContext.SaveChanges();
+            }
             return RedirectToAction("Index", "Location");
         }
 
@@ -50,7 +56,8 @@ namespace CoZ.Controllers
             int characterHp = 0;
             using (var DbContext = ApplicationDbContext.Create())
             {
-                Character myChar = DbContext.Characters.Find();
+                string id = User.Identity.GetUserId();
+                Character myChar = DbContext.Characters.Where(c => c.UserId == id).First();
                 Location currentLocation = DbContext.Locations.Where(l => l.XCoord == myChar.XCoord && l.YCoord == myChar.YCoord).First();
                 Monster monster = DbContext.Monsters.Where(c => c.Location.LocationId == currentLocation.LocationId).First();
                 myChar.CurrentHp -= monster.Strength;
@@ -59,15 +66,61 @@ namespace CoZ.Controllers
                 characterHp = myChar.CurrentHp;
                 DbContext.SaveChanges();
             }
-            if (characterHp == 0)
+            if (characterHp <= 0)
             {
-                return RedirectToAction(""); //TODO Game over screen
+                return View("GameOver"); 
             }
-            else if (monsterHp == 0)
+            else if (monsterHp <= 0)
             {
-                return View(""); //TODO Loot Screen? Terug naar location? Add daar logic om monster uit lijst te verwijderen
+                return RedirectToAction("Victory");
             }
-            else return View("Index");
+            else return RedirectToAction("Index");
+        }
+
+        public ActionResult Victory()
+        {
+            Monster result = null;
+            using (var DbContext = ApplicationDbContext.Create())
+            {
+                string id = User.Identity.GetUserId();
+                Character myChar = DbContext.Characters.Where(c => c.UserId == id).First();
+                Location currentLocation = DbContext.Locations.Where(l => l.XCoord == myChar.XCoord && l.YCoord == myChar.YCoord).First();
+                Monster monster = DbContext.Monsters.Where(c => c.Location.LocationId == currentLocation.LocationId).First();
+                myChar.Gold += monster.Gold;
+                myChar.Experience += monster.Level;
+                result = MonsterCopy(monster);
+                currentLocation.Monsters.Clear();
+                DbContext.SaveChanges();
+            }
+            return View(result);
+        }
+
+        public ActionResult GameOver()
+        {
+            return View();
+        }
+
+        public ActionResult LevelUp()
+        {
+            bool levelUp = false;
+            using (var DbContext = ApplicationDbContext.Create())
+            {
+                string id = User.Identity.GetUserId();
+                Character myChar = DbContext.Characters.Where(c => c.UserId == id).First();
+                Location currentLocation = DbContext.Locations.Where(l => l.XCoord == myChar.XCoord && l.YCoord == myChar.YCoord).First();
+                if (myChar.Experience > (myChar.Level * 5))
+                {
+                    levelUp = true;
+                    myChar.Experience = 0;
+                    myChar.Level += 1;
+                }
+                DbContext.SaveChanges();
+            }
+            if (levelUp == true)
+            {
+                return View();
+            }
+            else return RedirectToAction("Index", "Location");
         }
 
         //HELPER METHODES

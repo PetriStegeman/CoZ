@@ -299,6 +299,10 @@
     <Content Include="Views\Location\Index.cshtml" />
     <Content Include="Views\Battle\Index.cshtml" />
     <Content Include="Views\Game\Index.cshtml" />
+    <Content Include="Views\Battle\GameOver.cshtml" />
+    <Content Include="Views\Battle\Victory.cshtml" />
+    <Content Include="Views\Battle\LevelUp.cshtml" />
+    <Content Include="Views\Location\Camp.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

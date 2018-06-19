@@ -1,0 +1,38 @@
+﻿@using CoZ.Models.Monsters
+@model CoZ.Models.Monsters.Monster
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>You have defeated the @Model.Name !</h2>
+
+
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+
+<div class="row">
+    <div class="col-md-4">
+        <h2>You have gained @Model.Level Experience!</h2>
+    </div>
+    <div class="col-md-4">
+        <h2>You have found @Model.Gold Gold!</h2>
+    </div>
+</div>
+
+<br />
+<br />
+
+<div class="row">
+    <div class="col-md-offset-10">
+        <p><a class="btn btn-default" href="/Battle/LevelUp">Continue your journey &raquo;</a></p>
+    </div>
+</div>

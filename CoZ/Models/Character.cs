@@ -35,6 +35,9 @@ namespace CoZ.Models
             this.UserId = id;
             this.XCoord = 10;
             this.YCoord = 10;
+            this.CurrentHp = 10;
+            this.MaxHp = 10;
+            this.Strength = this.Level + 3;
         }
 
         public Character(){}
