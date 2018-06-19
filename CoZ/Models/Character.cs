@@ -15,7 +15,6 @@ namespace CoZ.Models
         public string Name { get; set; }
         public int Gold { get; set; }
         public virtual ICollection<Item> Inventory { get; set; }
-        public virtual Location CurrentLocation { get; set; }
         public virtual Map Map { get; set; }
         public int XCoord { get; set; }
         public int YCoord { get; set; }
@@ -34,12 +33,10 @@ namespace CoZ.Models
         {
             this.Map = MapFactory.CreateBigMap(id);
             this.UserId = id;
-            this.CurrentLocation = new StartingLocation();
             this.XCoord = 10;
             this.YCoord = 10;
         }
 
         public Character(){}
-
     }
 }

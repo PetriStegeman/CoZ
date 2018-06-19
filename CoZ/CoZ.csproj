@@ -204,9 +204,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201806181745173_tesdttestsd.cs" />
-    <Compile Include="Migrations\201806181745173_tesdttestsd.Designer.cs">
-      <DependentUpon>201806181745173_tesdttestsd.cs</DependentUpon>
+    <Compile Include="Migrations\201806190753092_foreignmap.cs" />
+    <Compile Include="Migrations\201806190753092_foreignmap.Designer.cs">
+      <DependentUpon>201806190753092_foreignmap.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -214,6 +214,7 @@
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\Items\Item.cs" />
     <Compile Include="Models\Items\Sword.cs" />
+    <Compile Include="Models\Locations\EmptyLocation.cs" />
     <Compile Include="Models\Locations\Forest.cs" />
     <Compile Include="Models\Locations\Lake.cs" />
     <Compile Include="Models\Locations\Location.cs" />
@@ -316,8 +317,8 @@
     <Content Include="Scripts\jquery-3.3.1.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201806181745173_tesdttestsd.resx">
-      <DependentUpon>201806181745173_tesdttestsd.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201806190753092_foreignmap.resx">
+      <DependentUpon>201806190753092_foreignmap.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

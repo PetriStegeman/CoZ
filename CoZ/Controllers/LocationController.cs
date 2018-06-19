@@ -16,17 +16,20 @@ namespace CoZ.Controllers
         public ActionResult Index()
         {
             Location result = null;
+            int counter = 0;
             using (var DbContext = ApplicationDbContext.Create())
             {
                 string id = User.Identity.GetUserId();
                 Character myChar = DbContext.Characters.Where(c => c.UserId == id).First();
-                result = CopyLocation(myChar.CurrentLocation);
+                Location currentLocation = DbContext.Locations.Where(l => l.XCoord == myChar.XCoord && l.YCoord == myChar.YCoord).First();
+                result = CopyLocation(currentLocation);
+                counter = DbContext.Monsters.Where(c => c.Location.LocationId == currentLocation.LocationId).Count();
             }
-            if (result.Monsters.Count != 0)
+            if (counter != 0)
             {
                 return RedirectToAction("Index", "Battle");
             }
-            return View(result);
+            else return View(result);
         }
 
         //Thread safe? wait for result from FindCharacter before using myChar
@@ -38,8 +41,8 @@ namespace CoZ.Controllers
                 string id = User.Identity.GetUserId();
                 Character myChar = DbContext.Characters.Where(c => c.UserId.Equals(id)).First();
                 myChar.YCoord += 1;
-                myChar.CurrentLocation = DbContext.Locations.Where(l => l.XCoord == myChar.XCoord && l.YCoord == myChar.YCoord).First();
-                result = CopyLocation(myChar.CurrentLocation);
+                Location copy = DbContext.Locations.Where(l => l.XCoord == myChar.XCoord && l.YCoord == myChar.YCoord).First();
+                result = CopyLocation(copy);
                 DbContext.SaveChanges();
             }
             return RedirectToAction("Index", result);
@@ -53,8 +56,8 @@ namespace CoZ.Controllers
                 string id = User.Identity.GetUserId();
                 Character myChar = DbContext.Characters.Where(c => c.UserId.Equals(id)).First();
                 myChar.YCoord -= 1;
-                myChar.CurrentLocation = DbContext.Locations.Where(l => l.XCoord == myChar.XCoord && l.YCoord == myChar.YCoord).First();
-                result = CopyLocation(myChar.CurrentLocation);
+                Location copy = DbContext.Locations.Where(l => l.XCoord == myChar.XCoord && l.YCoord == myChar.YCoord).First();
+                result = CopyLocation(copy);
                 DbContext.SaveChanges();
             }
             return RedirectToAction("Index", result);
@@ -68,8 +71,8 @@ namespace CoZ.Controllers
                 string id = User.Identity.GetUserId();
                 Character myChar = DbContext.Characters.Where(c => c.UserId.Equals(id)).First();
                 myChar.XCoord += 1;
-                myChar.CurrentLocation = DbContext.Locations.Where(l => l.XCoord == myChar.XCoord && l.YCoord == myChar.YCoord).First();
-                result = CopyLocation(myChar.CurrentLocation);
+                Location copy = DbContext.Locations.Where(l => l.XCoord == myChar.XCoord && l.YCoord == myChar.YCoord).First();
+                result = CopyLocation(copy);
                 DbContext.SaveChanges();
             }
             return RedirectToAction("Index", result);
@@ -83,8 +86,8 @@ namespace CoZ.Controllers
                 string id = User.Identity.GetUserId();
                 Character myChar = DbContext.Characters.Where(c => c.UserId.Equals(id)).First();
                 myChar.XCoord -= 1;
-                myChar.CurrentLocation = DbContext.Locations.Where(l => l.XCoord == myChar.XCoord && l.YCoord == myChar.YCoord).First();
-                result = CopyLocation(myChar.CurrentLocation);
+                Location copy = DbContext.Locations.Where(l => l.XCoord == myChar.XCoord && l.YCoord == myChar.YCoord).First();
+                result = CopyLocation(copy);
                 DbContext.SaveChanges();
             }
             return RedirectToAction("Index", result);
@@ -93,13 +96,15 @@ namespace CoZ.Controllers
         //Copy the characteristics of a Location from the DB
         public Location CopyLocation(Location input)
         {
-            Location output = new Plains();
-            output.Altitude = input.Altitude;
-            output.Description = input.Description;
-            output.ShortDescription = input.ShortDescription;
-            output.Monsters = input.Monsters;
-            output.Items = input.Items;
-            output.IsVisited = input.IsVisited;
+            Location output = new EmptyLocation
+            {
+                Altitude = input.Altitude,
+                Description = input.Description,
+                ShortDescription = input.ShortDescription,
+                Monsters = input.Monsters,
+                Items = input.Items,
+                IsVisited = input.IsVisited
+            };
             return output;
         }
     }

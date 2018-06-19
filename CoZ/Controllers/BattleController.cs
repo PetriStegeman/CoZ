@@ -30,7 +30,7 @@ namespace CoZ.Controllers
             }
             if (result == null)
             {
-                RedirectToAction("Index", "Location");
+                return RedirectToAction("Index", "Location");
             }
             return View(result);
         }
@@ -51,7 +51,8 @@ namespace CoZ.Controllers
             using (var DbContext = ApplicationDbContext.Create())
             {
                 Character myChar = DbContext.Characters.Find();
-                Monster monster = myChar.CurrentLocation.Monsters.First();
+                Location currentLocation = DbContext.Locations.Where(l => l.XCoord == myChar.XCoord && l.YCoord == myChar.YCoord).First();
+                Monster monster = DbContext.Monsters.Where(c => c.Location.LocationId == currentLocation.LocationId).First();
                 myChar.CurrentHp -= monster.Strength;
                 monster.Hp -= myChar.Strength;
                 monsterHp = monster.Hp;
