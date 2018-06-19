@@ -10,6 +10,7 @@ using System.Web.Mvc;
 
 namespace CoZ.Controllers
 {
+    [Authorize]
     public class LocationController : Controller
     {
         // GET: Current Location from character by character id

@@ -11,6 +11,7 @@ using System.Web.Mvc;
 
 namespace CoZ.Controllers
 {
+    [Authorize]
     public class BattleController : Controller
     {
         // GET: Battle
@@ -113,6 +114,8 @@ namespace CoZ.Controllers
                     levelUp = true;
                     myChar.Experience = 0;
                     myChar.Level += 1;
+                    myChar.MaxHp += 1;
+                    myChar.Strength += 1;
                 }
                 DbContext.SaveChanges();
             }
