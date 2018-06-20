@@ -14,6 +14,7 @@ namespace CoZ.Controllers
     [Authorize]
     public class GameController : Controller
     {
+
         // GET: Game
         public ActionResult Index()
         {
