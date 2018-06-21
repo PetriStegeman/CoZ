@@ -2,6 +2,7 @@
 using CoZ.Models.Locations;
 using CoZ.Models.Monsters;
 using CoZ.Repositories;
+using CoZ.ViewModels;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System;
@@ -30,18 +31,51 @@ namespace CoZ.Controllers
                 }
             }
         }
-        // GET: Battle
+
+        private CharacterRepository characterRepository;
+        protected CharacterRepository CharacterRepository
+        {
+            get
+            {
+                if (characterRepository == null)
+                {
+                    return new CharacterRepository();
+                }
+                else
+                {
+                    return characterRepository;
+                }
+            }
+        }
+
+        private MonsterRepository monsterRepository;
+        protected MonsterRepository MonsterRepository
+        {
+            get
+            {
+                if (characterRepository == null)
+                {
+                    return new MonsterRepository();
+                }
+                else
+                {
+                    return monsterRepository;
+                }
+            }
+        }
+
         public ActionResult Index()
         {
             Monster result = null;
             using (var DbContext = ApplicationDbContext.Create())
             {
                 string id = User.Identity.GetUserId();
-                Location location = LocationRepository.FindByCharacterId(id);
-                if (DbContext.Monsters.Where(c => c.Location.LocationId == location.LocationId).Count() != 0)
+                var character = this.CharacterRepository.FindByCharacterId(id);
+                var location = character.FindCurrentLocation();
+                if (location.Monsters.Count() != 0)
                 {
-                    Monster monster = DbContext.Monsters.Where(c => c.Location.LocationId == location.LocationId).First();
-                    result = MonsterCopy(monster);
+                    var monster = location.Monsters.First();
+                    result.CopyMonster(monster);
                 }
             }
             if (result == null)
@@ -57,9 +91,10 @@ namespace CoZ.Controllers
             using (var DbContext = ApplicationDbContext.Create())
             {
                 string id = User.Identity.GetUserId();
-                Location location = LocationRepository.FindByCharacterId(id);
+                var character = this.CharacterRepository.FindByCharacterId(id);
+                var location = character.FindCurrentLocation();
                 location.Monsters.Clear();
-                DbContext.SaveChanges();
+                this.LocationRepository.UpdateLocation(location);
             }
             return RedirectToAction("Index", "Location");
         }
@@ -67,45 +102,37 @@ namespace CoZ.Controllers
         //PartialView implementeren?
         public ActionResult Attack()
         {
-            int monsterHp = 0;
-            int characterHp = 0;
+            BattleViewModel result = null;
             using (var DbContext = ApplicationDbContext.Create())
             {
                 string id = User.Identity.GetUserId();
-                Character myChar = DbContext.Characters.Where(c => c.UserId == id).First();
-                Location location = LocationRepository.FindByCharacterId(id);
-                Monster monster = DbContext.Monsters.Where(c => c.Location.LocationId == location.LocationId).First();
-                myChar.CurrentHp -= monster.Strength;
-                monster.Hp -= myChar.Strength;
-                monsterHp = monster.Hp;
-                characterHp = myChar.CurrentHp;
-                DbContext.SaveChanges();
+                var character = this.CharacterRepository.FindByCharacterId(id);
+                var location = character.FindCurrentLocation();
+                var monster = location.Monsters.First();
+                character.Attack(monster);
+                result = SetBattleViewModel(monster, character);
+                this.CharacterRepository.UpdateCharacter(character);
+                this.MonsterRepository.Updatemonster(monster);
             }
-            if (characterHp <= 0)
-            {
-                return View("GameOver"); 
-            }
-            else if (monsterHp <= 0)
-            {
-                return RedirectToAction("Victory");
-            }
-            else return RedirectToAction("Index");
+            return DetermineBattleOutcome(result);
         }
 
         public ActionResult Victory()
         {
-            Monster result = null;
+            //VictoryViewModel result = null;
+            Monster result = null; //TODO Replace
             using (var DbContext = ApplicationDbContext.Create())
             {
                 string id = User.Identity.GetUserId();
-                Character myChar = DbContext.Characters.Where(c => c.UserId == id).First();
-                Location location = LocationRepository.FindByCharacterId(id);
-                Monster monster = DbContext.Monsters.Where(c => c.Location.LocationId == location.LocationId).First();
-                myChar.Gold += monster.Gold;
-                myChar.Experience += monster.Level;
-                result = MonsterCopy(monster);
-                location.Monsters.Clear();
-                DbContext.SaveChanges();
+                var character = this.CharacterRepository.FindByCharacterId(id);
+                var location = character.FindCurrentLocation();
+                var monster = location.Monsters.First();
+                character.Victory(monster);
+                //result = SetVictoryViewModel(monster);
+                result.CopyMonster(monster); //TODO Replace
+                this.MonsterRepository.DeleteMonster(monster);
+                this.LocationRepository.UpdateLocation(location);
+                this.CharacterRepository.UpdateCharacter(character);
             }
             return View(result);
         }
@@ -121,17 +148,14 @@ namespace CoZ.Controllers
             using (var DbContext = ApplicationDbContext.Create())
             {
                 string id = User.Identity.GetUserId();
-                Character myChar = DbContext.Characters.Where(c => c.UserId == id).First();
-                Location currentLocation = DbContext.Locations.Where(l => l.XCoord == myChar.XCoord && l.YCoord == myChar.YCoord).First();
-                if (myChar.Experience > (myChar.Level * 5))
+                var character = this.CharacterRepository.FindByCharacterId(id);
+                var location = character.FindCurrentLocation();
+                if (character.Experience > (character.Level * 5))
                 {
                     levelUp = true;
-                    myChar.Experience = 0;
-                    myChar.Level += 1;
-                    myChar.MaxHp += 1;
-                    myChar.Strength += 1;
+                    character.LevelUp();
                 }
-                DbContext.SaveChanges();
+                this.CharacterRepository.UpdateCharacter(character);
             }
             if (levelUp == true)
             {
@@ -140,18 +164,34 @@ namespace CoZ.Controllers
             else return RedirectToAction("Index", "Location");
         }
 
-        //HELPER METHODES
-        //TO DO FIX A REGION AT SOME POINT
-        public Monster MonsterCopy(Monster input)
+        public ActionResult DetermineBattleOutcome(BattleViewModel view)
         {
-            Monster output = new Boar(); //Misschien toch zoals het hoort Monster class gebruiken voor alle monsters?
-            output.Hp = input.Hp;
-            output.Gold = input.Gold;
-            output.Level = input.Level;
-            output.Loot = input.Loot;
-            output.Name = input.Name;
-            output.Strength = input.Strength;
-            return output;
+            if (view.CharacterCurrentHp <= 0)
+            {
+                return RedirectToAction("GameOver");
+            }
+            else if (view.MonsterCurrentHp <= 0)
+            {
+                return RedirectToAction("Victory");
+            }
+            else return RedirectToAction("Index");
         }
+
+        public BattleViewModel SetBattleViewModel(Monster monster, Character character)
+        {
+            return new BattleViewModel(monster, character);
+        }
+
+        public VictoryViewModel SetVictoryViewModel(Monster monster)
+        {
+            return new VictoryViewModel(monster);
+        }
+
+        public LevelUpViewModel SetLevelUpViewModel(Character character)
+        {
+            return new LevelUpViewModel(character);
+        }
+
+
     }
 }

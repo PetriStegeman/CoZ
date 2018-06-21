@@ -23,17 +23,17 @@ namespace CoZ.Models.Locations
         public abstract Monster AddMonster();
         //public abstract Item AddItem();
 
-        public void CopyLocation(Location DesiredResult)
+        public void CopyLocation(Location desiredResult)
         {
-            this.LocationId = DesiredResult.LocationId;
-            this.XCoord = DesiredResult.XCoord;
-            this.YCoord = DesiredResult.YCoord;
-            this.Description = DesiredResult.Description;
-            this.ShortDescription = DesiredResult.ShortDescription;
-            this.IsVisited = DesiredResult.IsVisited;
-            this.Altitude = DesiredResult.Altitude;
-            this.Items = DesiredResult.Items;
-            this.Monsters = DesiredResult.Monsters;
+            this.LocationId = desiredResult.LocationId;
+            this.XCoord = desiredResult.XCoord;
+            this.YCoord = desiredResult.YCoord;
+            this.Description = desiredResult.Description;
+            this.ShortDescription = desiredResult.ShortDescription;
+            this.IsVisited = desiredResult.IsVisited;
+            this.Altitude = desiredResult.Altitude;
+            this.Items = desiredResult.Items;
+            this.Monsters = desiredResult.Monsters;
         }
     }
 }

@@ -13,11 +13,25 @@ namespace CoZ.Models.Monsters
         public int MonsterId { get; set; }
         public string Name { get; set; }
         public int Level { get; set; }
-        public int Hp { get; set; }
+        public int CurrentHp { get; set; }
+        public int MaxHp { get; set; }
         public int Strength { get; set; }
         public int Gold { get; set; }
         public virtual ICollection<Item> Loot { get; set; }
         public virtual Location Location { get; set; }
+
+        public void CopyMonster(Monster desiredResult)
+        {
+            this.MonsterId = desiredResult.MonsterId;
+            this.Name = desiredResult.Name;
+            this.Level = desiredResult.Level;
+            this.CurrentHp = desiredResult.CurrentHp;
+            this.MaxHp = desiredResult.MaxHp;
+            this.Strength = desiredResult.Strength;
+            this.Gold = desiredResult.Gold;
+            this.Loot = desiredResult.Loot;
+            this.Location = desiredResult.Location;
+        }
 
         //Random Loot and Random Gold assignment for new creature
         public void MonsterInit()

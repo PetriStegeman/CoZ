@@ -1,5 +1,6 @@
 ﻿using CoZ.Models.Items;
 using CoZ.Models.Locations;
+using CoZ.Models.Monsters;
 using CoZ.Utility;
 using System;
 using System.Collections.Generic;
@@ -34,25 +35,56 @@ namespace CoZ.Models
             return this.Map.WorldMap.Where(l => l.XCoord == this.XCoord && l.YCoord == this.YCoord).Single();
         }
 
-        public void CopyCharacter(Character DesiredResult)
+        public void Camp()
         {
-            this.CharacterId = DesiredResult.CharacterId;
-            this.UserId = DesiredResult.UserId;
-            this.Name = DesiredResult.Name;
-            this.Gold = DesiredResult.Gold;
-            this.Inventory = DesiredResult.Inventory;
-            this.Map = DesiredResult.Map;
-            this.XCoord = DesiredResult.XCoord;
-            this.YCoord = DesiredResult.YCoord;
-            this.Experience = DesiredResult.Experience;
-            this.Level = DesiredResult.Level;
-            this.MaxHp = DesiredResult.MaxHp;
-            this.CurrentHp = DesiredResult.CurrentHp;
-            this.MaxMp = DesiredResult.MaxMp;
-            this.CurrentMp = DesiredResult.CurrentMp;
-            this.Strength = DesiredResult.Strength;
-            this.Magic = DesiredResult.Magic;
-            this.Insanity = DesiredResult.Insanity;
+            this.CurrentHp = this.MaxHp;
+        }
+
+        public void Attack(Monster monster)
+        {
+            this.CurrentHp -= monster.Strength;
+            monster.CurrentHp -= this.Strength; //TODO Weapon modifier, miss chance
+
+        }
+
+        public void Victory(Monster monster)
+        {
+            this.Gold += monster.Gold;
+            this.Experience += monster.Level;
+            //TODO Add extra rewards logic
+            //foreach (Item item in monster.Loot)
+            //{
+            //    this.Inventory.Add(item);
+            //}
+        }
+
+        public void LevelUp()
+        {
+            this.Experience = 0;
+            this.Level += 1;
+            this.MaxHp += 1;
+            this.Strength += 1;
+        }
+
+        public void CopyCharacter(Character desiredResult)
+        {
+            this.CharacterId = desiredResult.CharacterId;
+            this.UserId = desiredResult.UserId;
+            this.Name = desiredResult.Name;
+            this.Gold = desiredResult.Gold;
+            this.Inventory = desiredResult.Inventory;
+            this.Map = desiredResult.Map;
+            this.XCoord = desiredResult.XCoord;
+            this.YCoord = desiredResult.YCoord;
+            this.Experience = desiredResult.Experience;
+            this.Level = desiredResult.Level;
+            this.MaxHp = desiredResult.MaxHp;
+            this.CurrentHp = desiredResult.CurrentHp;
+            this.MaxMp = desiredResult.MaxMp;
+            this.CurrentMp = desiredResult.CurrentMp;
+            this.Strength = desiredResult.Strength;
+            this.Magic = desiredResult.Magic;
+            this.Insanity = desiredResult.Insanity;
         }
 
         public Character(string id)

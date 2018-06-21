@@ -12,7 +12,8 @@ namespace CoZ.Models.Monsters
         {
             this.Name = "Boar";
             this.Level = RngThreadSafe.Next(1, 3);
-            this.Hp = 5 + this.Level;
+            this.MaxHp = 5 + this.Level;
+            this.CurrentHp = this.MaxHp;
             this.Strength = this.Level;
             this.MonsterInit();
         }

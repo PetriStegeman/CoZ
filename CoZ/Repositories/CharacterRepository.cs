@@ -22,22 +22,16 @@ namespace CoZ.Repositories
 
         public void DeleteExistingCharacters(string id)
         {
-            bool characterExists = true;
-            while (characterExists)
+            if (this.DbContext.Characters.Where(c => c.UserId == id).Count() != 0)
             {
-                if (this.DbContext.Characters.Where(c => c.UserId == id).Count() != 0)
-                {
-                    Character character = this.DbContext.Characters.Where(c => c.UserId == id).First();
-                    this.DbContext.Characters.Remove(character);
-                    continue;
-                }
-                characterExists = false;
+                var character = this.DbContext.Characters.Where(c => c.UserId == id).Single();
+                this.DbContext.Characters.Remove(character);
             }
         }
 
         public void UpdateCharacter(Character character)
         {
-            var originalCharacter = this.DbContext.Characters.Where(c => c.CharacterId == character.CharacterId).Single();
+            var originalCharacter = this.DbContext.Characters.Find(character.CharacterId);
             originalCharacter.CopyCharacter(character);
             this.DbContext.SaveChanges();
         }
