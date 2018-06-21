@@ -40,12 +40,9 @@ namespace CoZ.Controllers
         //Generate data to start a new game
         public ActionResult Create()
         {
-            using (var DbContext = ApplicationDbContext.Create())
-            {
-                string id = User.Identity.GetUserId();
-                this.CharacterRepository.DeleteExistingCharacters(id);
-                this.CharacterRepository.CreateCharacter(id);
-            }
+            string id = User.Identity.GetUserId();
+            //this.CharacterRepository.DeleteExistingCharacters(id);
+            this.CharacterRepository.CreateCharacter(id);
             return RedirectToAction("Index", "Location");
         }
     }

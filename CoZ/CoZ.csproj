@@ -204,9 +204,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201806190753092_foreignmap.cs" />
-    <Compile Include="Migrations\201806190753092_foreignmap.Designer.cs">
-      <DependentUpon>201806190753092_foreignmap.cs</DependentUpon>
+    <Compile Include="Migrations\201806211033291_repoMapTest.cs" />
+    <Compile Include="Migrations\201806211033291_repoMapTest.Designer.cs">
+      <DependentUpon>201806211033291_repoMapTest.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -224,7 +224,6 @@
     <Compile Include="Models\Locations\River.cs" />
     <Compile Include="Models\Locations\StartingLocation.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
-    <Compile Include="Models\Map.cs" />
     <Compile Include="Models\Monsters\Boar.cs" />
     <Compile Include="Models\Monsters\Monster.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -328,8 +327,8 @@
     <Content Include="Scripts\jquery-3.3.1.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201806190753092_foreignmap.resx">
-      <DependentUpon>201806190753092_foreignmap.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201806211033291_repoMapTest.resx">
+      <DependentUpon>201806211033291_repoMapTest.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -66,54 +66,43 @@ namespace CoZ.Controllers
 
         public ActionResult Index()
         {
-            Monster result = null;
-            using (var DbContext = ApplicationDbContext.Create())
+            Monster monster = null;
+            string id = User.Identity.GetUserId();
+            var character = this.CharacterRepository.FindByCharacterId(id);
+            var location = this.LocationRepository.FindCurrentLocation(id);
+            if (this.LocationRepository.GetAmountOfMonsters(location) != 0)
             {
-                string id = User.Identity.GetUserId();
-                var character = this.CharacterRepository.FindByCharacterId(id);
-                var location = character.FindCurrentLocation();
-                if (location.Monsters.Count() != 0)
-                {
-                    var monster = location.Monsters.First();
-                    result.CopyMonster(monster);
-                }
+                monster = this.MonsterRepository.FindMonsterByLocation(location);
             }
-            if (result == null)
+            if (monster == null)
             {
                 return RedirectToAction("Index", "Location");
             }
-            return View(result);
+            return View(monster);
         }
         
         //Redirect the user to the Location view after defeating the monster(s)
         public ActionResult RunAWay()
         {
-            using (var DbContext = ApplicationDbContext.Create())
-            {
-                string id = User.Identity.GetUserId();
-                var character = this.CharacterRepository.FindByCharacterId(id);
-                var location = character.FindCurrentLocation();
-                location.Monsters.Clear();
-                this.LocationRepository.UpdateLocation(location);
-            }
+            string id = User.Identity.GetUserId();
+            var location = this.LocationRepository.FindCurrentLocation(id);
+            var monster = this.MonsterRepository.FindMonsterByLocation(location);
+            this.MonsterRepository.DeleteMonster(monster);
+            this.LocationRepository.UpdateLocation(location);
             return RedirectToAction("Index", "Location");
         }
 
         //PartialView implementeren?
         public ActionResult Attack()
         {
-            BattleViewModel result = null;
-            using (var DbContext = ApplicationDbContext.Create())
-            {
-                string id = User.Identity.GetUserId();
-                var character = this.CharacterRepository.FindByCharacterId(id);
-                var location = character.FindCurrentLocation();
-                var monster = location.Monsters.First();
-                character.Attack(monster);
-                result = SetBattleViewModel(monster, character);
-                this.CharacterRepository.UpdateCharacter(character);
-                this.MonsterRepository.Updatemonster(monster);
-            }
+            string id = User.Identity.GetUserId();
+            var character = this.CharacterRepository.FindByCharacterId(id);
+            var location = this.LocationRepository.FindCurrentLocation(id);
+            var monster = this.MonsterRepository.FindMonsterByLocation(location);
+            character.Attack(monster);
+            var result = SetBattleViewModel(monster, character);
+            this.CharacterRepository.UpdateCharacter(character);
+            this.MonsterRepository.Updatemonster(monster);
             return DetermineBattleOutcome(result);
         }
 
@@ -125,7 +114,7 @@ namespace CoZ.Controllers
             {
                 string id = User.Identity.GetUserId();
                 var character = this.CharacterRepository.FindByCharacterId(id);
-                var location = character.FindCurrentLocation();
+                var location = this.LocationRepository.FindCurrentLocation(id);
                 var monster = location.Monsters.First();
                 character.Victory(monster);
                 //result = SetVictoryViewModel(monster);
@@ -149,7 +138,7 @@ namespace CoZ.Controllers
             {
                 string id = User.Identity.GetUserId();
                 var character = this.CharacterRepository.FindByCharacterId(id);
-                var location = character.FindCurrentLocation();
+                var location = this.LocationRepository.FindCurrentLocation(id);
                 if (character.Experience > (character.Level * 5))
                 {
                     levelUp = true;

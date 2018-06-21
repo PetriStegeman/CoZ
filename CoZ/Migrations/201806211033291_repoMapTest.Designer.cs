@@ -7,13 +7,13 @@ namespace CoZ.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.2.0-61023")]
-    public sealed partial class foreignmap : IMigrationMetadata
+    public sealed partial class repoMapTest : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(foreignmap));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(repoMapTest));
         
         string IMigrationMetadata.Id
         {
-            get { return "201806190753092_foreignmap"; }
+            get { return "201806211033291_repoMapTest"; }
         }
         
         string IMigrationMetadata.Source

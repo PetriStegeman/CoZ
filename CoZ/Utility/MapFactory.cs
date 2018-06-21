@@ -10,43 +10,10 @@ namespace CoZ.Utility
 {
     public class MapFactory
     {
-        public static Map CreateSmallMap(string id)
+        public static ICollection<Location> CreateSmallMap(string id)
         {
-            Map worldMap = new Map();
-            worldMap.WorldMap = new Collection<Location>();
+            ICollection <Location> map = new List<Location>();
             for (int i = 0; i <= 20; i++)
-            {
-                for (int j = 0; j < 20; j++)
-                {
-                    Location location = GetTile(i, j);
-                    worldMap.WorldMap.Add(location);
-                }
-            }
-            return worldMap;
-        }
-
-        public static Map CreateMediumMap(string id)
-        {
-            {
-                Map worldMap = new Map();
-                worldMap.WorldMap = new Collection<Location>();
-                for (int i = 0; i <= 40; i++)
-                {
-                    for (int j = 0; j < 40; j++)
-                    {
-                        Location location = GetTile(i, j);
-                        worldMap.WorldMap.Add(location);
-                    }
-                }
-                return worldMap;
-            }
-        }
-
-        public static Map CreateBigMap(string id)
-        {
-            Map result = new Map();
-            ICollection<Location> map = new List<Location>();
-            for (int i = 0; i < 20; i++)
             {
                 for (int j = 0; j < 20; j++)
                 {
@@ -54,8 +21,35 @@ namespace CoZ.Utility
                     map.Add(location);
                 }
             }
-            result.WorldMap = map;
-            return result;
+            return map;
+        }
+
+        public static ICollection<Location> CreateMediumMap(string id)
+        {
+            ICollection<Location> map = new List<Location>();
+            for (int i = 0; i <= 20; i++)
+            {
+                for (int j = 0; j < 20; j++)
+                {
+                    Location location = GetTile(i, j);
+                    map.Add(location);
+                }
+            }
+            return map;
+        }
+
+        public static ICollection<Location> CreateBigMap(string id)
+        {
+            ICollection<Location> map = new List<Location>();
+            for (int i = 0; i <= 20; i++)
+            {
+                for (int j = 0; j < 20; j++)
+                {
+                    Location location = GetTile(i, j);
+                    map.Add(location);
+                }
+            }
+            return map;
         }
 
         private static Location GetTile(int x, int y)

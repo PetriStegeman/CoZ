@@ -16,7 +16,7 @@ namespace CoZ.Models
         public string Name { get; set; }
         public int Gold { get; set; }
         public virtual ICollection<Item> Inventory { get; set; }
-        public virtual Map Map { get; set; }
+        public virtual ICollection<Location> Map { get; set; }
         public int XCoord { get; set; }
         public int YCoord { get; set; }
         //Statistics
@@ -29,11 +29,6 @@ namespace CoZ.Models
         public int Strength { get; set; }
         public int Magic { get; set; }
         public int Insanity { get; set; }
-
-        public Location FindCurrentLocation()
-        {
-            return this.Map.WorldMap.Where(l => l.XCoord == this.XCoord && l.YCoord == this.YCoord).Single();
-        }
 
         public void Camp()
         {
@@ -95,7 +90,7 @@ namespace CoZ.Models
             this.YCoord = 10;
             this.CurrentHp = 10;
             this.MaxHp = 10;
-            this.Strength = this.Level + 3;
+            this.Strength = 3;
         }
 
         public Character(){}

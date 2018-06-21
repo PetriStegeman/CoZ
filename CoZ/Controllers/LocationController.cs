@@ -48,15 +48,9 @@ namespace CoZ.Controllers
 
         public ActionResult Index()
         {
-            Location location = null;
-            int monsterCounter = 0;
-            using (var DbContext = ApplicationDbContext.Create())
-            {
-                string id = User.Identity.GetUserId();
-                var character = this.CharacterRepository.FindByCharacterId(id);
-                location = character.FindCurrentLocation();
-                monsterCounter = location.Monsters.Count();
-            }
+            string id = User.Identity.GetUserId();
+            var location = this.LocationRepository.FindCurrentLocation(id);
+            int monsterCounter = this.LocationRepository.GetAmountOfMonsters(location);
             return BattleRedirect(location, monsterCounter);
         }
 
@@ -72,72 +66,52 @@ namespace CoZ.Controllers
         public ActionResult GoNorth()
         {
             Location result = null;
-            using (var DbContext = ApplicationDbContext.Create())
-            {
-                string id = User.Identity.GetUserId();
-                var character = this.CharacterRepository.FindByCharacterId(id);
-                character.YCoord += 1;
-                var location = character.FindCurrentLocation();
-                result.CopyLocation(location);
-                this.CharacterRepository.UpdateCharacter(character);
-            }
+            string id = User.Identity.GetUserId();
+            var character = this.CharacterRepository.FindByCharacterId(id);
+            character.YCoord += 1;
+            var location = this.LocationRepository.FindCurrentLocation(id);
+            result.CopyLocation(location);
+            this.CharacterRepository.UpdateCharacter(character);
             return RedirectToAction("Index", result);
         }
 
         public ActionResult GoSouth()
         {
-            Location result = null;
-            using (var DbContext = ApplicationDbContext.Create())
-            {
-                string id = User.Identity.GetUserId();
-                var character = this.CharacterRepository.FindByCharacterId(id);
-                character.YCoord -= 1;
-                var location = character.FindCurrentLocation();
-                result.CopyLocation(location);
-                this.CharacterRepository.UpdateCharacter(character);
-            }
-            return RedirectToAction("Index", result);
+
+            string id = User.Identity.GetUserId();
+            var character = this.CharacterRepository.FindByCharacterId(id);
+            character.YCoord -= 1;
+            var location = this.LocationRepository.FindCurrentLocation(id);
+            this.CharacterRepository.UpdateCharacter(character);
+            return RedirectToAction("Index", location);
         }
 
         public ActionResult GoEast()
         {
-            Location result = null;
-            using (var DbContext = ApplicationDbContext.Create())
-            {
-                string id = User.Identity.GetUserId();
-                var character = this.CharacterRepository.FindByCharacterId(id);
-                character.XCoord += 1;
-                var location = character.FindCurrentLocation();
-                result.CopyLocation(location);
-                this.CharacterRepository.UpdateCharacter(character);
-            }
-            return RedirectToAction("Index", result);
+            string id = User.Identity.GetUserId();
+            var character = this.CharacterRepository.FindByCharacterId(id);
+            character.XCoord += 1;
+            var location = this.LocationRepository.FindCurrentLocation(id);
+            this.CharacterRepository.UpdateCharacter(character);
+            return RedirectToAction("Index", location);
         }
 
         public ActionResult GoWest()
         {
-            Location result = null;
-            using (var DbContext = ApplicationDbContext.Create())
-            {
-                string id = User.Identity.GetUserId();
-                var character = this.CharacterRepository.FindByCharacterId(id);
-                character.XCoord -= 1;
-                var location = character.FindCurrentLocation();
-                result.CopyLocation(location);
-                this.CharacterRepository.UpdateCharacter(character);
-            }
-            return RedirectToAction("Index", result);
+            string id = User.Identity.GetUserId();
+            var character = this.CharacterRepository.FindByCharacterId(id);
+            character.XCoord -= 1;
+            var location = this.LocationRepository.FindCurrentLocation(id);
+            this.CharacterRepository.UpdateCharacter(character);
+            return RedirectToAction("Index", location);
         }
 
         public ActionResult Camp()
         {
-            using (var DbContext = ApplicationDbContext.Create())
-            {
-                string id = User.Identity.GetUserId();
-                var character = this.CharacterRepository.FindByCharacterId(id);
-                character.Camp();
-                this.CharacterRepository.UpdateCharacter(character);
-            }
+            string id = User.Identity.GetUserId();
+            var character = this.CharacterRepository.FindByCharacterId(id);
+            character.Camp();
+            this.CharacterRepository.UpdateCharacter(character);
             return View();
         }
     }
