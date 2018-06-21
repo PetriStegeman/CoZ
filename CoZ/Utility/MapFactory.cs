@@ -46,9 +46,9 @@ namespace CoZ.Utility
         {
             Map result = new Map();
             ICollection<Location> map = new List<Location>();
-            for (int i = 0; i < 6; i++)
+            for (int i = 0; i < 20; i++)
             {
-                for (int j = 0; j < 6; j++)
+                for (int j = 0; j < 20; j++)
                 {
                     Location location = GetTile(i, j);
                     map.Add(location);

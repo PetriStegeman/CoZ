@@ -1,6 +1,7 @@
 ﻿using CoZ.Models;
 using CoZ.Models.Locations;
 using CoZ.Models.Monsters;
+using CoZ.Repositories;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System;
@@ -14,6 +15,21 @@ namespace CoZ.Controllers
     [Authorize]
     public class BattleController : Controller
     {
+        private LocationRepository locationRepository;
+        protected LocationRepository LocationRepository
+        {
+            get
+            {
+                if (locationRepository == null)
+                {
+                    return new LocationRepository();
+                }
+                else
+                {
+                    return locationRepository;
+                }
+            }
+        }
         // GET: Battle
         public ActionResult Index()
         {
@@ -21,11 +37,10 @@ namespace CoZ.Controllers
             using (var DbContext = ApplicationDbContext.Create())
             {
                 string id = User.Identity.GetUserId();
-                Character myChar = DbContext.Characters.Where(c => c.UserId == id).First();
-                Location currentLocation = DbContext.Locations.Where(l => l.XCoord == myChar.XCoord && l.YCoord == myChar.YCoord).First();
-                if (DbContext.Monsters.Where(c => c.Location.LocationId == currentLocation.LocationId).Count() != 0)
+                Location location = LocationRepository.FindByCharacterId(id);
+                if (DbContext.Monsters.Where(c => c.Location.LocationId == location.LocationId).Count() != 0)
                 {
-                    Monster monster = DbContext.Monsters.Where(c => c.Location.LocationId == currentLocation.LocationId).First();
+                    Monster monster = DbContext.Monsters.Where(c => c.Location.LocationId == location.LocationId).First();
                     result = MonsterCopy(monster);
                 }
             }
@@ -42,9 +57,8 @@ namespace CoZ.Controllers
             using (var DbContext = ApplicationDbContext.Create())
             {
                 string id = User.Identity.GetUserId();
-                Character myChar = DbContext.Characters.Where(c => c.UserId == id).First();
-                Location currentLocation = DbContext.Locations.Where(l => l.XCoord == myChar.XCoord && l.YCoord == myChar.YCoord).First();
-                currentLocation.Monsters.Clear();
+                Location location = LocationRepository.FindByCharacterId(id);
+                location.Monsters.Clear();
                 DbContext.SaveChanges();
             }
             return RedirectToAction("Index", "Location");
@@ -59,8 +73,8 @@ namespace CoZ.Controllers
             {
                 string id = User.Identity.GetUserId();
                 Character myChar = DbContext.Characters.Where(c => c.UserId == id).First();
-                Location currentLocation = DbContext.Locations.Where(l => l.XCoord == myChar.XCoord && l.YCoord == myChar.YCoord).First();
-                Monster monster = DbContext.Monsters.Where(c => c.Location.LocationId == currentLocation.LocationId).First();
+                Location location = LocationRepository.FindByCharacterId(id);
+                Monster monster = DbContext.Monsters.Where(c => c.Location.LocationId == location.LocationId).First();
                 myChar.CurrentHp -= monster.Strength;
                 monster.Hp -= myChar.Strength;
                 monsterHp = monster.Hp;
@@ -85,12 +99,12 @@ namespace CoZ.Controllers
             {
                 string id = User.Identity.GetUserId();
                 Character myChar = DbContext.Characters.Where(c => c.UserId == id).First();
-                Location currentLocation = DbContext.Locations.Where(l => l.XCoord == myChar.XCoord && l.YCoord == myChar.YCoord).First();
-                Monster monster = DbContext.Monsters.Where(c => c.Location.LocationId == currentLocation.LocationId).First();
+                Location location = LocationRepository.FindByCharacterId(id);
+                Monster monster = DbContext.Monsters.Where(c => c.Location.LocationId == location.LocationId).First();
                 myChar.Gold += monster.Gold;
                 myChar.Experience += monster.Level;
                 result = MonsterCopy(monster);
-                currentLocation.Monsters.Clear();
+                location.Monsters.Clear();
                 DbContext.SaveChanges();
             }
             return View(result);

@@ -29,6 +29,32 @@ namespace CoZ.Models
         public int Magic { get; set; }
         public int Insanity { get; set; }
 
+        public Location FindCurrentLocation()
+        {
+            return this.Map.WorldMap.Where(l => l.XCoord == this.XCoord && l.YCoord == this.YCoord).Single();
+        }
+
+        public void CopyCharacter(Character DesiredResult)
+        {
+            this.CharacterId = DesiredResult.CharacterId;
+            this.UserId = DesiredResult.UserId;
+            this.Name = DesiredResult.Name;
+            this.Gold = DesiredResult.Gold;
+            this.Inventory = DesiredResult.Inventory;
+            this.Map = DesiredResult.Map;
+            this.XCoord = DesiredResult.XCoord;
+            this.YCoord = DesiredResult.YCoord;
+            this.Experience = DesiredResult.Experience;
+            this.Level = DesiredResult.Level;
+            this.MaxHp = DesiredResult.MaxHp;
+            this.CurrentHp = DesiredResult.CurrentHp;
+            this.MaxMp = DesiredResult.MaxMp;
+            this.CurrentMp = DesiredResult.CurrentMp;
+            this.Strength = DesiredResult.Strength;
+            this.Magic = DesiredResult.Magic;
+            this.Insanity = DesiredResult.Insanity;
+        }
+
         public Character(string id)
         {
             this.Map = MapFactory.CreateBigMap(id);

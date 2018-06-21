@@ -1,5 +1,6 @@
 ﻿using CoZ.Models;
 using CoZ.Models.Locations;
+using CoZ.Repositories;
 using CoZ.Utility;
 using Microsoft.AspNet.Identity;
 using System;
@@ -14,6 +15,21 @@ namespace CoZ.Controllers
     [Authorize]
     public class GameController : Controller
     {
+        private CharacterRepository characterRepository;
+        protected CharacterRepository CharacterRepository
+        {
+            get
+            {
+                if (characterRepository == null)
+                {
+                    return new CharacterRepository();
+                }
+                else
+                {
+                    return characterRepository;
+                }
+            }
+        }
 
         // GET: Game
         public ActionResult Index()
@@ -27,9 +43,8 @@ namespace CoZ.Controllers
             using (var DbContext = ApplicationDbContext.Create())
             {
                 string id = User.Identity.GetUserId();
-                Character character = new Character(id);
-                DbContext.Characters.Add(character);
-                DbContext.SaveChanges();
+                this.CharacterRepository.DeleteExistingCharacters(id);
+                this.CharacterRepository.CreateCharacter(id);
             }
             return RedirectToAction("Index", "Location");
         }

@@ -1,6 +1,7 @@
 ﻿using CoZ.Models;
 using CoZ.Models.Locations;
 using CoZ.Models.Monsters;
+using CoZ.Repositories;
 using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
@@ -13,27 +14,44 @@ namespace CoZ.Controllers
     [Authorize]
     public class LocationController : Controller
     {
-        // GET: Current Location from character by character id
+        private LocationRepository locationRepository;
+        protected LocationRepository LocationRepository
+        {
+            get
+            {
+                if (locationRepository == null)
+                {
+                    return new LocationRepository();
+                }
+                else
+                {
+                    return locationRepository;
+                }
+            }
+        }
+        
         public ActionResult Index()
         {
-            Location result = null;
-            int counter = 0;
+            Location location = null;
+            int monsterCounter = 0;
             using (var DbContext = ApplicationDbContext.Create())
             {
                 string id = User.Identity.GetUserId();
-                Character myChar = DbContext.Characters.Where(c => c.UserId == id).First();
-                Location currentLocation = DbContext.Locations.Where(l => l.XCoord == myChar.XCoord && l.YCoord == myChar.YCoord).First();
-                result = CopyLocation(currentLocation);
-                counter = DbContext.Monsters.Where(c => c.Location.LocationId == currentLocation.LocationId).Count();
+                location = LocationRepository.FindByCharacterId(id);
+                monsterCounter = location.Monsters.Count();
             }
-            if (counter != 0)
+            return BattleRedirect(location, monsterCounter);
+        }
+
+        private ActionResult BattleRedirect(Location location, int monsterCounter)
+        {
+            if (monsterCounter != 0)
             {
                 return RedirectToAction("Index", "Battle");
             }
-            else return View(result);
+            else return View("Index", location);
         }
 
-        //Thread safe? wait for result from FindCharacter before using myChar
         public ActionResult GoNorth()
         {
             Location result = null;
@@ -106,7 +124,6 @@ namespace CoZ.Controllers
             return View();
         }
 
-        //Copy the characteristics of a Location from the DB
         public Location CopyLocation(Location input)
         {
             Location output = new EmptyLocation
