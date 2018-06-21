@@ -23,7 +23,7 @@ namespace CoZ.Models.Locations
         public abstract Monster AddMonster();
         //public abstract Item AddItem();
 
-        public void CopyLocation(Location desiredResult)
+        public void CloneLocation(Location desiredResult)
         {
             this.LocationId = desiredResult.LocationId;
             this.XCoord = desiredResult.XCoord;
@@ -32,8 +32,19 @@ namespace CoZ.Models.Locations
             this.ShortDescription = desiredResult.ShortDescription;
             this.IsVisited = desiredResult.IsVisited;
             this.Altitude = desiredResult.Altitude;
-            this.Items = desiredResult.Items;
-            this.Monsters = desiredResult.Monsters;
+        }
+
+        public Location CopyLocation()
+        {
+            var location = new EmptyLocation();
+            location.LocationId = this.LocationId;
+            location.XCoord = this.XCoord;
+            location.YCoord = this.YCoord;
+            location.Description = this.Description;
+            location.ShortDescription = this.ShortDescription;
+            location.IsVisited = this.IsVisited;
+            location.Altitude = this.Altitude;
+            return location;
         }
     }
 }

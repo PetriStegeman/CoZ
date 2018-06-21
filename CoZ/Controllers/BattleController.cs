@@ -70,7 +70,7 @@ namespace CoZ.Controllers
             string id = User.Identity.GetUserId();
             var character = this.CharacterRepository.FindByCharacterId(id);
             var location = this.LocationRepository.FindCurrentLocation(id);
-            if (this.LocationRepository.GetAmountOfMonsters(location) != 0)
+            if (this.LocationRepository.GetNumberOfMonsters(location) != 0)
             {
                 monster = this.MonsterRepository.FindMonsterByLocation(location);
             }

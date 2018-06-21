@@ -50,29 +50,22 @@ namespace CoZ.Controllers
         {
             string id = User.Identity.GetUserId();
             var location = this.LocationRepository.FindCurrentLocation(id);
-            int monsterCounter = this.LocationRepository.GetAmountOfMonsters(location);
-            return BattleRedirect(location, monsterCounter);
-        }
-
-        private ActionResult BattleRedirect(Location location, int monsterCounter)
-        {
+            int monsterCounter = this.LocationRepository.GetNumberOfMonsters(location);
             if (monsterCounter != 0)
             {
                 return RedirectToAction("Index", "Battle");
             }
-            else return View("Index", location);
+            else return View(location);
         }
 
         public ActionResult GoNorth()
         {
-            Location result = null;
             string id = User.Identity.GetUserId();
             var character = this.CharacterRepository.FindByCharacterId(id);
             character.YCoord += 1;
             var location = this.LocationRepository.FindCurrentLocation(id);
-            result.CopyLocation(location);
             this.CharacterRepository.UpdateCharacter(character);
-            return RedirectToAction("Index", result);
+            return RedirectToAction("Index", location);
         }
 
         public ActionResult GoSouth()

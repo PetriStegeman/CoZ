@@ -13,23 +13,27 @@ namespace CoZ.Repositories
 
         public Monster FindMonsterByLocation(Location location)
         {
+            Monster output;
             using (var dbContext = ApplicationDbContext.Create())
             {
                 var originalLocation = dbContext.Locations.Find(location.LocationId);
-                return originalLocation.Monsters.First();
+                var monster = originalLocation.Monsters.First();
+                output = monster.CloneMonster();
             }
+            return output;
         }
 
         public void DeleteMonster(Monster monster)
         {
             using (var dbContext = ApplicationDbContext.Create())
             {
-                if (dbContext.Monsters.Where(c => c.MonsterId == monster.MonsterId).Count() != 0)
+                var originalMonster = dbContext.Monsters.Find(monster.MonsterId);
+                foreach (var item in originalMonster.Loot)
                 {
-                    var originalMonster = dbContext.Monsters.Find(monster.MonsterId);
-                    dbContext.Monsters.Remove(originalMonster);
-                    dbContext.SaveChanges();
+                    dbContext.Items.Remove(dbContext.Items.Find(item.ItemId));
                 }
+                dbContext.Monsters.Remove(originalMonster);
+                dbContext.SaveChanges();
             }
         }
 

@@ -7,13 +7,13 @@ namespace CoZ.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.2.0-61023")]
-    public sealed partial class repoMapTest : IMigrationMetadata
+    public sealed partial class praytokthuluitworks : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(repoMapTest));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(praytokthuluitworks));
         
         string IMigrationMetadata.Id
         {
-            get { return "201806211033291_repoMapTest"; }
+            get { return "201806211225254_praytokthuluitworks"; }
         }
         
         string IMigrationMetadata.Source

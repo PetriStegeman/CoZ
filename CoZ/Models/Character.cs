@@ -67,8 +67,6 @@ namespace CoZ.Models
             this.UserId = desiredResult.UserId;
             this.Name = desiredResult.Name;
             this.Gold = desiredResult.Gold;
-            this.Inventory = desiredResult.Inventory;
-            this.Map = desiredResult.Map;
             this.XCoord = desiredResult.XCoord;
             this.YCoord = desiredResult.YCoord;
             this.Experience = desiredResult.Experience;
