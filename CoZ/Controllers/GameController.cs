@@ -15,6 +15,23 @@ namespace CoZ.Controllers
     [Authorize]
     public class GameController : Controller
     {
+        #region Repositories
+        private LocationRepository locationRepository;
+        protected LocationRepository LocationRepository
+        {
+            get
+            {
+                if (locationRepository == null)
+                {
+                    return new LocationRepository();
+                }
+                else
+                {
+                    return locationRepository;
+                }
+            }
+        }
+
         private CharacterRepository characterRepository;
         protected CharacterRepository CharacterRepository
         {
@@ -62,6 +79,7 @@ namespace CoZ.Controllers
                 }
             }
         }
+        #endregion
 
         // GET: Game
         public ActionResult Index()

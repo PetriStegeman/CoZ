@@ -1,55 +1,46 @@
-﻿@using CoZ.Models.Monsters
-@model CoZ.Models.Monsters.Monster
+﻿@using CoZ.ViewModels
+@model CoZ.ViewModels.BattleViewModel
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>A @Model.Name appeared!</h2>
-<p>The @Model.Name walks around, and hasn't spotted you yet.</p>
-<p>You turn around to walk away, but the sound of your movements pull the @Model.Name's attention.</p>
-<p>The @Model.Name attacks!</p>
+<h2>A @Model.MonsterName appears out of nowhere!</h2>
+<p>The @Model.MonsterName walks around, and hasn't spotted you yet.</p>
+<p>You turn around to walk away, but the sound of your movements pull the @Model.MonsterName's attention.</p>
+<p>The @Model.MonsterName attacks!</p>
 
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
 <br />
 <br />
 <br />
 
 <div class="row">
     <div class="col-md-4">
-        <h2>@Model.Name</h2>
+        <h2>You</h2>
+        <p>Hp: @Model.CharacterCurrentHp/@Model.CharacterMaxHp</p>
+        <p>Mp: @Model.CharacterCurrentMp/@Model.CharacterCurrentMp</p>
     </div>
     <div class="col-md-4">
-        <h2>Level: @Model.Level</h2>
-    </div>
-</div>
-
-<div class="row">
-    <div class="col-md-4">
-        <h2></h2>
-    </div>
-    <div class="col-md-4">
-        <h2>Health Points: @Model.CurrentHp</h2>
+        <h2>Level @Model.MonsterLevel @Model.MonsterName</h2>
+        <p>Hp: @Model.MonsterCurrentHp/@Model.MonsterMaxHp</p>
     </div>
 </div>
 
 <br />
 <br />
+<br />
 
 <div class="row">
-    <div class="col-md-offset-10">
-        <p><a class="btn btn-default" href="/Battle/Attack">Fight &raquo;</a></p>
+    <div class="col-md-offset-9">
+        <p><a class="btn btn-default" width="200" href="/Battle/Attack">Fight &raquo;</a></p>
+    </div>
+    <div class="col-md-offset-7">
+        <p><a class="btn btn-default" width="200" href="">Use Magic &raquo;</a><a class="btn btn-default" width="200" href="">Defend &raquo;</a></p>
+    </div>
+    <div class="col-md-offset-11">
+        <p><a class="btn btn-default" width="200" href="">Defend &raquo;</a></p>
     </div>
     <div class="col-md-offset-9">
-        <p><a class="btn btn-default" href="">Use Magic &raquo;</a>---------|---------<a class="btn btn-default" href="">Defend &raquo;</a></p>
-    </div>
-    <div class="col-md-offset-10">
-        <p><a class="btn btn-default" href="/Battle/RunAway">Run Away &raquo;</a></p>
+        <p><a class="btn btn-default" width="200" href="/Battle/RunAway">Run Away &raquo;</a></p>
     </div>
 </div>

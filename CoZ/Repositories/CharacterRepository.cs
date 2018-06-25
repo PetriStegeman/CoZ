@@ -1,4 +1,5 @@
 ﻿using CoZ.Models;
+using CoZ.Models.Items;
 using CoZ.Models.Locations;
 using CoZ.Models.Monsters;
 using System;
@@ -8,7 +9,7 @@ using System.Web;
 
 namespace CoZ.Repositories
 {
-    public class CharacterRepository //: Repository 
+    public class CharacterRepository 
     {
         public void CreateCharacter(string id)
         {
@@ -24,16 +25,15 @@ namespace CoZ.Repositories
         {
             using (var dbContext = ApplicationDbContext.Create())
             {
-                return dbContext.Characters.Where(c => c.UserId == id).Single();
+                return dbContext.Characters.SingleOrDefault(c => c.UserId == id);
             }
         }
 
-        //SOLID AND CLEAN IF YOU DONT AGREE FIGHT ME IRL
         public void DeleteCharacter(string id)
         {
             using (var dbContext = ApplicationDbContext.Create())
             {
-                var character = dbContext.Characters.Single(c => c.UserId == id);
+                var character = dbContext.Characters.SingleOrDefault(c => c.UserId == id);
                 DeleteLocations(dbContext, character);
                 foreach (var item in character.Inventory)
                 {
@@ -70,6 +70,18 @@ namespace CoZ.Repositories
             {
                 var originalCharacter = dbContext.Characters.Find(character.CharacterId);
                 originalCharacter.CopyCharacter(character);
+                dbContext.SaveChanges();
+            }
+        }
+
+        public void GainItem(String id, Item item)
+        {
+            using (var dbContext = ApplicationDbContext.Create())
+            {
+                var character = new Character(id);
+                var newLoot = item.CloneItem();
+                character.Inventory.Add(newLoot);
+                dbContext.Items.Add(newLoot);
                 dbContext.SaveChanges();
             }
         }

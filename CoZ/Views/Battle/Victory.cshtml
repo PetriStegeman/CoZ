@@ -1,33 +1,27 @@
-﻿@using CoZ.Models.Monsters
-@model CoZ.Models.Monsters.Monster
+﻿@using CoZ.ViewModels
+@model CoZ.ViewModels.BattleViewModel
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>You have defeated the @Model.Name !</h2>
+<h2>You have defeated the @Model.MonsterName !</h2>
 
 
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
 <br />
 <br />
 <br />
 
 <div class="row">
     <div class="col-md-4">
-        <h2>You have gained @Model.Level Experience!</h2>
+        <h2>You have gained @Model.MonsterLevel Experience!</h2>
     </div>
     <div class="col-md-4">
-        <h2>You have found @Model.Gold Gold!</h2>
+        <h2>You have found @Model.MonsterGold Gold!</h2>
     </div>
 </div>
 
+<br />
 <br />
 <br />
 

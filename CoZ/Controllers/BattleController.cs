@@ -1,4 +1,5 @@
 ﻿using CoZ.Models;
+using CoZ.Models.Items;
 using CoZ.Models.Locations;
 using CoZ.Models.Monsters;
 using CoZ.Repositories;
@@ -16,6 +17,7 @@ namespace CoZ.Controllers
     [Authorize]
     public class BattleController : Controller
     {
+        #region Repositories
         private LocationRepository locationRepository;
         protected LocationRepository LocationRepository
         {
@@ -64,17 +66,35 @@ namespace CoZ.Controllers
             }
         }
 
+        private ItemRepository itemRepository;
+        protected ItemRepository ItemRepository
+        {
+            get
+            {
+                if (itemRepository == null)
+                {
+                    return new ItemRepository();
+                }
+                else
+                {
+                    return itemRepository;
+                }
+            }
+        }
+        #endregion
+
         public ActionResult Index()
         {
             string id = User.Identity.GetUserId();
             var character = this.CharacterRepository.FindByCharacterId(id);
             var location = this.LocationRepository.FindCurrentLocation(id);
             var monster = this.MonsterRepository.FindMonsterByLocation(location);
+            var result = CreateBattleViewModel(monster, character);
             if (monster == null)
             {
                 return RedirectToAction("Index", "Location");
             }
-            return View(monster);
+            return View(result);
         }
         
         //Redirect the user to the Location view after defeating the monster(s)
@@ -88,7 +108,6 @@ namespace CoZ.Controllers
             return RedirectToAction("Index", "Location");
         }
 
-        //PartialView implementeren?
         public ActionResult Attack()
         {
             string id = User.Identity.GetUserId();
@@ -96,7 +115,7 @@ namespace CoZ.Controllers
             var location = this.LocationRepository.FindCurrentLocation(id);
             var monster = this.MonsterRepository.FindMonsterByLocation(location);
             character.Attack(monster);
-            var result = SetBattleViewModel(monster, character);
+            var result = CreateBattleViewModel(monster, character);
             this.CharacterRepository.UpdateCharacter(character);
             this.MonsterRepository.Updatemonster(monster);
             return DetermineBattleOutcome(result);
@@ -104,15 +123,14 @@ namespace CoZ.Controllers
 
         public ActionResult Victory()
         {
-            //VictoryViewModel result = null;
-            Monster result = null; //TODO Replace
             string id = User.Identity.GetUserId();
             var character = this.CharacterRepository.FindByCharacterId(id);
             var location = this.LocationRepository.FindCurrentLocation(id);
             var monster = this.MonsterRepository.FindMonsterByLocation(location);
+            var item = this.ItemRepository.FindLoot(monster);
+            this.CharacterRepository.GainItem(id, item);
             character.Victory(monster);
-            //result = SetVictoryViewModel(monster);
-            result.CopyMonster(monster); //TODO Replace
+            var result = CreateBattleViewModel(monster, character, item);
             this.MonsterRepository.DeleteMonster(monster);
             this.LocationRepository.UpdateLocation(location);
             this.CharacterRepository.UpdateCharacter(character);
@@ -121,6 +139,8 @@ namespace CoZ.Controllers
 
         public ActionResult GameOver()
         {
+            string id = User.Identity.GetUserId();
+            this.CharacterRepository.DeleteCharacter(id);
             return View();
         }
 
@@ -152,21 +172,10 @@ namespace CoZ.Controllers
             else return RedirectToAction("Index");
         }
 
-        public BattleViewModel SetBattleViewModel(Monster monster, Character character)
+        public BattleViewModel CreateBattleViewModel(Monster monster, Character character, Item item = null)
         {
-            return new BattleViewModel(monster, character);
+            return new BattleViewModel(monster, character, item);
         }
-
-        public VictoryViewModel SetVictoryViewModel(Monster monster)
-        {
-            return new VictoryViewModel(monster);
-        }
-
-        public LevelUpViewModel SetLevelUpViewModel(Character character)
-        {
-            return new LevelUpViewModel(character);
-        }
-
 
     }
 }

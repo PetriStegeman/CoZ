@@ -2,6 +2,7 @@
 using CoZ.Models.Locations;
 using CoZ.Models.Monsters;
 using CoZ.Repositories;
+using CoZ.ViewModels;
 using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,8 @@ namespace CoZ.Controllers
     [Authorize]
     public class LocationController : Controller
     {
+
+        #region Repositories
         private LocationRepository locationRepository;
         protected LocationRepository LocationRepository
         {
@@ -62,16 +65,34 @@ namespace CoZ.Controllers
             }
         }
 
+        private ItemRepository itemRepository;
+        protected ItemRepository ItemRepository
+        {
+            get
+            {
+                if (itemRepository == null)
+                {
+                    return new ItemRepository();
+                }
+                else
+                {
+                    return itemRepository;
+                }
+            }
+        }
+        #endregion
+
         public ActionResult Index()
         {
             string id = User.Identity.GetUserId();
             var location = this.LocationRepository.FindCurrentLocation(id);
             var monster = this.MonsterRepository.FindMonsterByLocation(location);
+            var modelView = CreateViewModel(location);
             if (monster != null)
             {
                 return RedirectToAction("Index", "Battle");
             }
-            else return View(location);
+            else return View(modelView);
         }
 
         public ActionResult GoNorth()
@@ -85,12 +106,11 @@ namespace CoZ.Controllers
             character.YCoord += 1;
             var location = this.LocationRepository.FindCurrentLocation(id);
             this.CharacterRepository.UpdateCharacter(character);
-            return RedirectToAction("Index", location);
+            return RedirectToAction("Index");
         }
 
         public ActionResult GoSouth()
         {
-
             string id = User.Identity.GetUserId();
             var character = this.CharacterRepository.FindByCharacterId(id);
             if (character.YCoord == 0)
@@ -100,7 +120,7 @@ namespace CoZ.Controllers
             character.YCoord -= 1;
             var location = this.LocationRepository.FindCurrentLocation(id);
             this.CharacterRepository.UpdateCharacter(character);
-            return RedirectToAction("Index", location);
+            return RedirectToAction("Index");
         }
 
         public ActionResult GoEast()
@@ -114,7 +134,7 @@ namespace CoZ.Controllers
             character.XCoord += 1;
             var location = this.LocationRepository.FindCurrentLocation(id);
             this.CharacterRepository.UpdateCharacter(character);
-            return RedirectToAction("Index", location);
+            return RedirectToAction("Index");
         }
 
         public ActionResult GoWest()
@@ -128,7 +148,7 @@ namespace CoZ.Controllers
             character.XCoord -= 1;
             var location = this.LocationRepository.FindCurrentLocation(id);
             this.CharacterRepository.UpdateCharacter(character);
-            return RedirectToAction("Index", location);
+            return RedirectToAction("Index");
         }
 
         public ActionResult Camp()
@@ -138,6 +158,22 @@ namespace CoZ.Controllers
             character.Camp();
             this.CharacterRepository.UpdateCharacter(character);
             return View();
+        }
+
+        public LocationViewModel CreateViewModel(Location location)
+        {
+            string id = User.Identity.GetUserId();
+            var character = this.CharacterRepository.FindByCharacterId(id);
+            var locationToNorth = this.LocationRepository.FindLocation(id, character.XCoord, character.YCoord + 1);
+            bool isMonsterNorth = locationToNorth.Monster != null;
+            var locationToEast = this.LocationRepository.FindLocation(id, character.XCoord + 1, character.YCoord);
+            bool isMonsterEast = locationToEast.Monster != null;
+            var locationToSouth = this.LocationRepository.FindLocation(id, character.XCoord, character.YCoord - 1);
+            bool isMonsterSouth = locationToSouth.Monster != null;
+            var locationToWest = this.LocationRepository.FindLocation(id, character.XCoord + 1, character.YCoord);
+            bool isMonsterWest = locationToWest.Monster != null;
+            LocationViewModel result = new LocationViewModel(location, isMonsterNorth, isMonsterEast, isMonsterSouth, isMonsterWest);
+            return result;
         }
     }
 }

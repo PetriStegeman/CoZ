@@ -22,7 +22,7 @@ namespace CoZ.Models.Monsters
 
         public abstract Monster CloneMonster();
 
-        public void CopyMonster(Monster desiredResult)
+        public virtual void CopyMonster(Monster desiredResult)
         {
             this.MonsterId = desiredResult.MonsterId;
             this.Name = desiredResult.Name;

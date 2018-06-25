@@ -7,6 +7,32 @@ namespace CoZ.Models.Items
 {
     public class WoodenSword : Weapon
     {
+        public void CopyItem(WoodenSword desiredResult)
+        {
+            this.ItemId = desiredResult.ItemId;
+            this.Name = desiredResult.Name;
+            this.Description = desiredResult.Description;
+            this.Value = desiredResult.Value;
+            this.IsSellable = desiredResult.IsSellable;
+            this.IsEquiped = desiredResult.IsEquiped;
+            this.CanBeWeapon = desiredResult.CanBeWeapon;
+            this.Strength = desiredResult.Strength;
+        }
+
+        public override Item CloneItem()
+        {
+            var output = new WoodenSword();
+            output.ItemId = this.ItemId;
+            output.Name = this.Name;
+            output.CanBeWeapon = this.CanBeWeapon;
+            output.IsEquiped = this.IsEquiped;
+            output.Description = this.Description;
+            output.Value = this.Value;
+            output.Strength = this.Strength;
+            output.IsSellable = this.IsSellable;
+            return output;
+        }
+
         public WoodenSword()
         {
             this.Name = "A Wooden Sword";

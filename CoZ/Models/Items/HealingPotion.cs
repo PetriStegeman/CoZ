@@ -14,6 +14,32 @@ namespace CoZ.Models.Items
             //TODO Make do something
         }
 
+        public void CopyItem(HealingPotion desiredResult)
+        {
+            this.ItemId = desiredResult.ItemId;
+            this.Name = desiredResult.Name;
+            this.Description = desiredResult.Description;
+            this.Value = desiredResult.Value;
+            this.IsSellable = desiredResult.IsSellable;
+            this.IsEquiped = desiredResult.IsEquiped;
+            this.PortionsRemaining = desiredResult.PortionsRemaining;
+            this.CanBeConsumed = desiredResult.CanBeConsumed;
+        }
+
+        public override Item CloneItem()
+        {
+            var output = new HealingPotion();
+            output.ItemId = this.ItemId;
+            output.Name = this.Name;
+            output.PortionsRemaining = this.PortionsRemaining;
+            output.IsEquiped = this.IsEquiped;
+            output.Description = this.Description;
+            output.Value = this.Value;
+            output.CanBeConsumed = this.CanBeConsumed;
+            output.IsSellable = this.IsSellable;
+            return output;
+        }
+
         public HealingPotion()
         {
             this.Name = "Healing Potion";

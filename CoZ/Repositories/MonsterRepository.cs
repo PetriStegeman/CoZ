@@ -17,7 +17,7 @@ namespace CoZ.Repositories
             Monster output;
             using (var dbContext = ApplicationDbContext.Create())
             {
-                var monster = dbContext.Locations.SingleOrDefault(d => d.LocationId == location.LocationId).Monster;
+                var monster = dbContext.Locations.Single(d => d.LocationId == location.LocationId).Monster;
                 if (monster == null)
                 {
                     output = null;
@@ -67,8 +67,8 @@ namespace CoZ.Repositories
                         {
                             monster.Loot = item;
                         }
-                        location.Monster = monster;
                         dbContext.Monsters.Add(monster);
+                        location.Monster = monster;
                     }
                 }
                 dbContext.SaveChanges();

@@ -15,5 +15,17 @@ namespace CoZ.Models.Items
         public int Value { get; set; }
         public bool IsSellable { get; set; }
         public bool IsEquiped { get; set; }
+
+        public virtual void CopyItem(Item desiredResult)
+        {
+            this.ItemId = desiredResult.ItemId;
+            this.Name = desiredResult.Name;
+            this.Description = desiredResult.Description;
+            this.Value = desiredResult.Value;
+            this.IsSellable = desiredResult.IsSellable;
+            this.IsEquiped = desiredResult.IsEquiped;
+        }
+
+        public abstract Item CloneItem();
     }
 }

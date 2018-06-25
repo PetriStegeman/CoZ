@@ -1,6 +1,7 @@
 ﻿using CoZ.Models;
 using CoZ.Models.Items;
 using CoZ.Models.Locations;
+using CoZ.Models.Monsters;
 using CoZ.Utility;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,18 @@ namespace CoZ.Repositories
 {
     public class ItemRepository
     {
+
+        public Item FindLoot(Monster monster)
+        {
+            Item result;
+            using (var dbContext = ApplicationDbContext.Create())
+            {
+                var item = dbContext.Items.Find(monster.Loot.ItemId);
+                result = item.CloneItem();
+            }
+            return result;
+        }
+
         internal void AddItems(string id)
         {
             using (var dbContext = ApplicationDbContext.Create())
@@ -22,8 +35,8 @@ namespace CoZ.Repositories
                     var item = ItemFactory.CreateItem();
                     if (location.Monster == null && item != null)
                     {
-                        location.Item = item;
                         dbContext.Items.Add(item);
+                        location.Item = item;
                     }
                 }
                 dbContext.SaveChanges();

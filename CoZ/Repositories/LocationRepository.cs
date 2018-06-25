@@ -15,7 +15,7 @@ namespace CoZ.Repositories
             bool result = false;
             using (var dbContext = ApplicationDbContext.Create())
             {
-                var monster = dbContext.Locations.SingleOrDefault(d => d.LocationId == location.LocationId).Monster;
+                var monster = dbContext.Locations.Single(d => d.LocationId == location.LocationId).Monster;
                 if (monster != null)
                 {
                     result = true;

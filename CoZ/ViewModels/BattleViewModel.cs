@@ -1,4 +1,5 @@
 ﻿using CoZ.Models;
+using CoZ.Models.Items;
 using CoZ.Models.Monsters;
 using System;
 using System.Collections.Generic;
@@ -18,10 +19,12 @@ namespace CoZ.ViewModels
         public int MonsterMaxHp { get; set; }
         public int MonsterLevel { get; set; }
         public string MonsterName { get; set; }
+        public int MonsterGold { get; set; }
+        public string ItemName { get; set; }
 
         public BattleViewModel() { }
 
-        public BattleViewModel(Monster monster, Character character)
+        public BattleViewModel(Monster monster, Character character, Item item = null)
         {
             this.CharacterCurrentHp = character.CurrentHp;
             this.CharacterMaxHp = character.MaxHp;
@@ -32,7 +35,10 @@ namespace CoZ.ViewModels
             this.MonsterMaxHp = monster.MaxHp;
             this.MonsterLevel = monster.Level;
             this.MonsterName = monster.Name;
+            if (item != null)
+            {
+                this.ItemName = item.Name;
+            }
         }
-
     }
 }
