@@ -8,14 +8,14 @@ using System.Web;
 
 namespace CoZ.Utility
 {
-    public class MapFactory
+    public static class MapFactory
     {
         public static ICollection<Location> CreateSmallMap(string id)
         {
             ICollection <Location> map = new List<Location>();
-            for (int i = 0; i <= 20; i++)
+            for (int i = 1; i <= 20; i++)
             {
-                for (int j = 0; j < 20; j++)
+                for (int j = 1; j <= 20; j++)
                 {
                     Location location = GetTile(i, j);
                     map.Add(location);
@@ -27,9 +27,9 @@ namespace CoZ.Utility
         public static ICollection<Location> CreateMediumMap(string id)
         {
             ICollection<Location> map = new List<Location>();
-            for (int i = 0; i <= 20; i++)
+            for (int i = 1; i <= 20; i++)
             {
-                for (int j = 0; j < 20; j++)
+                for (int j = 1; j <= 20; j++)
                 {
                     Location location = GetTile(i, j);
                     map.Add(location);
@@ -38,12 +38,12 @@ namespace CoZ.Utility
             return map;
         }
 
-        public static ICollection<Location> CreateBigMap(string id)
+        public static ICollection<Location> CreateBigMap()
         {
             ICollection<Location> map = new List<Location>();
-            for (int i = 0; i <= 20; i++)
+            for (int i = 1; i <= 20; i++)
             {
-                for (int j = 0; j < 20; j++)
+                for (int j = 1; j <= 20; j++)
                 {
                     Location location = GetTile(i, j);
                     map.Add(location);

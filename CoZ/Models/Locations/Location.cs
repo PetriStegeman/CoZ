@@ -16,11 +16,9 @@ namespace CoZ.Models.Locations
         public string ShortDescription { get; set; }
         public bool IsVisited { get; set; }
         public int Altitude { get; set; }
-        public virtual ICollection<Item> Items { get; set; }
-        public virtual ICollection<Monster> Monsters { get; set; }
-        //public virtual Character Character { get; set; }
+        public virtual Item Item { get; set; }
+        public virtual Monster Monster { get; set; }
 
-        public abstract Monster AddMonster();
         //public abstract Item AddItem();
 
         public void CloneLocation(Location desiredResult)
@@ -34,17 +32,7 @@ namespace CoZ.Models.Locations
             this.Altitude = desiredResult.Altitude;
         }
 
-        public Location CopyLocation()
-        {
-            var location = new EmptyLocation();
-            location.LocationId = this.LocationId;
-            location.XCoord = this.XCoord;
-            location.YCoord = this.YCoord;
-            location.Description = this.Description;
-            location.ShortDescription = this.ShortDescription;
-            location.IsVisited = this.IsVisited;
-            location.Altitude = this.Altitude;
-            return location;
-        }
+        public abstract Location CopyLocation();
+
     }
 }

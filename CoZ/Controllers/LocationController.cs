@@ -46,12 +46,28 @@ namespace CoZ.Controllers
             }
         }
 
+        private MonsterRepository monsterRepository;
+        protected MonsterRepository MonsterRepository
+        {
+            get
+            {
+                if (monsterRepository == null)
+                {
+                    return new MonsterRepository();
+                }
+                else
+                {
+                    return monsterRepository;
+                }
+            }
+        }
+
         public ActionResult Index()
         {
             string id = User.Identity.GetUserId();
             var location = this.LocationRepository.FindCurrentLocation(id);
-            int monsterCounter = this.LocationRepository.GetNumberOfMonsters(location);
-            if (monsterCounter != 0)
+            var monster = this.MonsterRepository.FindMonsterByLocation(location);
+            if (monster != null)
             {
                 return RedirectToAction("Index", "Battle");
             }
@@ -62,6 +78,10 @@ namespace CoZ.Controllers
         {
             string id = User.Identity.GetUserId();
             var character = this.CharacterRepository.FindByCharacterId(id);
+            if (character.YCoord == 20)
+            {
+                //TODO Throw out of bounds exception and handle it in javascript
+            }
             character.YCoord += 1;
             var location = this.LocationRepository.FindCurrentLocation(id);
             this.CharacterRepository.UpdateCharacter(character);
@@ -73,6 +93,10 @@ namespace CoZ.Controllers
 
             string id = User.Identity.GetUserId();
             var character = this.CharacterRepository.FindByCharacterId(id);
+            if (character.YCoord == 0)
+            {
+                //TODO Throw out of bounds exception and handle it in javascript
+            }
             character.YCoord -= 1;
             var location = this.LocationRepository.FindCurrentLocation(id);
             this.CharacterRepository.UpdateCharacter(character);
@@ -83,6 +107,10 @@ namespace CoZ.Controllers
         {
             string id = User.Identity.GetUserId();
             var character = this.CharacterRepository.FindByCharacterId(id);
+            if (character.XCoord == 20)
+            {
+                //TODO Throw out of bounds exception and handle it in javascript
+            }
             character.XCoord += 1;
             var location = this.LocationRepository.FindCurrentLocation(id);
             this.CharacterRepository.UpdateCharacter(character);
@@ -93,6 +121,10 @@ namespace CoZ.Controllers
         {
             string id = User.Identity.GetUserId();
             var character = this.CharacterRepository.FindByCharacterId(id);
+            if (character.YCoord == 0)
+            {
+                //TODO Throw out of bounds exception and handle it in javascript
+            }
             character.XCoord -= 1;
             var location = this.LocationRepository.FindCurrentLocation(id);
             this.CharacterRepository.UpdateCharacter(character);

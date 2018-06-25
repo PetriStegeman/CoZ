@@ -10,13 +10,16 @@ namespace CoZ.Repositories
     public class LocationRepository //: Repository
     {
 
-        public int GetNumberOfMonsters(Location location)
+        public bool AreThereMonstersAtLocation(Location location)
         {
-            int result = 0;
+            bool result = false;
             using (var dbContext = ApplicationDbContext.Create())
             {
-                var originalLocation = dbContext.Locations.Find(location.LocationId);
-                result = originalLocation.Monsters.Count();
+                var monster = dbContext.Locations.SingleOrDefault(d => d.LocationId == location.LocationId).Monster;
+                if (monster != null)
+                {
+                    result = true;
+                }
             }
             return result;
         }
@@ -59,14 +62,9 @@ namespace CoZ.Repositories
         {
             using (var dbContext = ApplicationDbContext.Create())
             {
-                foreach (var monster in location.Monsters)
-                {
-                    foreach (var item in monster.Loot)
-                    {
-                        dbContext.Items.Remove(dbContext.Items.Find(item.ItemId));
-                    }
-                    dbContext.Monsters.Remove(dbContext.Monsters.Find(monster.MonsterId));
-                }
+                var monster = dbContext.Locations.SingleOrDefault(d => d.LocationId == location.LocationId).Monster;
+                dbContext.Items.Remove(dbContext.Items.Find(monster.Loot.ItemId));
+                dbContext.Monsters.Remove(dbContext.Monsters.Find(monster.MonsterId));
                 dbContext.Locations.Remove(dbContext.Locations.Find(location.LocationId));
                 dbContext.SaveChanges();
             }

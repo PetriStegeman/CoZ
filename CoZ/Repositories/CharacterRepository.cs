@@ -18,7 +18,6 @@ namespace CoZ.Repositories
                 dbContext.Characters.Add(character);
                 dbContext.SaveChanges();
             }
-
         }
 
         public Character FindByCharacterId(string id)
@@ -35,18 +34,7 @@ namespace CoZ.Repositories
             using (var dbContext = ApplicationDbContext.Create())
             {
                 var character = dbContext.Characters.Single(c => c.UserId == id);
-                foreach (var location in character.Map)
-                {
-                    foreach (var monster in location.Monsters)
-                    {
-                        foreach (var item in monster.Loot)
-                        {
-                            dbContext.Items.Remove(dbContext.Items.Find(item.ItemId));
-                        }
-                        dbContext.Monsters.Remove(dbContext.Monsters.Find(monster.MonsterId));
-                    }
-                    dbContext.Locations.Remove(dbContext.Locations.Find(location.LocationId));
-                }
+                DeleteLocations(dbContext, character);
                 foreach (var item in character.Inventory)
                 {
                     dbContext.Items.Remove(dbContext.Items.Find(item.ItemId));
@@ -55,6 +43,26 @@ namespace CoZ.Repositories
                 dbContext.SaveChanges();
             }
         }
+
+        private static void DeleteLocations(ApplicationDbContext dbContext, Character character)
+        {
+            IEnumerable<Location> locationsWithMonstersToDelete = character.Map.Where(d => d.Monster != null);
+            foreach (var location in locationsWithMonstersToDelete)
+            {
+                dbContext.Items.Remove(dbContext.Items.Find(location.Monster.Loot.ItemId));
+                dbContext.Monsters.Remove(dbContext.Monsters.Find(location.Monster.MonsterId));
+            }
+            IEnumerable<Location> locationsWithItemsToDelete = character.Map.Where(d => d.Item != null);
+            foreach (var location in locationsWithItemsToDelete)
+            {
+                dbContext.Items.Remove(dbContext.Items.Find(location.Item.ItemId));
+            }
+            foreach (var location in character.Map)
+            {
+                dbContext.Locations.Remove(dbContext.Locations.Find(location.LocationId));
+            }
+        }
+
 
         public void UpdateCharacter(Character character)
         {

@@ -1,6 +1,7 @@
 ﻿using CoZ.Models;
 using CoZ.Models.Locations;
 using CoZ.Models.Monsters;
+using CoZ.Utility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,9 +17,15 @@ namespace CoZ.Repositories
             Monster output;
             using (var dbContext = ApplicationDbContext.Create())
             {
-                var originalLocation = dbContext.Locations.Find(location.LocationId);
-                var monster = originalLocation.Monsters.First();
-                output = monster.CloneMonster();
+                var monster = dbContext.Locations.SingleOrDefault(d => d.LocationId == location.LocationId).Monster;
+                if (monster == null)
+                {
+                    output = null;
+                }
+                else
+                {
+                    output = monster.CloneMonster();
+                }
             }
             return output;
         }
@@ -28,10 +35,7 @@ namespace CoZ.Repositories
             using (var dbContext = ApplicationDbContext.Create())
             {
                 var originalMonster = dbContext.Monsters.Find(monster.MonsterId);
-                foreach (var item in originalMonster.Loot)
-                {
-                    dbContext.Items.Remove(dbContext.Items.Find(item.ItemId));
-                }
+                dbContext.Items.Remove(dbContext.Items.Find(monster.Loot.ItemId));
                 dbContext.Monsters.Remove(originalMonster);
                 dbContext.SaveChanges();
             }
@@ -43,6 +47,30 @@ namespace CoZ.Repositories
             {
                 var originalMonster = dbContext.Monsters.Find(monster.MonsterId);
                 originalMonster.CopyMonster(monster);
+                dbContext.SaveChanges();
+            }
+        }
+
+        internal void AddMonsters(string id)
+        {
+            using (var dbContext = ApplicationDbContext.Create())
+            {
+                var character = dbContext.Characters.Single(c => c.UserId == id);
+                ICollection<Location> map = character.Map;
+                foreach (var location in map)
+                {
+                    var monster = MonsterFactory.CreateMonster();
+                    if (monster != null)
+                    {
+                        var item = ItemFactory.CreateItem();
+                        if (item != null)
+                        {
+                            monster.Loot = item;
+                        }
+                        location.Monster = monster;
+                        dbContext.Monsters.Add(monster);
+                    }
+                }
                 dbContext.SaveChanges();
             }
         }

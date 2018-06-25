@@ -11,7 +11,7 @@ namespace CoZ.ViewModels
     {
         public int Gold { get; set; }
         public int Experience { get; set; }
-        public ICollection<Item> Loot { get; set; }
+        public Item Loot { get; set; }
 
         public VictoryViewModel() { }
 

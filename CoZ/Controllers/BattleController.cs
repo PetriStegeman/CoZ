@@ -53,7 +53,7 @@ namespace CoZ.Controllers
         {
             get
             {
-                if (characterRepository == null)
+                if (monsterRepository == null)
                 {
                     return new MonsterRepository();
                 }
@@ -66,14 +66,10 @@ namespace CoZ.Controllers
 
         public ActionResult Index()
         {
-            Monster monster = null;
             string id = User.Identity.GetUserId();
             var character = this.CharacterRepository.FindByCharacterId(id);
             var location = this.LocationRepository.FindCurrentLocation(id);
-            if (this.LocationRepository.GetNumberOfMonsters(location) != 0)
-            {
-                monster = this.MonsterRepository.FindMonsterByLocation(location);
-            }
+            var monster = this.MonsterRepository.FindMonsterByLocation(location);
             if (monster == null)
             {
                 return RedirectToAction("Index", "Location");
@@ -110,19 +106,16 @@ namespace CoZ.Controllers
         {
             //VictoryViewModel result = null;
             Monster result = null; //TODO Replace
-            using (var DbContext = ApplicationDbContext.Create())
-            {
-                string id = User.Identity.GetUserId();
-                var character = this.CharacterRepository.FindByCharacterId(id);
-                var location = this.LocationRepository.FindCurrentLocation(id);
-                var monster = location.Monsters.First();
-                character.Victory(monster);
-                //result = SetVictoryViewModel(monster);
-                result.CopyMonster(monster); //TODO Replace
-                this.MonsterRepository.DeleteMonster(monster);
-                this.LocationRepository.UpdateLocation(location);
-                this.CharacterRepository.UpdateCharacter(character);
-            }
+            string id = User.Identity.GetUserId();
+            var character = this.CharacterRepository.FindByCharacterId(id);
+            var location = this.LocationRepository.FindCurrentLocation(id);
+            var monster = this.MonsterRepository.FindMonsterByLocation(location);
+            character.Victory(monster);
+            //result = SetVictoryViewModel(monster);
+            result.CopyMonster(monster); //TODO Replace
+            this.MonsterRepository.DeleteMonster(monster);
+            this.LocationRepository.UpdateLocation(location);
+            this.CharacterRepository.UpdateCharacter(character);
             return View(result);
         }
 
@@ -134,19 +127,12 @@ namespace CoZ.Controllers
         public ActionResult LevelUp()
         {
             bool levelUp = false;
-            using (var DbContext = ApplicationDbContext.Create())
-            {
-                string id = User.Identity.GetUserId();
-                var character = this.CharacterRepository.FindByCharacterId(id);
-                var location = this.LocationRepository.FindCurrentLocation(id);
-                if (character.Experience > (character.Level * 5))
-                {
-                    levelUp = true;
-                    character.LevelUp();
-                }
-                this.CharacterRepository.UpdateCharacter(character);
-            }
-            if (levelUp == true)
+            string id = User.Identity.GetUserId();
+            var character = this.CharacterRepository.FindByCharacterId(id);
+            var location = this.LocationRepository.FindCurrentLocation(id);
+            levelUp = character.IsLevelUp();
+            this.CharacterRepository.UpdateCharacter(character);
+            if (levelUp)
             {
                 return View();
             }

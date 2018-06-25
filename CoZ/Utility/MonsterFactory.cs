@@ -1,4 +1,4 @@
-﻿/*
+﻿
 using CoZ.Models.Locations;
 using CoZ.Models.Monsters;
 using System;
@@ -8,25 +8,33 @@ using System.Web;
 
 namespace CoZ.Utility
 {
-    public class MonsterFactory
+    public static class MonsterFactory
     {
         //20% chance to add Monster to Monsterlist of Location
-        public static void CreateMonster(Location location)
+        public static Monster CreateMonster()
         {
             if (RngThreadSafe.Next(1, 100) <= 20)
             {
-                location.Monsters.Add(GetMonster());
+                return GetMonster();
             }
+            return null; 
         }
 
         //Generate random new Monster
         private static Monster GetMonster()
         {
-            //Temporary token Monster, to be replaced
-            Monster result = new Boar();
-            //TODO Return a random monster from our monster database
-            return result;
+            switch (RngThreadSafe.Next(1, 6))
+            {
+                case 1: return new Boar();
+                    break;
+                case 2: return new KoboldWarrior();
+                    break;
+                case 3: return new KoboldGatherer();
+                    break;
+                case 4: return new KoboldHunter();
+                    break;
+                default: return new Deer();
+            }
         }
     }
 }
-*/

@@ -17,21 +17,10 @@ namespace CoZ.Models.Monsters
         public int MaxHp { get; set; }
         public int Strength { get; set; }
         public int Gold { get; set; }
-        public virtual ICollection<Item> Loot { get; set; }
-        public virtual Location Location { get; set; }
+        public int Speed { get; set; }
+        public virtual Item Loot { get; set; }
 
-        internal Monster CloneMonster()
-        {
-            var output = new EmptyMonster();
-            output.MonsterId = this.MonsterId;
-            output.Name = this.Name;
-            output.Level = this.Level;
-            output.CurrentHp = this.CurrentHp;
-            output.MaxHp = this.MaxHp;
-            output.Strength = this.Strength;
-            output.Gold = this.Gold;
-            return output;
-        }
+        public abstract Monster CloneMonster();
 
         public void CopyMonster(Monster desiredResult)
         {
@@ -42,12 +31,13 @@ namespace CoZ.Models.Monsters
             this.MaxHp = desiredResult.MaxHp;
             this.Strength = desiredResult.Strength;
             this.Gold = desiredResult.Gold;
+            this.Speed = desiredResult.Speed;
         }
 
         //Random Loot and Random Gold assignment for new creature
         public void MonsterInit()
         {
-            this.Loot = new List<Item>();
+            //this.Loot = new List<Item>();
             //ItemFactory.CreateItem(this);
             this.Gold = RngThreadSafe.Next(1, this.Level * 3);
         }

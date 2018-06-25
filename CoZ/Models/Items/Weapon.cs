@@ -1,0 +1,13 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+
+namespace CoZ.Models.Items
+{
+    public abstract class Weapon : Item
+    {
+        public int Strength { get; set; }
+        public bool CanBeWeapon { get; set; }
+    }
+}

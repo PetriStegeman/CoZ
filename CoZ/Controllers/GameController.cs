@@ -31,6 +31,38 @@ namespace CoZ.Controllers
             }
         }
 
+        private MonsterRepository monsterRepository;
+        protected MonsterRepository MonsterRepository
+        {
+            get
+            {
+                if (monsterRepository == null)
+                {
+                    return new MonsterRepository();
+                }
+                else
+                {
+                    return monsterRepository;
+                }
+            }
+        }
+
+        private ItemRepository itemRepository;
+        protected ItemRepository ItemRepository
+        {
+            get
+            {
+                if (itemRepository == null)
+                {
+                    return new ItemRepository();
+                }
+                else
+                {
+                    return itemRepository;
+                }
+            }
+        }
+
         // GET: Game
         public ActionResult Index()
         {
@@ -41,8 +73,13 @@ namespace CoZ.Controllers
         public ActionResult Create()
         {
             string id = User.Identity.GetUserId();
-            //this.CharacterRepository.DeleteExistingCharacters(id);
+            if (this.CharacterRepository.FindByCharacterId(id) != null)
+            {
+                this.CharacterRepository.DeleteCharacter(id);
+            }
             this.CharacterRepository.CreateCharacter(id);
+            this.MonsterRepository.AddMonsters(id);
+            this.ItemRepository.AddItems(id);
             return RedirectToAction("Index", "Location");
         }
     }

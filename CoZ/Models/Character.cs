@@ -28,18 +28,30 @@ namespace CoZ.Models
         public int CurrentMp { get; set; }
         public int Strength { get; set; }
         public int Magic { get; set; }
-        public int Insanity { get; set; }
+        public int Speed { get; set; }
 
         public void Camp()
         {
             this.CurrentHp = this.MaxHp;
         }
 
-        public void Attack(Monster monster)
+        public string Attack(Monster monster)
         {
-            this.CurrentHp -= monster.Strength;
-            monster.CurrentHp -= this.Strength; //TODO Weapon modifier, miss chance
-
+            int monsterDamage = 0;
+            int characterDamage = 0;
+            string result = "";
+            if (RngThreadSafe.Next(1, 10) >= 4 - (this.Speed-monster.Speed))
+            {
+                this.CurrentHp -= monster.Strength;
+                monsterDamage = monster.Strength;
+            }
+            if (RngThreadSafe.Next(1, 10) >= 4 - (monster.Speed - this.Speed))
+            {
+                monster.CurrentHp -= this.Strength;
+                characterDamage = this.Strength; 
+            }
+            result = "You inflicted " + characterDamage + " damage to the boar. The boar inflicted " + monsterDamage + " damage to you.";
+            return result;
         }
 
         public void Victory(Monster monster)
@@ -51,6 +63,16 @@ namespace CoZ.Models
             //{
             //    this.Inventory.Add(item);
             //}
+        }
+
+        public bool IsLevelUp()
+        {
+            if (this.Experience > (this.Level * 5))
+            {
+                LevelUp();
+                return true;
+            }
+            else return false;
         }
 
         public void LevelUp()
@@ -77,18 +99,19 @@ namespace CoZ.Models
             this.CurrentMp = desiredResult.CurrentMp;
             this.Strength = desiredResult.Strength;
             this.Magic = desiredResult.Magic;
-            this.Insanity = desiredResult.Insanity;
+            this.Speed = desiredResult.Speed;
         }
 
         public Character(string id)
         {
-            this.Map = MapFactory.CreateBigMap(id);
+            this.Map = MapFactory.CreateBigMap();
             this.UserId = id;
             this.XCoord = 10;
             this.YCoord = 10;
             this.CurrentHp = 10;
             this.MaxHp = 10;
-            this.Strength = 3;
+            this.Strength = 2;
+            this.Speed = 1;
         }
 
         public Character(){}
