@@ -5,7 +5,9 @@ using System.Web;
 
 namespace CoZ.Models.Items
 {
-    public class Sword : Item
+    public abstract class Weapon : Item
     {
+        public int Strength { get; set; }
+        public bool CanBeWeapon { get; set; }
     }
 }

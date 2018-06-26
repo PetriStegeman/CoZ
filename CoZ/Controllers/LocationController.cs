@@ -1,6 +1,8 @@
 ﻿using CoZ.Models;
 using CoZ.Models.Locations;
 using CoZ.Models.Monsters;
+using CoZ.Repositories;
+using CoZ.ViewModels;
 using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
@@ -13,112 +15,165 @@ namespace CoZ.Controllers
     [Authorize]
     public class LocationController : Controller
     {
-        // GET: Current Location from character by character id
+
+        #region Repositories
+        private LocationRepository locationRepository;
+        protected LocationRepository LocationRepository
+        {
+            get
+            {
+                if (locationRepository == null)
+                {
+                    return new LocationRepository();
+                }
+                else
+                {
+                    return locationRepository;
+                }
+            }
+        }
+
+        private CharacterRepository characterRepository;
+        protected CharacterRepository CharacterRepository
+        {
+            get
+            {
+                if (characterRepository == null)
+                {
+                    return new CharacterRepository();
+                }
+                else
+                {
+                    return characterRepository;
+                }
+            }
+        }
+
+        private MonsterRepository monsterRepository;
+        protected MonsterRepository MonsterRepository
+        {
+            get
+            {
+                if (monsterRepository == null)
+                {
+                    return new MonsterRepository();
+                }
+                else
+                {
+                    return monsterRepository;
+                }
+            }
+        }
+
+        private ItemRepository itemRepository;
+        protected ItemRepository ItemRepository
+        {
+            get
+            {
+                if (itemRepository == null)
+                {
+                    return new ItemRepository();
+                }
+                else
+                {
+                    return itemRepository;
+                }
+            }
+        }
+        #endregion
+
         public ActionResult Index()
         {
-            Location result = null;
-            int counter = 0;
-            using (var DbContext = ApplicationDbContext.Create())
-            {
-                string id = User.Identity.GetUserId();
-                Character myChar = DbContext.Characters.Where(c => c.UserId == id).First();
-                Location currentLocation = DbContext.Locations.Where(l => l.XCoord == myChar.XCoord && l.YCoord == myChar.YCoord).First();
-                result = CopyLocation(currentLocation);
-                counter = DbContext.Monsters.Where(c => c.Location.LocationId == currentLocation.LocationId).Count();
-            }
-            if (counter != 0)
+            string id = User.Identity.GetUserId();
+            var location = this.LocationRepository.FindCurrentLocation(id);
+            var monster = this.MonsterRepository.FindMonsterByLocation(location);
+            var modelView = CreateViewModel(location);
+            if (monster != null)
             {
                 return RedirectToAction("Index", "Battle");
             }
-            else return View(result);
+            else return View(modelView);
         }
 
-        //Thread safe? wait for result from FindCharacter before using myChar
         public ActionResult GoNorth()
         {
-            Location result = null;
-            using (var DbContext = ApplicationDbContext.Create())
+            string id = User.Identity.GetUserId();
+            var character = this.CharacterRepository.FindByCharacterId(id);
+            if (character.YCoord == 20)
             {
-                string id = User.Identity.GetUserId();
-                Character myChar = DbContext.Characters.Where(c => c.UserId.Equals(id)).First();
-                myChar.YCoord += 1;
-                Location copy = DbContext.Locations.Where(l => l.XCoord == myChar.XCoord && l.YCoord == myChar.YCoord).First();
-                result = CopyLocation(copy);
-                DbContext.SaveChanges();
+                //TODO Throw out of bounds exception and handle it in javascript
             }
-            return RedirectToAction("Index", result);
+            character.YCoord += 1;
+            var location = this.LocationRepository.FindCurrentLocation(id);
+            this.CharacterRepository.UpdateCharacter(character);
+            return RedirectToAction("Index");
         }
 
         public ActionResult GoSouth()
         {
-            Location result = null;
-            using (var DbContext = ApplicationDbContext.Create())
+            string id = User.Identity.GetUserId();
+            var character = this.CharacterRepository.FindByCharacterId(id);
+            if (character.YCoord == 0)
             {
-                string id = User.Identity.GetUserId();
-                Character myChar = DbContext.Characters.Where(c => c.UserId.Equals(id)).First();
-                myChar.YCoord -= 1;
-                Location copy = DbContext.Locations.Where(l => l.XCoord == myChar.XCoord && l.YCoord == myChar.YCoord).First();
-                result = CopyLocation(copy);
-                DbContext.SaveChanges();
+                //TODO Throw out of bounds exception and handle it in javascript
             }
-            return RedirectToAction("Index", result);
+            character.YCoord -= 1;
+            var location = this.LocationRepository.FindCurrentLocation(id);
+            this.CharacterRepository.UpdateCharacter(character);
+            return RedirectToAction("Index");
         }
 
         public ActionResult GoEast()
         {
-            Location result = null;
-            using (var DbContext = ApplicationDbContext.Create())
+            string id = User.Identity.GetUserId();
+            var character = this.CharacterRepository.FindByCharacterId(id);
+            if (character.XCoord == 20)
             {
-                string id = User.Identity.GetUserId();
-                Character myChar = DbContext.Characters.Where(c => c.UserId.Equals(id)).First();
-                myChar.XCoord += 1;
-                Location copy = DbContext.Locations.Where(l => l.XCoord == myChar.XCoord && l.YCoord == myChar.YCoord).First();
-                result = CopyLocation(copy);
-                DbContext.SaveChanges();
+                //TODO Throw out of bounds exception and handle it in javascript
             }
-            return RedirectToAction("Index", result);
+            character.XCoord += 1;
+            var location = this.LocationRepository.FindCurrentLocation(id);
+            this.CharacterRepository.UpdateCharacter(character);
+            return RedirectToAction("Index");
         }
 
         public ActionResult GoWest()
         {
-            Location result = null;
-            using (var DbContext = ApplicationDbContext.Create())
+            string id = User.Identity.GetUserId();
+            var character = this.CharacterRepository.FindByCharacterId(id);
+            if (character.YCoord == 0)
             {
-                string id = User.Identity.GetUserId();
-                Character myChar = DbContext.Characters.Where(c => c.UserId.Equals(id)).First();
-                myChar.XCoord -= 1;
-                Location copy = DbContext.Locations.Where(l => l.XCoord == myChar.XCoord && l.YCoord == myChar.YCoord).First();
-                result = CopyLocation(copy);
-                DbContext.SaveChanges();
+                //TODO Throw out of bounds exception and handle it in javascript
             }
-            return RedirectToAction("Index", result);
+            character.XCoord -= 1;
+            var location = this.LocationRepository.FindCurrentLocation(id);
+            this.CharacterRepository.UpdateCharacter(character);
+            return RedirectToAction("Index");
         }
 
         public ActionResult Camp()
         {
-            using (var DbContext = ApplicationDbContext.Create())
-            {
-                string id = User.Identity.GetUserId();
-                Character myChar = DbContext.Characters.Where(c => c.UserId.Equals(id)).First();
-                myChar.CurrentHp = myChar.MaxHp;
-                DbContext.SaveChanges();
-            }
+            string id = User.Identity.GetUserId();
+            var character = this.CharacterRepository.FindByCharacterId(id);
+            character.Camp();
+            this.CharacterRepository.UpdateCharacter(character);
             return View();
         }
 
-        //Copy the characteristics of a Location from the DB
-        public Location CopyLocation(Location input)
+        public LocationViewModel CreateViewModel(Location location)
         {
-            Location output = new EmptyLocation
-            {
-                Altitude = input.Altitude,
-                Description = input.Description,
-                ShortDescription = input.ShortDescription,
-                Monsters = input.Monsters,
-                Items = input.Items,
-                IsVisited = input.IsVisited
-            };
-            return output;
+            string id = User.Identity.GetUserId();
+            var character = this.CharacterRepository.FindByCharacterId(id);
+            var locationToNorth = this.LocationRepository.FindLocation(id, character.XCoord, character.YCoord + 1);
+            bool isMonsterNorth = this.LocationRepository.AreThereMonstersAtLocation(locationToNorth);
+            var locationToEast = this.LocationRepository.FindLocation(id, character.XCoord + 1, character.YCoord);
+            bool isMonsterEast = this.LocationRepository.AreThereMonstersAtLocation(locationToEast);
+            var locationToSouth = this.LocationRepository.FindLocation(id, character.XCoord, character.YCoord - 1);
+            bool isMonsterSouth = this.LocationRepository.AreThereMonstersAtLocation(locationToSouth);
+            var locationToWest = this.LocationRepository.FindLocation(id, character.XCoord + 1, character.YCoord);
+            bool isMonsterWest = this.LocationRepository.AreThereMonstersAtLocation(locationToWest);
+            LocationViewModel result = new LocationViewModel(location, isMonsterNorth, isMonsterEast, isMonsterSouth, isMonsterWest);
+            return result;
         }
     }
 }

@@ -1,0 +1,23 @@
+﻿@using CoZ.Models.Items
+@model CoZ.Models.Items.Item
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Inventory</h2>
+
+<div class="row">
+    <div class="col-md-4">
+        <h2><a class="btn btn-default" href="/Inventory/Next">Look at next item &raquo;</a></h2>
+    </div>
+    <div class="col-md-4">
+        <h2><a class="btn btn-default" href="/Inventory/Previous">Look at previous item &raquo;</a></h2>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <h2><a class="btn btn-default" href="/Location/Index">Go back to the game &raquo;</a></h2>
+    </div>
+</div>

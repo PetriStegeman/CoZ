@@ -5,7 +5,7 @@ using System.Web;
 
 namespace CoZ.Utility
 {
-    public class RngThreadSafe
+    public static class RngThreadSafe
     {
         private static Random _global = new Random();
         [ThreadStatic]

@@ -1,19 +1,14 @@
-﻿using CoZ.Models;
-using CoZ.Models.Locations;
+﻿using CoZ.Models.Items;
 using CoZ.Repositories;
-using CoZ.Utility;
-using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
 namespace CoZ.Controllers
 {
-    [Authorize]
-    public class GameController : Controller
+    public class InventoryController : Controller
     {
         #region Repositories
         private LocationRepository locationRepository;
@@ -81,24 +76,14 @@ namespace CoZ.Controllers
         }
         #endregion
 
-        // GET: Game
         public ActionResult Index()
         {
             return View();
         }
 
-        //Generate data to start a new game
-        public ActionResult Create()
+        public ActionResult Next()
         {
-            string id = User.Identity.GetUserId();
-            if (this.CharacterRepository.FindByCharacterId(id) != null)
-            {
-                this.CharacterRepository.DeleteCharacter(id);
-            }
-            this.CharacterRepository.CreateCharacter(id);
-            this.MonsterRepository.AddMonsters(id);
-            this.ItemRepository.AddItems(id);
-            return RedirectToAction("Index", "Location");
+            return View("Index");
         }
     }
 }

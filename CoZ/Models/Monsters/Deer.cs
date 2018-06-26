@@ -7,11 +7,11 @@ using System.Web;
 
 namespace CoZ.Models.Monsters
 {
-    public class Boar : Monster
+    public class Deer : Monster
     {
         public override Monster CloneMonster()
         {
-            var output = new Boar();
+            var output = new Deer();
             output.MonsterId = this.MonsterId;
             output.Name = this.Name;
             output.Level = this.Level;
@@ -22,25 +22,25 @@ namespace CoZ.Models.Monsters
             return output;
         }
 
-        public Boar(Location location)
+        public Deer(Location location)
         {
-            this.Name = "Boar";
-            this.Level = RngThreadSafe.Next(1, 4);
-            this.MaxHp = 6 + this.Level;
+            this.Name = "Deer";
+            this.Level = 1;
+            this.MaxHp = 4;
             this.CurrentHp = this.MaxHp;
-            this.Strength = this.Level;
-            this.Speed = this.Level;
+            this.Strength = 1;
+            this.Speed = 1;
             this.Location = location;
         }
 
-        public Boar()
+        public Deer()
         {
-            this.Name = "Boar";
-            this.Level = RngThreadSafe.Next(1, 4);
-            this.MaxHp = 6 + this.Level;
+            this.Name = "Deer";
+            this.Level = 1;
+            this.MaxHp = 4;
             this.CurrentHp = this.MaxHp;
-            this.Strength = this.Level;
-            this.Speed = this.Level;
+            this.Strength = 1;
+            this.Speed = 1;
         }
     }
 }
