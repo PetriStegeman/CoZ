@@ -22,6 +22,18 @@ namespace CoZ.Models.Monsters
             return output;
         }
 
+        public KoboldGatherer(Location location)
+        {
+            this.Name = "Kobold Warrior";
+            this.Level = RngThreadSafe.Next(2, 4);
+            this.MaxHp = 4 + this.Level;
+            this.CurrentHp = this.MaxHp;
+            this.Strength = this.Level;
+            this.Speed = 3;
+            this.MonsterInit();
+            this.Location = location;
+        }
+
         public KoboldGatherer()
         {
             this.Name = "Kobold Warrior";

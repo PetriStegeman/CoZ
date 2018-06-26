@@ -3,7 +3,7 @@ namespace CoZ.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class zwolleMigration : DbMigration
+    public partial class zwollllle : DbMigration
     {
         public override void Up()
         {
@@ -65,22 +65,19 @@ namespace CoZ.Migrations
                         Altitude = c.Int(nullable: false),
                         Discriminator = c.String(nullable: false, maxLength: 128),
                         Item_ItemId = c.Int(),
-                        Monster_MonsterId = c.Int(),
                         Character_CharacterId = c.Int(),
                     })
                 .PrimaryKey(t => t.LocationId)
                 .ForeignKey("dbo.Items", t => t.Item_ItemId)
-                .ForeignKey("dbo.Monsters", t => t.Monster_MonsterId)
                 .ForeignKey("dbo.Characters", t => t.Character_CharacterId)
                 .Index(t => t.Item_ItemId)
-                .Index(t => t.Monster_MonsterId)
                 .Index(t => t.Character_CharacterId);
             
             CreateTable(
                 "dbo.Monsters",
                 c => new
                     {
-                        MonsterId = c.Int(nullable: false, identity: true),
+                        MonsterId = c.Int(nullable: false),
                         Name = c.String(),
                         Level = c.Int(nullable: false),
                         CurrentHp = c.Int(nullable: false),
@@ -92,7 +89,9 @@ namespace CoZ.Migrations
                         Loot_ItemId = c.Int(),
                     })
                 .PrimaryKey(t => t.MonsterId)
+                .ForeignKey("dbo.Locations", t => t.MonsterId)
                 .ForeignKey("dbo.Items", t => t.Loot_ItemId)
+                .Index(t => t.MonsterId)
                 .Index(t => t.Loot_ItemId);
             
             CreateTable(
@@ -172,8 +171,8 @@ namespace CoZ.Migrations
             DropForeignKey("dbo.AspNetUserClaims", "UserId", "dbo.AspNetUsers");
             DropForeignKey("dbo.AspNetUserRoles", "RoleId", "dbo.AspNetRoles");
             DropForeignKey("dbo.Locations", "Character_CharacterId", "dbo.Characters");
-            DropForeignKey("dbo.Locations", "Monster_MonsterId", "dbo.Monsters");
             DropForeignKey("dbo.Monsters", "Loot_ItemId", "dbo.Items");
+            DropForeignKey("dbo.Monsters", "MonsterId", "dbo.Locations");
             DropForeignKey("dbo.Locations", "Item_ItemId", "dbo.Items");
             DropForeignKey("dbo.Items", "Character_CharacterId", "dbo.Characters");
             DropIndex("dbo.AspNetUserLogins", new[] { "UserId" });
@@ -183,8 +182,8 @@ namespace CoZ.Migrations
             DropIndex("dbo.AspNetUserRoles", new[] { "UserId" });
             DropIndex("dbo.AspNetRoles", "RoleNameIndex");
             DropIndex("dbo.Monsters", new[] { "Loot_ItemId" });
+            DropIndex("dbo.Monsters", new[] { "MonsterId" });
             DropIndex("dbo.Locations", new[] { "Character_CharacterId" });
-            DropIndex("dbo.Locations", new[] { "Monster_MonsterId" });
             DropIndex("dbo.Locations", new[] { "Item_ItemId" });
             DropIndex("dbo.Items", new[] { "Character_CharacterId" });
             DropTable("dbo.AspNetUserLogins");

@@ -11,10 +11,8 @@ namespace CoZ.Models.Monsters
 {
     public abstract class Monster
     {
-        public int MonsterId { get; set; }
         [ForeignKey("Location")]
-        public int LocationFK { get; set; }
-        public Location Location { get; set; }
+        public int MonsterId { get; set; }
         public string Name { get; set; }
         public int Level { get; set; }
         public int CurrentHp { get; set; }
@@ -23,6 +21,7 @@ namespace CoZ.Models.Monsters
         public int Gold { get; set; }
         public int Speed { get; set; }
         public virtual Item Loot { get; set; }
+        public virtual Location Location { get; set; }
 
         public abstract Monster CloneMonster();
 

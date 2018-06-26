@@ -35,31 +35,31 @@ namespace CoZ.Repositories
             {
                 var character = dbContext.Characters.SingleOrDefault(c => c.UserId == id);
                 DeleteLocations(dbContext, character);
-                foreach (var item in character.Inventory)
-                {
-                    dbContext.Items.Remove(dbContext.Items.Find(item.ItemId));
-                }
+                DeleteItems(dbContext, character.Inventory);
                 dbContext.Characters.Remove(character);
                 dbContext.SaveChanges();
             }
         }
 
-        private static void DeleteLocations(ApplicationDbContext dbContext, Character character)
+        private void DeleteLocations(ApplicationDbContext dbContext, Character character)
         {
-            IEnumerable<Location> locationsWithMonstersToDelete = character.Map.Where(d => d.Monster != null);
-            foreach (var location in locationsWithMonstersToDelete)
+            IEnumerable<Location> map = character.Map;
+            foreach (var location in map.ToList())
             {
-                dbContext.Items.Remove(dbContext.Items.Find(location.Monster.Loot.ItemId));
-                dbContext.Monsters.Remove(dbContext.Monsters.Find(location.Monster.MonsterId));
-            }
-            IEnumerable<Location> locationsWithItemsToDelete = character.Map.Where(d => d.Item != null);
-            foreach (var location in locationsWithItemsToDelete)
-            {
-                dbContext.Items.Remove(dbContext.Items.Find(location.Item.ItemId));
-            }
-            foreach (var location in character.Map)
-            {
+                if (location.Monster != null)
+                {
+                    dbContext.Monsters.Remove(dbContext.Monsters.Find(location.Monster.MonsterId));
+                }
                 dbContext.Locations.Remove(dbContext.Locations.Find(location.LocationId));
+            }
+        }
+
+        private void DeleteItems(ApplicationDbContext dbContext, ICollection<Item> items)
+        {
+            foreach (var item in items.ToList())
+            {
+                items.Remove(item);
+                dbContext.Items.Remove(dbContext.Items.Find(item.ItemId));
             }
         }
 
@@ -78,8 +78,9 @@ namespace CoZ.Repositories
         {
             using (var dbContext = ApplicationDbContext.Create())
             {
-                var character = new Character(id);
-                var newLoot = item.CloneItem();
+                var originalItem = dbContext.Items.Find(item.ItemId);
+                var newLoot = originalItem.CloneItem();
+                var character = dbContext.Characters.SingleOrDefault(c => c.UserId == id);
                 character.Inventory.Add(newLoot);
                 dbContext.Items.Add(newLoot);
                 dbContext.SaveChanges();

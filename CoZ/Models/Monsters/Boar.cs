@@ -22,6 +22,17 @@ namespace CoZ.Models.Monsters
             return output;
         }
 
+        public Boar(Location location)
+        {
+            this.Name = "Boar";
+            this.Level = RngThreadSafe.Next(1, 4);
+            this.MaxHp = 6 + this.Level;
+            this.CurrentHp = this.MaxHp;
+            this.Strength = this.Level;
+            this.Speed = this.Level;
+            this.Location = location;
+        }
+
         public Boar()
         {
             this.Name = "Boar";

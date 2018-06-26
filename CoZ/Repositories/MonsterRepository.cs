@@ -62,7 +62,7 @@ namespace CoZ.Repositories
                 ICollection<Location> map = character.Map;
                 foreach (var location in map)
                 {
-                    var monster = MonsterFactory.CreateMonster();
+                    var monster = MonsterFactory.CreateMonster(location);
                     if (monster != null)
                     {
                         var item = ItemFactory.CreateItem();

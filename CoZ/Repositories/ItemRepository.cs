@@ -15,12 +15,15 @@ namespace CoZ.Repositories
 
         public Item FindLoot(Monster monster)
         {
-            Item result;
+            Item result = null;
             using (var dbContext = ApplicationDbContext.Create())
             {
                 var originalMonster = dbContext.Monsters.Find(monster.MonsterId);
-                var item = dbContext.Items.Find(originalMonster.Loot.ItemId);
-                result = item.CloneItem();
+                if (originalMonster.Loot != null)
+                {
+                    var item = dbContext.Items.Find(originalMonster.Loot.ItemId);
+                    result = item.CloneItem();
+                }
             }
             return result;
         }

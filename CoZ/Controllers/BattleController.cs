@@ -128,7 +128,10 @@ namespace CoZ.Controllers
             var location = this.LocationRepository.FindCurrentLocation(id);
             var monster = this.MonsterRepository.FindMonsterByLocation(location);
             var item = this.ItemRepository.FindLoot(monster);
-            this.CharacterRepository.GainItem(id, item);
+            if (item != null)
+            {
+                this.CharacterRepository.GainItem(id, item);
+            }
             character.Victory(monster);
             var result = CreateBattleViewModel(monster, character, item);
             this.MonsterRepository.DeleteMonster(monster);

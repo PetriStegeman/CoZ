@@ -2,6 +2,7 @@
 using CoZ.Models.Monsters;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 
@@ -15,7 +16,7 @@ namespace CoZ.Models.Items
         public int Value { get; set; }
         public bool IsSellable { get; set; }
         public bool IsEquiped { get; set; }
-
+        
         public virtual void CopyItem(Item desiredResult)
         {
             this.ItemId = desiredResult.ItemId;

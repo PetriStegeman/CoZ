@@ -22,6 +22,17 @@ namespace CoZ.Models.Monsters
             return output;
         }
 
+        public Deer(Location location)
+        {
+            this.Name = "Deer";
+            this.Level = 1;
+            this.MaxHp = 4;
+            this.CurrentHp = this.MaxHp;
+            this.Strength = 1;
+            this.Speed = 1;
+            this.Location = location;
+        }
+
         public Deer()
         {
             this.Name = "Deer";

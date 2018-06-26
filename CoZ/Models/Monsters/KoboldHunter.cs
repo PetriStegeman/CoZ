@@ -22,6 +22,18 @@ namespace CoZ.Models.Monsters
             return output;
         }
 
+        public KoboldHunter(Location location)
+        {
+            this.Name = "Kobold Hunter";
+            this.Level = RngThreadSafe.Next(3, 5);
+            this.MaxHp = 4 + this.Level;
+            this.CurrentHp = this.MaxHp;
+            this.Strength = this.Level - 1;
+            this.Speed = 5;
+            this.MonsterInit();
+            this.Location = location;
+        }
+
         public KoboldHunter()
         {
             this.Name = "Kobold Hunter";
@@ -32,5 +44,6 @@ namespace CoZ.Models.Monsters
             this.Speed = 5;
             this.MonsterInit();
         }
+
     }
 }

@@ -11,29 +11,29 @@ namespace CoZ.Utility
     public static class MonsterFactory
     {
         //20% chance to add Monster to Monsterlist of Location
-        public static Monster CreateMonster()
+        public static Monster CreateMonster(Location location)
         {
             if (RngThreadSafe.Next(1, 100) <= 20)
             {
-                return GetMonster();
+                return GetMonster(location);
             }
             return null; 
         }
 
         //Generate random new Monster
-        private static Monster GetMonster()
+        private static Monster GetMonster(Location location)
         {
             switch (RngThreadSafe.Next(1, 6))
             {
-                case 1: return new Boar();
+                case 1: return new Boar(location);
                     break;
-                case 2: return new KoboldWarrior();
+                case 2: return new KoboldWarrior(location);
                     break;
-                case 3: return new KoboldGatherer();
+                case 3: return new KoboldGatherer(location);
                     break;
-                case 4: return new KoboldHunter();
+                case 4: return new KoboldHunter(location);
                     break;
-                default: return new Deer();
+                default: return new Deer(location);
             }
         }
     }
