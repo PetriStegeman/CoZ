@@ -35,7 +35,10 @@ namespace CoZ.Repositories
             using (var dbContext = ApplicationDbContext.Create())
             {
                 var originalMonster = dbContext.Monsters.Find(monster.MonsterId);
-                dbContext.Items.Remove(dbContext.Items.Find(monster.Loot.ItemId));
+                if (originalMonster.Loot != null)
+                {
+                    dbContext.Items.Remove(dbContext.Items.Find(originalMonster.Loot.ItemId));
+                }
                 dbContext.Monsters.Remove(originalMonster);
                 dbContext.SaveChanges();
             }

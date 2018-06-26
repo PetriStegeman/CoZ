@@ -165,13 +165,13 @@ namespace CoZ.Controllers
             string id = User.Identity.GetUserId();
             var character = this.CharacterRepository.FindByCharacterId(id);
             var locationToNorth = this.LocationRepository.FindLocation(id, character.XCoord, character.YCoord + 1);
-            bool isMonsterNorth = locationToNorth.Monster != null;
+            bool isMonsterNorth = this.LocationRepository.AreThereMonstersAtLocation(locationToNorth);
             var locationToEast = this.LocationRepository.FindLocation(id, character.XCoord + 1, character.YCoord);
-            bool isMonsterEast = locationToEast.Monster != null;
+            bool isMonsterEast = this.LocationRepository.AreThereMonstersAtLocation(locationToEast);
             var locationToSouth = this.LocationRepository.FindLocation(id, character.XCoord, character.YCoord - 1);
-            bool isMonsterSouth = locationToSouth.Monster != null;
+            bool isMonsterSouth = this.LocationRepository.AreThereMonstersAtLocation(locationToSouth);
             var locationToWest = this.LocationRepository.FindLocation(id, character.XCoord + 1, character.YCoord);
-            bool isMonsterWest = locationToWest.Monster != null;
+            bool isMonsterWest = this.LocationRepository.AreThereMonstersAtLocation(locationToWest);
             LocationViewModel result = new LocationViewModel(location, isMonsterNorth, isMonsterEast, isMonsterSouth, isMonsterWest);
             return result;
         }

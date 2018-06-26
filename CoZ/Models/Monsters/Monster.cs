@@ -3,6 +3,7 @@ using CoZ.Models.Locations;
 using CoZ.Utility;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 
@@ -11,6 +12,9 @@ namespace CoZ.Models.Monsters
     public abstract class Monster
     {
         public int MonsterId { get; set; }
+        [ForeignKey("Location")]
+        public int LocationFK { get; set; }
+        public Location Location { get; set; }
         public string Name { get; set; }
         public int Level { get; set; }
         public int CurrentHp { get; set; }

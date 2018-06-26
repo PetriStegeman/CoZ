@@ -18,7 +18,8 @@ namespace CoZ.Repositories
             Item result;
             using (var dbContext = ApplicationDbContext.Create())
             {
-                var item = dbContext.Items.Find(monster.Loot.ItemId);
+                var originalMonster = dbContext.Monsters.Find(monster.MonsterId);
+                var item = dbContext.Items.Find(originalMonster.Loot.ItemId);
                 result = item.CloneItem();
             }
             return result;
