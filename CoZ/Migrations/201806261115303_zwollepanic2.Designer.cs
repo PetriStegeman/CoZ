@@ -7,13 +7,13 @@ namespace CoZ.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.2.0-61023")]
-    public sealed partial class zwollllle : IMigrationMetadata
+    public sealed partial class zwollepanic2 : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(zwollllle));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(zwollepanic2));
         
         string IMigrationMetadata.Id
         {
-            get { return "201806260850015_zwollllle"; }
+            get { return "201806261115303_zwollepanic2"; }
         }
         
         string IMigrationMetadata.Source

@@ -50,7 +50,5 @@ namespace CoZ.Models.Locations
                 default: return "It's the perfect embodiment of everything a forest should be. You might want to remember this location.";
             }
         }
-
-
     }
 }

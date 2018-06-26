@@ -120,5 +120,5 @@ D:\Repo\CoZ\CoZ\obj\Debug\CoZ.csproj.CoreCompileInputs.cache
 D:\Repo\CoZ\CoZ\obj\Debug\CoZ.csproj.CopyComplete
 D:\Repo\CoZ\CoZ\obj\Debug\CoZ.dll
 D:\Repo\CoZ\CoZ\obj\Debug\CoZ.pdb
-D:\Repo\CoZ\CoZ\obj\Debug\CoZ.Migrations.zwollllle.resources
+D:\Repo\CoZ\CoZ\obj\Debug\CoZ.Migrations.zwollepanic2.resources
 D:\Repo\CoZ\CoZ\obj\Debug\CoZ.csproj.GenerateResource.cache
