@@ -13,7 +13,7 @@ namespace CoZ.Utility
         //20% chance to add Monster to Monsterlist of Location
         public static Monster CreateMonster(Location location)
         {
-            if (RngThreadSafe.Next(1, 100) <= 20)
+            if (RngThreadSafe.Next(1, 100) <= 50)
             {
                 return GetMonster(location);
             }

@@ -27,15 +27,31 @@ namespace CoZ.Models.Locations
         {
             this.XCoord = x;
             this.YCoord = y;
-            //this.Items = new List<Item>();
-            this.Description = "You find yourself in rolling plains";
+            this.Description = "You find yourself on widespread grasslands. " + PlainsDescription();
             this.ShortDescription = "a plains";
         }
+
         public Plains()
         {
-            //this.Items = new List<Item>();
-            this.Description = "You find yourself in rolling plains";
+            this.Description = "You find yourself on widespread grasslands. " + PlainsDescription();
             this.ShortDescription = "a plains";
+        }
+
+        private string PlainsDescription()
+        {
+            switch (RngThreadSafe.Next(1, 5))
+            {
+                case 1:
+                    return "Ankle high grass spreads in every direction. There are signs of grazing herd animals everywhere, but no animal in sight. It makes you a bit uncomfortabel.";
+                    break;
+                case 2:
+                    return "Waist high grass grows wildly in every direction. You can see trails through the grass where animals and travelers have gone before you, but you better thread safely. You don't know what could be hiding in the grass...";
+                    break;
+                case 3:
+                    return "Grass everywhere. More grass than you can handle. It's so boring, reaching all the way to the horizon. Better move on quickly...";
+                    break;
+                default: return "A pleasant breeze makes the grass move in hypnotizing swaying motions. It makes you want to sit down and just look at it for a while...";
+            }
         }
     }
 }

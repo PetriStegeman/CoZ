@@ -3,7 +3,7 @@ namespace CoZ.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class zwollllle : DbMigration
+    public partial class zwollepanic2 : DbMigration
     {
         public override void Up()
         {

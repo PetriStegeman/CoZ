@@ -197,6 +197,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BattleController.cs" />
+    <Compile Include="Controllers\CharacterController.cs" />
     <Compile Include="Controllers\GameController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InventoryController.cs" />
@@ -205,9 +206,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201806260850015_zwollllle.cs" />
-    <Compile Include="Migrations\201806260850015_zwollllle.Designer.cs">
-      <DependentUpon>201806260850015_zwollllle.cs</DependentUpon>
+    <Compile Include="Migrations\201806261115303_zwollepanic2.cs" />
+    <Compile Include="Migrations\201806261115303_zwollepanic2.Designer.cs">
+      <DependentUpon>201806261115303_zwollepanic2.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -249,6 +250,7 @@
     <Compile Include="Utility\RiverFactory.cs" />
     <Compile Include="Utility\RngThreadSafe.cs" />
     <Compile Include="ViewModels\BattleViewModel.cs" />
+    <Compile Include="ViewModels\CharacterViewModel.cs" />
     <Compile Include="ViewModels\LocationViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -321,6 +323,7 @@
     <Content Include="Views\Location\Camp.cshtml" />
     <Content Include="Views\Inventory\Index.cshtml" />
     <Content Include="Views\Inventory\NoItem.cshtml" />
+    <Content Include="Views\Character\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -339,8 +342,8 @@
     <Content Include="Scripts\jquery-3.3.1.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201806260850015_zwollllle.resx">
-      <DependentUpon>201806260850015_zwollllle.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201806261115303_zwollepanic2.resx">
+      <DependentUpon>201806261115303_zwollepanic2.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

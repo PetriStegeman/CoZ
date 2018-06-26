@@ -59,9 +59,9 @@ namespace CoZ.Utility
             {
                 case 1: result = new Forest(x, y); break;
                 case 2: result = new Plains(x, y); break;
-                case 3: result = new Forest(x, y); break;
-                case 4: result = new Forest(x, y); break;
-                default: result = new Forest(x, y); break;
+                case 3: result = new River(x, y); break;
+                case 4: result = new Mountain(x, y); break;
+                default: result = new Lake(x, y); break;
             }
             return result;
         }
