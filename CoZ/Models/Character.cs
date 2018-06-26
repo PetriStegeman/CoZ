@@ -68,7 +68,7 @@ namespace CoZ.Models
 
         public bool IsLevelUp()
         {
-            if (this.Experience > (this.Level * 5))
+            if (this.Experience > ((this.Level+1) * 5))
             {
                 LevelUp();
                 return true;

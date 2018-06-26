@@ -16,7 +16,11 @@ namespace CoZ.Models.Items
         public int Value { get; set; }
         public bool IsSellable { get; set; }
         public bool IsEquiped { get; set; }
-        
+
+        /// <summary>
+        /// Make this Item into a copy of the parameter Item
+        /// </summary>
+        /// <param name="desiredResult"></param>
         public virtual void CopyItem(Item desiredResult)
         {
             this.ItemId = desiredResult.ItemId;
@@ -27,6 +31,10 @@ namespace CoZ.Models.Items
             this.IsEquiped = desiredResult.IsEquiped;
         }
 
+        /// <summary>
+        /// Return a new copy of this Item
+        /// </summary>
+        /// <returns></returns>
         public abstract Item CloneItem();
     }
 }

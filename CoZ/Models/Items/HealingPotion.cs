@@ -14,6 +14,10 @@ namespace CoZ.Models.Items
             //TODO Make do something
         }
 
+        /// <summary>
+        /// Make this Item into a copy of the parameter Item
+        /// </summary>
+        /// <param name="desiredResult"></param>
         public void CopyItem(HealingPotion desiredResult)
         {
             this.ItemId = desiredResult.ItemId;
@@ -26,6 +30,10 @@ namespace CoZ.Models.Items
             this.CanBeConsumed = desiredResult.CanBeConsumed;
         }
 
+        /// <summary>
+        /// Return a new copy of this Item
+        /// </summary>
+        /// <returns></returns>
         public override Item CloneItem()
         {
             var output = new HealingPotion();

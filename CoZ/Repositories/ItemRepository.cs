@@ -28,6 +28,36 @@ namespace CoZ.Repositories
             return result;
         }
 
+        public Item FindEquipedWeapon(string id)
+        {
+            Item result = null;
+            using (var dbContext = ApplicationDbContext.Create())
+            {
+                var character = dbContext.Characters.Single(c => c.UserId == id);
+                var weapon = character.Inventory.SingleOrDefault(w => w.IsEquiped == true && w is Weapon);
+                if (weapon != null)
+                {
+                    result = weapon.CloneItem();
+                }
+            }
+            return result;
+        }
+
+        public Item FindEquipedArmor(string id)
+        {
+            Item result = null;
+            using (var dbContext = ApplicationDbContext.Create())
+            {
+                var character = dbContext.Characters.Single(c => c.UserId == id);
+                var armor = character.Inventory.SingleOrDefault(a => a.IsEquiped == true && a is Armor);
+                if (armor != null)
+                {
+                    result = armor.CloneItem();
+                }
+            }
+            return result;
+        }
+
         internal void AddItems(string id)
         {
             using (var dbContext = ApplicationDbContext.Create())
