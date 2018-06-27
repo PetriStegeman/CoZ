@@ -107,8 +107,8 @@ namespace CoZ.Models
         {
             this.Map = MapFactory.CreateBigMap();
             this.UserId = id;
-            this.XCoord = 10;
-            this.YCoord = 10;
+            this.XCoord = 20;
+            this.YCoord = 20;
             this.CurrentHp = 10;
             this.MaxHp = 10;
             this.Strength = 2;

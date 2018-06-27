@@ -1,13 +1,8 @@
 ﻿using CoZ.Models;
 using CoZ.Models.Locations;
-using CoZ.Models.Monsters;
 using CoZ.Repositories;
 using CoZ.ViewModels;
 using Microsoft.AspNet.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace CoZ.Controllers
@@ -101,10 +96,12 @@ namespace CoZ.Controllers
             var character = this.CharacterRepository.FindByCharacterId(id);
             if (character.YCoord == 20)
             {
-                //TODO Throw out of bounds exception and handle it in javascript
+                character.YCoord = 1;
             }
-            character.YCoord += 1;
-            var location = this.LocationRepository.FindCurrentLocation(id);
+            else
+            {
+                character.YCoord += 1;
+            }
             this.CharacterRepository.UpdateCharacter(character);
             return RedirectToAction("Index");
         }
@@ -113,12 +110,14 @@ namespace CoZ.Controllers
         {
             string id = User.Identity.GetUserId();
             var character = this.CharacterRepository.FindByCharacterId(id);
-            if (character.YCoord == 0)
+            if (character.YCoord == 1)
             {
-                //TODO Throw out of bounds exception and handle it in javascript
+                character.YCoord = 20;
             }
-            character.YCoord -= 1;
-            var location = this.LocationRepository.FindCurrentLocation(id);
+            else
+            {
+                character.YCoord -= 1;
+            }
             this.CharacterRepository.UpdateCharacter(character);
             return RedirectToAction("Index");
         }
@@ -129,10 +128,12 @@ namespace CoZ.Controllers
             var character = this.CharacterRepository.FindByCharacterId(id);
             if (character.XCoord == 20)
             {
-                //TODO Throw out of bounds exception and handle it in javascript
+                character.XCoord = 1;
             }
-            character.XCoord += 1;
-            var location = this.LocationRepository.FindCurrentLocation(id);
+            else
+            {
+                character.XCoord += 1;
+            }
             this.CharacterRepository.UpdateCharacter(character);
             return RedirectToAction("Index");
         }
@@ -141,12 +142,14 @@ namespace CoZ.Controllers
         {
             string id = User.Identity.GetUserId();
             var character = this.CharacterRepository.FindByCharacterId(id);
-            if (character.YCoord == 0)
+            if (character.XCoord == 1)
             {
-                //TODO Throw out of bounds exception and handle it in javascript
+                character.XCoord = 20;
             }
-            character.XCoord -= 1;
-            var location = this.LocationRepository.FindCurrentLocation(id);
+            else
+            {
+                character.XCoord -= 1;
+            }
             this.CharacterRepository.UpdateCharacter(character);
             return RedirectToAction("Index");
         }
@@ -164,15 +167,79 @@ namespace CoZ.Controllers
         {
             string id = User.Identity.GetUserId();
             var character = this.CharacterRepository.FindByCharacterId(id);
-            var locationToNorth = this.LocationRepository.FindLocation(id, character.XCoord, character.YCoord + 1);
-            bool isMonsterNorth = this.LocationRepository.AreThereMonstersAtLocation(locationToNorth);
-            var locationToEast = this.LocationRepository.FindLocation(id, character.XCoord + 1, character.YCoord);
-            bool isMonsterEast = this.LocationRepository.AreThereMonstersAtLocation(locationToEast);
-            var locationToSouth = this.LocationRepository.FindLocation(id, character.XCoord, character.YCoord - 1);
-            bool isMonsterSouth = this.LocationRepository.AreThereMonstersAtLocation(locationToSouth);
-            var locationToWest = this.LocationRepository.FindLocation(id, character.XCoord + 1, character.YCoord);
-            bool isMonsterWest = this.LocationRepository.AreThereMonstersAtLocation(locationToWest);
+            bool isMonsterNorth = CheckNorth(id, character);
+            bool isMonsterEast = CheckEast(id, character);
+            bool isMonsterSouth = CheckSouth(id, character);
+            bool isMonsterWest = CheckWest(id, character);
             LocationViewModel result = new LocationViewModel(location, isMonsterNorth, isMonsterEast, isMonsterSouth, isMonsterWest);
+            return result;
+        }
+
+        public bool CheckNorth(string id, Character character)
+        {
+            var x = character.XCoord;
+            var y = 0;
+            if (character.YCoord == 20)
+            {
+                y = 1;
+            }
+            else
+            {
+                y = character.YCoord + 1;
+            }
+            var location = this.LocationRepository.FindLocation(id, x, y);
+            var result = this.LocationRepository.AreThereMonstersAtLocation(location);
+            return result;
+        }
+
+        public bool CheckSouth(string id, Character character)
+        {
+            var x = character.XCoord;
+            var y = 0;
+            if (character.YCoord == 1)
+            {
+                y = 20;
+            }
+            else
+            {
+                y = character.YCoord - 1;
+            }
+            var location = this.LocationRepository.FindLocation(id, x, y);
+            var result = this.LocationRepository.AreThereMonstersAtLocation(location);
+            return result;
+        }
+
+        public bool CheckEast(string id, Character character)
+        {
+            var x = 0;
+            var y = character.YCoord;
+            if (character.XCoord == 20)
+            {
+                x = 1;
+            }
+            else
+            {
+                x = character.XCoord + 1;
+            }
+            var location = this.LocationRepository.FindLocation(id, x, y);
+            var result = this.LocationRepository.AreThereMonstersAtLocation(location);
+            return result;
+        }
+
+        public bool CheckWest(string id, Character character)
+        {
+            var x = 0;
+            var y = character.YCoord;
+            if (character.XCoord == 1)
+            {
+                x = 20;
+            }
+            else
+            {
+                x = character.XCoord - 1;
+            }
+            var location = this.LocationRepository.FindLocation(id, x, y);
+            var result = this.LocationRepository.AreThereMonstersAtLocation(location);
             return result;
         }
     }

@@ -17,10 +17,16 @@ namespace CoZ.Utility
             {
                 for (int j = 1; j <= 20; j++)
                 {
+                    if (i == 20 && j == 20)
+                    {
+                        break;
+                    }
                     Location location = GetTile(i, j);
                     map.Add(location);
                 }
             }
+            var startLocation = new StartingLocation(20, 20);
+            map.Add(startLocation);
             return map;
         }
 
@@ -31,10 +37,16 @@ namespace CoZ.Utility
             {
                 for (int j = 1; j <= 20; j++)
                 {
+                    if (i == 20 && j == 20)
+                    {
+                        break;
+                    }
                     Location location = GetTile(i, j);
                     map.Add(location);
                 }
             }
+            var startLocation = new StartingLocation(20, 20);
+            map.Add(startLocation);
             return map;
         }
 
@@ -45,10 +57,16 @@ namespace CoZ.Utility
             {
                 for (int j = 1; j <= 20; j++)
                 {
+                    if (i == 20 && j == 20)
+                    {
+                        break;
+                    }
                     Location location = GetTile(i, j);
                     map.Add(location);
                 }
             }
+            var startLocation = new StartingLocation(20, 20);
+            map.Add(startLocation);
             return map;
         }
 
