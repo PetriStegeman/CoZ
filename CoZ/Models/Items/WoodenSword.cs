@@ -19,7 +19,7 @@ namespace CoZ.Models.Items
             this.Value = desiredResult.Value;
             this.IsSellable = desiredResult.IsSellable;
             this.IsEquiped = desiredResult.IsEquiped;
-            this.CanBeWeapon = desiredResult.CanBeWeapon;
+            this.ItemType = desiredResult.ItemType;
             this.Strength = desiredResult.Strength;
         }
 
@@ -32,7 +32,7 @@ namespace CoZ.Models.Items
             var output = new WoodenSword();
             output.ItemId = this.ItemId;
             output.Name = this.Name;
-            output.CanBeWeapon = this.CanBeWeapon;
+            output.ItemType = this.ItemType;
             output.IsEquiped = this.IsEquiped;
             output.Description = this.Description;
             output.Value = this.Value;
@@ -46,7 +46,7 @@ namespace CoZ.Models.Items
             this.Name = "A Wooden Sword";
             this.Description = "A crudely carved wooden sword. It's better than nothing.";
             this.Value = 1;
-            this.CanBeWeapon = true;
+            this.ItemType = EItemType.Weapon;
             this.IsSellable = true;
         }
     }

@@ -114,6 +114,8 @@ namespace CoZ.Models
             this.MaxHp = 10;
             this.Strength = 2;
             this.Speed = 1;
+            this.Inventory = new List<Item>();
+            this.Inventory.Add(new HealingPotion());
         }
 
         public Character(){}

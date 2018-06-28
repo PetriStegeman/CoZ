@@ -1,5 +1,5 @@
-﻿@using CoZ.Models.Items
-@model CoZ.Models.Items.Item
+﻿@using CoZ.ViewModels
+@model CoZ.ViewModels.InventoryViewModel
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -7,14 +7,22 @@
 
 <h2>Inventory</h2>
 
-<div class="row">
-    <div class="col-md-4">
-        <h2><a class="btn btn-default" href="/Inventory/Next">Look at next item &raquo;</a></h2>
-    </div>
-    <div class="col-md-4">
-        <h2><a class="btn btn-default" href="/Inventory/Previous">Look at previous item &raquo;</a></h2>
-    </div>
-</div>
+<table>
+    @for (int i = 0; i < Model.Inventory.Count; i++)
+    {
+        <tr>
+            <td>
+                @Model.Inventory[i].ItemName
+            </td>
+            <td>
+                @Model.Inventory[i].ItemType
+            </td>
+            <td>
+                @Model.Inventory[i].Value
+            </td>
+        </tr>
+    }
+</table>
 
 <div class="row">
     <div class="col-md-4">

@@ -27,7 +27,7 @@ namespace CoZ.Models.Items
             this.IsSellable = desiredResult.IsSellable;
             this.IsEquiped = desiredResult.IsEquiped;
             this.PortionsRemaining = desiredResult.PortionsRemaining;
-            this.CanBeConsumed = desiredResult.CanBeConsumed;
+            this.ItemType = desiredResult.ItemType;
         }
 
         /// <summary>
@@ -43,7 +43,7 @@ namespace CoZ.Models.Items
             output.IsEquiped = this.IsEquiped;
             output.Description = this.Description;
             output.Value = this.Value;
-            output.CanBeConsumed = this.CanBeConsumed;
+            output.ItemType = this.ItemType;
             output.IsSellable = this.IsSellable;
             return output;
         }
@@ -55,6 +55,7 @@ namespace CoZ.Models.Items
             this.Value = 1;
             this.PortionsRemaining = 3;
             this.IsSellable = true;
+            this.ItemType = EItemType.Consumable;
         }
     }
 }

@@ -12,6 +12,17 @@ namespace CoZ.Repositories
 {
     public class ItemRepository
     {
+        public List<Item> GetInventory(string id)
+        {
+            List<Item> result = new List<Item>();
+            using (var dbContext = ApplicationDbContext.Create())
+            {
+                var character = dbContext.Characters.Single(c => c.UserId == id);
+                var inventory = character.Inventory.ToList();
+                result = inventory;
+            }
+            return result;
+        }
 
         public Item FindLoot(Monster monster)
         {

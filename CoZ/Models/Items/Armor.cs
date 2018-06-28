@@ -8,6 +8,5 @@ namespace CoZ.Models.Items
     public abstract class Armor : Item
     {
         public int Hp { get; set; }
-        public bool CanBeArmor { get; set; }
     }
 }
