@@ -1,15 +1,9 @@
 ﻿using CoZ.Models;
 using CoZ.Models.Items;
-using CoZ.Models.Locations;
 using CoZ.Models.Monsters;
 using CoZ.Repositories;
 using CoZ.ViewModels;
 using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.EntityFramework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace CoZ.Controllers

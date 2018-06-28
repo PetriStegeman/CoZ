@@ -63,6 +63,11 @@ namespace CoZ.Repositories
             }
         }
 
+        //Gaat er van uit dat er monster/item/location zijn
+            /// <summary>
+            /// Hard remove location, monsters and items
+            /// </summary>
+            /// <param name="location"></param>
         public void DeleteLocation(Location location)
         {
             using (var dbContext = ApplicationDbContext.Create())

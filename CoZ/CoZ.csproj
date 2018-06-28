@@ -214,6 +214,8 @@
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Character.cs" />
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\Inventory\Inventory.cs" />
+    <Compile Include="Models\Inventory\InventoryScheme.cs" />
     <Compile Include="Models\Items\Armor.cs" />
     <Compile Include="Models\Items\HealingPotion.cs" />
     <Compile Include="Models\Items\Item.cs" />
@@ -325,6 +327,7 @@
     <Content Include="Views\Inventory\Index.cshtml" />
     <Content Include="Views\Inventory\NoItem.cshtml" />
     <Content Include="Views\Character\Index.cshtml" />
+    <Content Include="Views\Game\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

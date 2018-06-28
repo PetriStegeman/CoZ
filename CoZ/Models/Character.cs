@@ -103,8 +103,9 @@ namespace CoZ.Models
             this.Speed = desiredResult.Speed;
         }
 
-        public Character(string id)
+        public Character(string id, string name)
         {
+            this.Name = name;
             this.Map = MapFactory.CreateBigMap();
             this.UserId = id;
             this.XCoord = 20;

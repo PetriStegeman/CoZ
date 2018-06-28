@@ -9,11 +9,11 @@ namespace CoZ.Repositories
 {
     public class CharacterRepository 
     {
-        public void CreateCharacter(string id)
+        public void CreateCharacter(string id, string name)
         {
             using (var dbContext = ApplicationDbContext.Create())
             {
-                var character = new Character(id);
+                var character = new Character(id, name);
                 dbContext.Characters.Add(character);
                 dbContext.SaveChanges();
             }
