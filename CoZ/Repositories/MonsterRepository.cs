@@ -77,7 +77,7 @@ namespace CoZ.Repositories
                 ICollection<Location> map = character.Map;
                 foreach (var location in map)
                 {
-                    if (location is StartingLocation)
+                    if (location is StartingLocation | location is Town)
                     {
                         continue;
                     }

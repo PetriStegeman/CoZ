@@ -42,13 +42,10 @@ namespace CoZ.Models.Locations
             {
                 case 1:
                     return "The mountain's peak is barely visible ahead of you, partly hidden by the low hanging clouds. You can't cross it for sure, but if you travel around the mountain you think you can still go in every direction...";
-                    break;
                 case 2:
                     return "Ahead of you is the beautiful snow covered peak. Smooth white steep slopes, impossible to climb. You will have to travel around the mountain...";
-                    break;
                 case 3:
                     return "There isn't any one peak to speak off, and I guess you could barely call it a mountain. There are paths criss crossing all over the 'mountain', so there isn't really anything stopping you from moving on.";
-                    break;
                 default: return "There are many shadowy holes hidden behind boulders and under prickly bushes. You start to wonder how deep some of those caves go, and what you might find inside those caves...";
             }
         }

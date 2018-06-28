@@ -23,10 +23,8 @@ namespace CoZ.Utility
             {
                 case 1:
                     return new HealingPotion();
-                    break;
                 case 2:
                     return new WoodenSword();
-                    break;
                 default:
                     return new LinenArmor();
             }

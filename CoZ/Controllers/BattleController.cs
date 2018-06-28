@@ -108,11 +108,11 @@ namespace CoZ.Controllers
             var character = this.CharacterRepository.FindByCharacterId(id);
             var location = this.LocationRepository.FindCurrentLocation(id);
             var monster = this.MonsterRepository.FindMonsterByLocation(location);
-            character.Attack(monster);
+            var damage = character.Attack(monster);
             var result = CreateBattleViewModel(monster, character);
             this.CharacterRepository.UpdateCharacter(character);
             this.MonsterRepository.Updatemonster(monster);
-            return DetermineBattleOutcome(result);
+            return DetermineBattleOutcome(result, damage);
         }
 
         public ActionResult Victory()
@@ -156,7 +156,7 @@ namespace CoZ.Controllers
             else return RedirectToAction("Index", "Location");
         }
 
-        public ActionResult DetermineBattleOutcome(BattleViewModel view)
+        public ActionResult DetermineBattleOutcome(BattleViewModel view, string damage)
         {
             if (view.CharacterCurrentHp <= 0)
             {
@@ -166,7 +166,11 @@ namespace CoZ.Controllers
             {
                 return RedirectToAction("Victory");
             }
-            else return RedirectToAction("Index");
+            else
+            {
+                ViewBag.Message = damage;
+                return View("Index", view);
+            }
         }
 
         public BattleViewModel CreateBattleViewModel(Monster monster, Character character, Item item = null)

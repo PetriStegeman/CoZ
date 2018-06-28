@@ -230,6 +230,7 @@
     <Compile Include="Models\Locations\Plains.cs" />
     <Compile Include="Models\Locations\River.cs" />
     <Compile Include="Models\Locations\StartingLocation.cs" />
+    <Compile Include="Models\Locations\Town.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Monsters\Boar.cs" />
     <Compile Include="Models\Monsters\Deer.cs" />
@@ -327,6 +328,7 @@
     <Content Include="Views\Inventory\Index.cshtml" />
     <Content Include="Views\Character\Index.cshtml" />
     <Content Include="Views\Game\Create.cshtml" />
+    <Content Include="Views\Location\Market.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

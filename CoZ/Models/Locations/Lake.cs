@@ -42,13 +42,10 @@ namespace CoZ.Models.Locations
             {
                 case 1:
                     return "The waters look calm and inviting. On closer inspection the water looks crystal clear. Going for a short swim might be nice.";
-                    break;
                 case 2:
                     return "It's more of a puddle really. Barely 5 paces across, and by your estimation no deeper than your waist.";
-                    break;
                 case 3:
                     return "Dark murky waters span almost to the horizon. The water looks very deep. Better thread with care, there is no telling what is hiding in these waters.";
-                    break;
                 default: return "The water looks perfectly still. Too still. Something is not right. You better move on quickly.";
             }
         }

@@ -76,6 +76,17 @@ namespace CoZ.Repositories
         {
             using (var dbContext = ApplicationDbContext.Create())
             {
+                var character = dbContext.Characters.SingleOrDefault(c => c.UserId == id);
+                character.Inventory.Add(item);
+                dbContext.Items.Add(item);
+                dbContext.SaveChanges();
+            }
+        }
+        /* Backup in case of Destruction
+        public void GainItem(String id, Item item)
+        {
+            using (var dbContext = ApplicationDbContext.Create())
+            {
                 var originalItem = dbContext.Items.Find(item.ItemId);
                 var newLoot = originalItem.CloneItem();
                 var character = dbContext.Characters.SingleOrDefault(c => c.UserId == id);
@@ -84,5 +95,6 @@ namespace CoZ.Repositories
                 dbContext.SaveChanges();
             }
         }
+        */
     }
 }

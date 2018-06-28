@@ -33,7 +33,10 @@ namespace CoZ.Models
 
         public void Camp()
         {
-            this.CurrentHp = this.MaxHp;
+            if (this.CurrentHp < this.MaxHp/2)
+            {
+                this.CurrentHp += 1;
+            }
         }
 
         public string Attack(Monster monster)
@@ -51,7 +54,7 @@ namespace CoZ.Models
                 monster.CurrentHp -= this.Strength;
                 characterDamage = this.Strength; 
             }
-            result = "You inflicted " + characterDamage + " damage to the boar. The boar inflicted " + monsterDamage + " damage to you.";
+            result = "You inflicted " + characterDamage + " damage to the " + monster.Name + ". The " + monster.Name + " inflicted " + monsterDamage + " damage to you.";
             return result;
         }
 
@@ -59,16 +62,11 @@ namespace CoZ.Models
         {
             this.Gold += monster.Gold;
             this.Experience += monster.Level;
-            //TODO Add extra rewards logic
-            //foreach (Item item in monster.Loot)
-            //{
-            //    this.Inventory.Add(item);
-            //}
         }
 
         public bool IsLevelUp()
         {
-            if (this.Experience > ((this.Level+1) * 5))
+            if (this.Experience > (this.Level * 5))
             {
                 LevelUp();
                 return true;
@@ -107,6 +105,8 @@ namespace CoZ.Models
         {
             this.Name = name;
             this.Map = MapFactory.CreateBigMap();
+            this.Gold = 5;
+            this.Level = 1;
             this.UserId = id;
             this.XCoord = 20;
             this.YCoord = 20;

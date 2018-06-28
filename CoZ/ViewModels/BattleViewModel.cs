@@ -33,6 +33,7 @@ namespace CoZ.ViewModels
             this.CharacterCurrentMp = character.CurrentMp;
             this.CharacterMaxMp = character.MaxMp;
             this.CharacterLevel = character.Level;
+            this.MonsterGold = monster.Gold;
             this.MonsterCurrentHp = monster.CurrentHp;
             this.MonsterMaxHp = monster.MaxHp;
             this.MonsterLevel = monster.Level;

@@ -1,4 +1,5 @@
 ﻿using CoZ.Models;
+using CoZ.Models.Items;
 using CoZ.Models.Locations;
 using CoZ.Repositories;
 using CoZ.ViewModels;
@@ -241,6 +242,37 @@ namespace CoZ.Controllers
             var location = this.LocationRepository.FindLocation(id, x, y);
             var result = this.LocationRepository.AreThereMonstersAtLocation(location);
             return result;
+        }
+
+        public ActionResult Market(bool? purchase = null)
+        {
+            if (purchase == true)
+            {
+                ViewBag.Message = "You have purchased the item.";
+            }
+            else if(purchase == false)
+            {
+                ViewBag.Message = "You do not have enough gold.";
+            }
+            return View();
+        }
+
+        public ActionResult BuyPotion()
+        {
+            string id = User.Identity.GetUserId();
+            var character = this.CharacterRepository.FindByCharacterId(id);
+            if (character.Gold < 5)
+            {
+                ViewBag.Message = "You do not have enough gold.";
+            }
+            else
+            {
+                character.Gold -= 5;
+                this.CharacterRepository.UpdateCharacter(character);
+                this.CharacterRepository.GainItem(id, new HealingPotion());
+                ViewBag.Message = "You have purchased the item";
+            }
+            return View("Market");
         }
     }
 }
