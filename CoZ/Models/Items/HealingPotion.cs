@@ -9,9 +9,16 @@ namespace CoZ.Models.Items
 {
     public class HealingPotion : Potion
     {
-        public override void Consume()
+        public override void Consume(Character character)
         {
-            //TODO Make do something
+            if (character.CurrentHp <= character.MaxHp - 5)
+            {
+                character.CurrentHp += 5;
+            }
+            else
+            {
+                character.CurrentHp = character.MaxHp;
+            }
         }
 
         /// <summary>
@@ -51,7 +58,7 @@ namespace CoZ.Models.Items
         public HealingPotion()
         {
             this.Name = "Healing Potion";
-            this.Description = "A small glass bottle, holding 3 portions of healing potion which recover 5 of your health points";
+            this.Description = "Recover 5 Hp";
             this.Value = 1;
             this.PortionsRemaining = 3;
             this.IsSellable = true;

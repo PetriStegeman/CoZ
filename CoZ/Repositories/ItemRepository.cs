@@ -24,6 +24,23 @@ namespace CoZ.Repositories
             return result;
         }
 
+        public void ConsumeItem(string id, string itemName)
+        {
+            using (var dbContext = ApplicationDbContext.Create())
+            {
+                var character = dbContext.Characters.Single(c => c.UserId == id);
+                var inventory = character.Inventory.ToList();
+                Potion item = (Potion) inventory.SingleOrDefault(w => w.Name == itemName);
+                if (item != null)
+                {
+                    item.Consume(character);
+                    inventory.Remove(item);
+                    dbContext.Items.Remove(dbContext.Items.Find(item.ItemId));
+                }
+                dbContext.SaveChanges();
+            }
+        }
+
         public Item FindLoot(Monster monster)
         {
             Item result = null;

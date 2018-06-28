@@ -9,6 +9,6 @@ namespace CoZ.Models.Items
     {
         public int PortionsRemaining { get; set; }
 
-        public abstract void Consume();
+        public abstract void Consume(Character character);
     }
 }

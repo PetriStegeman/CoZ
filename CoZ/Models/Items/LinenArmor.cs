@@ -43,8 +43,8 @@ namespace CoZ.Models.Items
 
         public LinenArmor()
         {
-            this.Name = "A Linen Armor";
-            this.Description = "A thin shirt made of linen. It's better than nothing.";
+            this.Name = "Linen Armor";
+            this.Description = "Simple armor";
             this.Value = 1;
             this.ItemType = EItemType.Armor;
             this.IsSellable = true;

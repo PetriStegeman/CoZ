@@ -43,8 +43,8 @@ namespace CoZ.Models.Items
 
         public WoodenSword()
         {
-            this.Name = "A Wooden Sword";
-            this.Description = "A crudely carved wooden sword. It's better than nothing.";
+            this.Name = "Wooden Sword";
+            this.Description = "Simple Sword";
             this.Value = 1;
             this.ItemType = EItemType.Weapon;
             this.IsSellable = true;

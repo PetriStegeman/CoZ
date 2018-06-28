@@ -85,5 +85,12 @@ namespace CoZ.Controllers
             var viewModel = new InventoryViewModel(inventory);
             return View(viewModel);
         }
+
+        public ActionResult ConsumeItem(string itemName)
+        {
+            string id = User.Identity.GetUserId();
+            this.ItemRepository.ConsumeItem(id, itemName);
+            return RedirectToAction("Index");
+        }
     }
 }
