@@ -42,11 +42,8 @@ namespace CoZ.Models.Locations
             switch (RngThreadSafe.Next(1, 5))
             {
                 case 1: return "The trees are packed tightly together, so much so that there is barely any sunlight filtering through the trees.";
-                    break;
                 case 2: return "Tall tree trunks cover your field of view, as far as you can see in any direction. At least the open mossy ground and small shrubberies give you a feeling of peace.";
-                    break;
                 case 3: return "Dense pine trees everywhere. Needles cover the ground everywhere, be careful not to get any in your boots.";
-                    break;
                 default: return "It's the perfect embodiment of everything a forest should be. You might want to remember this location.";
             }
         }

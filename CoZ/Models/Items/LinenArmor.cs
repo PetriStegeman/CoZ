@@ -19,7 +19,7 @@ namespace CoZ.Models.Items
             this.Value = desiredResult.Value;
             this.IsSellable = desiredResult.IsSellable;
             this.IsEquiped = desiredResult.IsEquiped;
-            this.CanBeArmor = desiredResult.CanBeArmor;
+            this.ItemType = desiredResult.ItemType;
             this.Hp = desiredResult.Hp;
         }
 
@@ -32,7 +32,7 @@ namespace CoZ.Models.Items
             var output = new LinenArmor();
             output.ItemId = this.ItemId;
             output.Name = this.Name;
-            output.CanBeArmor = this.CanBeArmor;
+            output.ItemType = this.ItemType;
             output.IsEquiped = this.IsEquiped;
             output.Description = this.Description;
             output.Value = this.Value;
@@ -43,11 +43,12 @@ namespace CoZ.Models.Items
 
         public LinenArmor()
         {
-            this.Name = "A Linen Armor";
-            this.Description = "A thin shirt made of linen. It's better than nothing.";
+            this.Name = "Linen Armor";
+            this.Description = "Simple armor";
             this.Value = 1;
-            this.CanBeArmor = true;
+            this.ItemType = EItemType.Armor;
             this.IsSellable = true;
+            this.Hp = 1;
         }
     }
 }

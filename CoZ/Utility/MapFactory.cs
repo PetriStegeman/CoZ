@@ -17,10 +17,18 @@ namespace CoZ.Utility
             {
                 for (int j = 1; j <= 20; j++)
                 {
+                    if ((i == 20 && j == 20) | (i == 20 && j == 17))
+                    {
+                        continue;
+                    }
                     Location location = GetTile(i, j);
                     map.Add(location);
                 }
             }
+            var startLocation = new StartingLocation(20, 20);
+            var town = new Town(20, 17);
+            map.Add(startLocation);
+            map.Add(town);
             return map;
         }
 
@@ -31,10 +39,18 @@ namespace CoZ.Utility
             {
                 for (int j = 1; j <= 20; j++)
                 {
+                    if ((i == 20 && j == 20) | (i == 20 && j == 17))
+                    {
+                        continue;
+                    }
                     Location location = GetTile(i, j);
                     map.Add(location);
                 }
             }
+            var startLocation = new StartingLocation(20, 20);
+            var town = new Town(20, 17);
+            map.Add(startLocation);
+            map.Add(town);
             return map;
         }
 
@@ -45,10 +61,18 @@ namespace CoZ.Utility
             {
                 for (int j = 1; j <= 20; j++)
                 {
+                    if ((i == 20 && j == 20) | (i == 20 && j == 17))
+                    {
+                        continue;
+                    }
                     Location location = GetTile(i, j);
                     map.Add(location);
                 }
             }
+            var startLocation = new StartingLocation(20, 20);
+            var town = new Town(20, 17);
+            map.Add(startLocation);
+            map.Add(town);
             return map;
         }
 

@@ -7,11 +7,11 @@ using System.Web;
 
 namespace CoZ.Models.Monsters
 {
-    public class KoboldWarrior : Monster
+    public class TheGreatDragonKraltock : Monster
     {
         public override Monster CloneMonster()
         {
-            var output = new KoboldWarrior();
+            var output = new TheGreatDragonKraltock();
             output.MonsterId = this.MonsterId;
             output.Name = this.Name;
             output.Level = this.Level;
@@ -22,22 +22,22 @@ namespace CoZ.Models.Monsters
             return output;
         }
 
-        public KoboldWarrior(Location location)
+        public TheGreatDragonKraltock(Location location)
         {
-            this.Name = "Kobold Warrior";
-            this.Level = RngThreadSafe.Next(3, 6);
-            this.MaxHp = 10 + this.Level;
+            this.Name = "The Geat Dragon Kraltock";
+            this.Level = 20;
+            this.MaxHp = 50;
             this.CurrentHp = this.MaxHp;
-            this.Strength = 1 + this.Level;
-            this.Speed = 3;
+            this.Strength = 15;
+            this.Speed = 7;
             this.MonsterInit();
             this.Location = location;
         }
 
-        public KoboldWarrior()
+        public TheGreatDragonKraltock()
         {
             this.Name = "Kobold Warrior";
-            this.Level = RngThreadSafe.Next(3,6);
+            this.Level = RngThreadSafe.Next(3, 6);
             this.MaxHp = 10 + this.Level;
             this.CurrentHp = this.MaxHp;
             this.Strength = 1 + this.Level;

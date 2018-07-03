@@ -26,13 +26,9 @@ namespace CoZ.Utility
             switch (RngThreadSafe.Next(1, 6))
             {
                 case 1: return new Boar(location);
-                    break;
                 case 2: return new KoboldWarrior(location);
-                    break;
                 case 3: return new KoboldGatherer(location);
-                    break;
                 case 4: return new KoboldHunter(location);
-                    break;
                 default: return new Deer(location);
             }
         }

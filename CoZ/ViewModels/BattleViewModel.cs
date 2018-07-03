@@ -10,6 +10,7 @@ namespace CoZ.ViewModels
 {
     public class BattleViewModel
     {
+        public string CharacterName { get; set; }
         public int CharacterCurrentHp { get; set; }
         public int CharacterMaxHp { get; set; }
         public int CharacterCurrentMp { get; set; }
@@ -26,11 +27,13 @@ namespace CoZ.ViewModels
 
         public BattleViewModel(Monster monster, Character character, Item item = null)
         {
+            this.CharacterName = character.Name;
             this.CharacterCurrentHp = character.CurrentHp;
             this.CharacterMaxHp = character.MaxHp;
             this.CharacterCurrentMp = character.CurrentMp;
             this.CharacterMaxMp = character.MaxMp;
             this.CharacterLevel = character.Level;
+            this.MonsterGold = monster.Gold;
             this.MonsterCurrentHp = monster.CurrentHp;
             this.MonsterMaxHp = monster.MaxHp;
             this.MonsterLevel = monster.Level;

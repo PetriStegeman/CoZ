@@ -33,25 +33,75 @@ namespace CoZ.Models
 
         public void Camp()
         {
-            this.CurrentHp = this.MaxHp;
+            if (this.CurrentHp < this.MaxHp/2)
+            {
+                this.CurrentHp = this.MaxHp/2;
+            }
         }
 
-        public string Attack(Monster monster)
+        public string Attack(Monster monster, List<Item> inventory)
+        {
+            int monsterDamage = MonsterDamage(monster, this, inventory);
+            int characterDamage = CharacterDamage(monster, this, inventory);
+            return AttackResult(characterDamage, monsterDamage, monster.Name);
+        }
+
+        private int CharacterDamage(Monster monster, Character character, List<Item> inventory)
+        {
+            int characterDamage = 0;
+            if (RngThreadSafe.Next(1, 10) >= 4 - (monster.Speed - character.Speed))
+            {
+                Weapon weapon = (Weapon)inventory.SingleOrDefault(w => w.IsEquiped == true && w is Weapon);
+                if (weapon != null)
+                {
+                    monster.CurrentHp -= weapon.Strength;
+                }
+                monster.CurrentHp -= character.Strength;
+                characterDamage = character.Strength;
+            }
+
+            return characterDamage;
+        }
+
+        private int MonsterDamage(Monster monster, Character character, List<Item> inventory)
         {
             int monsterDamage = 0;
-            int characterDamage = 0;
-            string result = "";
-            if (RngThreadSafe.Next(1, 10) >= 4 - (this.Speed-monster.Speed))
+            if (RngThreadSafe.Next(1, 10) >= 4 - (character.Speed - monster.Speed))
             {
-                this.CurrentHp -= monster.Strength;
+                Armor armor = (Armor)inventory.SingleOrDefault(w => w.IsEquiped == true && w is Armor);
+                if (armor != null)
+                {
+                    character.CurrentHp += armor.Hp;
+                }
+                character.CurrentHp -= monster.Strength;
                 monsterDamage = monster.Strength;
             }
-            if (RngThreadSafe.Next(1, 10) >= 4 - (monster.Speed - this.Speed))
+
+            return monsterDamage;
+        }
+
+        public string AttackResult(int characterDamage, int monsterDamage, string monsterName)
+        {
+            var characterResult = "";
+            var monsterResult = "";
+            var result = "";
+            if (characterDamage == 0)
             {
-                monster.CurrentHp -= this.Strength;
-                characterDamage = this.Strength; 
+                characterResult = "Your attack missed!";
             }
-            result = "You inflicted " + characterDamage + " damage to the boar. The boar inflicted " + monsterDamage + " damage to you.";
+            else
+            {
+                characterResult = "You inflicted " + characterDamage + " damage to the " + monsterName + ".";
+            }
+            if (monsterDamage == 0)
+            {
+                monsterResult = "The " + monsterName + "'s attack missed!";
+            }
+            else
+            {
+                monsterResult = "The " + monsterName + " inflicted " + monsterDamage + " damage to you.";
+            }
+            result = characterResult + monsterResult;
             return result;
         }
 
@@ -59,16 +109,11 @@ namespace CoZ.Models
         {
             this.Gold += monster.Gold;
             this.Experience += monster.Level;
-            //TODO Add extra rewards logic
-            //foreach (Item item in monster.Loot)
-            //{
-            //    this.Inventory.Add(item);
-            //}
         }
 
         public bool IsLevelUp()
         {
-            if (this.Experience > ((this.Level+1) * 5))
+            if (this.Experience > (this.Level * 5))
             {
                 LevelUp();
                 return true;
@@ -103,16 +148,21 @@ namespace CoZ.Models
             this.Speed = desiredResult.Speed;
         }
 
-        public Character(string id)
+        public Character(string id, string name)
         {
+            this.Name = name;
             this.Map = MapFactory.CreateBigMap();
+            this.Gold = 5;
+            this.Level = 1;
             this.UserId = id;
-            this.XCoord = 10;
-            this.YCoord = 10;
-            this.CurrentHp = 10;
-            this.MaxHp = 10;
-            this.Strength = 2;
+            this.XCoord = 20;
+            this.YCoord = 20;
+            this.CurrentHp = 12;
+            this.MaxHp = 12;
+            this.Strength = 3;
             this.Speed = 1;
+            this.Inventory = new List<Item>();
+            this.Inventory.Add(new HealingPotion());
         }
 
         public Character(){}

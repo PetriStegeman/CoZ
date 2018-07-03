@@ -88,17 +88,34 @@ namespace CoZ.Controllers
         }
 
         //Generate data to start a new game
-        public ActionResult Create()
+        public ActionResult Initialize(string name)
         {
             string id = User.Identity.GetUserId();
             if (this.CharacterRepository.FindByCharacterId(id) != null)
             {
                 this.CharacterRepository.DeleteCharacter(id);
             }
-            this.CharacterRepository.CreateCharacter(id);
+            this.CharacterRepository.CreateCharacter(id, name);
             this.MonsterRepository.AddMonsters(id);
             this.ItemRepository.AddItems(id);
+            AddFinalBoss(id);
             return RedirectToAction("Index", "Location");
+        }
+
+        public ActionResult Create()
+        {
+            return View();
+        }
+
+        public void AddFinalBoss(string id)
+        {
+            var location = this.LocationRepository.FindLocation(id, 6, 6);
+            var monster = this.MonsterRepository.FindMonsterByLocation(location);
+            if (monster != null)
+            {
+                this.MonsterRepository.DeleteMonster(monster);
+            }
+            this.MonsterRepository.AddFinalBoss(id);
         }
     }
 }

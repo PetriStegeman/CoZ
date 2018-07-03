@@ -206,15 +206,16 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201806261115303_zwollepanic2.cs" />
-    <Compile Include="Migrations\201806261115303_zwollepanic2.Designer.cs">
-      <DependentUpon>201806261115303_zwollepanic2.cs</DependentUpon>
+    <Compile Include="Migrations\201806280757207_inventoryTEST1.cs" />
+    <Compile Include="Migrations\201806280757207_inventoryTEST1.Designer.cs">
+      <DependentUpon>201806280757207_inventoryTEST1.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Character.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\Items\Armor.cs" />
+    <Compile Include="Models\Items\EItemType.cs" />
     <Compile Include="Models\Items\HealingPotion.cs" />
     <Compile Include="Models\Items\Item.cs" />
     <Compile Include="Models\Items\LinenArmor.cs" />
@@ -229,6 +230,7 @@
     <Compile Include="Models\Locations\Plains.cs" />
     <Compile Include="Models\Locations\River.cs" />
     <Compile Include="Models\Locations\StartingLocation.cs" />
+    <Compile Include="Models\Locations\Town.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Monsters\Boar.cs" />
     <Compile Include="Models\Monsters\Deer.cs" />
@@ -236,6 +238,7 @@
     <Compile Include="Models\Monsters\KoboldHunter.cs" />
     <Compile Include="Models\Monsters\KoboldWarrior.cs" />
     <Compile Include="Models\Monsters\Monster.cs" />
+    <Compile Include="Models\Monsters\TheGreatDragonKraltock.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\CharacterRepository.cs" />
     <Compile Include="Repositories\ItemRepository.cs" />
@@ -251,6 +254,7 @@
     <Compile Include="Utility\RngThreadSafe.cs" />
     <Compile Include="ViewModels\BattleViewModel.cs" />
     <Compile Include="ViewModels\CharacterViewModel.cs" />
+    <Compile Include="ViewModels\InventoryViewModel.cs" />
     <Compile Include="ViewModels\LocationViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -322,8 +326,9 @@
     <Content Include="Views\Battle\LevelUp.cshtml" />
     <Content Include="Views\Location\Camp.cshtml" />
     <Content Include="Views\Inventory\Index.cshtml" />
-    <Content Include="Views\Inventory\NoItem.cshtml" />
     <Content Include="Views\Character\Index.cshtml" />
+    <Content Include="Views\Game\Create.cshtml" />
+    <Content Include="Views\Location\Market.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -342,8 +347,8 @@
     <Content Include="Scripts\jquery-3.3.1.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201806261115303_zwollepanic2.resx">
-      <DependentUpon>201806261115303_zwollepanic2.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201806280757207_inventoryTEST1.resx">
+      <DependentUpon>201806280757207_inventoryTEST1.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

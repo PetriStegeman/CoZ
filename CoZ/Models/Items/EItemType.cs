@@ -5,8 +5,8 @@ using System.Web;
 
 namespace CoZ.Models.Items
 {
-    public abstract class Armor : Item
+    public enum EItemType
     {
-        public int Hp { get; set; }
-    }
+        Weapon, Consumable, Armor,
+    };
 }

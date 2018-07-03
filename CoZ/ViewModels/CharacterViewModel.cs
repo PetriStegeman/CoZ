@@ -8,6 +8,7 @@ namespace CoZ.ViewModels
 {
     public class CharacterViewModel
     {
+        public string Name { get; set; }
         public int Level { get; set; }
         public int CurrentHp { get; set; }
         public int MaxHp { get; set; }
@@ -23,6 +24,7 @@ namespace CoZ.ViewModels
 
         public CharacterViewModel(Character character, string WeaponName, string ArmorName)
         {
+            this.Name = character.Name;
             this.Level = character.Level;
             this.CurrentHp = character.CurrentHp;
             this.MaxHp = character.MaxHp;

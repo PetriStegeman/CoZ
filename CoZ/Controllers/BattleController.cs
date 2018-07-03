@@ -1,15 +1,9 @@
 ﻿using CoZ.Models;
 using CoZ.Models.Items;
-using CoZ.Models.Locations;
 using CoZ.Models.Monsters;
 using CoZ.Repositories;
 using CoZ.ViewModels;
 using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.EntityFramework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace CoZ.Controllers
@@ -112,13 +106,14 @@ namespace CoZ.Controllers
         {
             string id = User.Identity.GetUserId();
             var character = this.CharacterRepository.FindByCharacterId(id);
+            var inventory = this.ItemRepository.GetInventory(id);
             var location = this.LocationRepository.FindCurrentLocation(id);
             var monster = this.MonsterRepository.FindMonsterByLocation(location);
-            character.Attack(monster);
+            var damage = character.Attack(monster, inventory);
             var result = CreateBattleViewModel(monster, character);
             this.CharacterRepository.UpdateCharacter(character);
             this.MonsterRepository.Updatemonster(monster);
-            return DetermineBattleOutcome(result);
+            return DetermineBattleOutcome(result, damage);
         }
 
         public ActionResult Victory()
@@ -162,7 +157,7 @@ namespace CoZ.Controllers
             else return RedirectToAction("Index", "Location");
         }
 
-        public ActionResult DetermineBattleOutcome(BattleViewModel view)
+        public ActionResult DetermineBattleOutcome(BattleViewModel view, string damage)
         {
             if (view.CharacterCurrentHp <= 0)
             {
@@ -172,7 +167,11 @@ namespace CoZ.Controllers
             {
                 return RedirectToAction("Victory");
             }
-            else return RedirectToAction("Index");
+            else
+            {
+                ViewBag.Message = damage;
+                return View("Index", view);
+            }
         }
 
         public BattleViewModel CreateBattleViewModel(Monster monster, Character character, Item item = null)

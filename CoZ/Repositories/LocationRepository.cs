@@ -1,5 +1,6 @@
 ﻿using CoZ.Models;
 using CoZ.Models.Locations;
+using CoZ.Utility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +16,8 @@ namespace CoZ.Repositories
             bool result = false;
             using (var dbContext = ApplicationDbContext.Create())
             {
-                var monster = dbContext.Locations.Single(d => d.LocationId == location.LocationId).Monster;
+                var originalLocation = dbContext.Locations.Find(location.LocationId);
+                var monster = originalLocation.Monster;
                 if (monster != null)
                 {
                     result = true;
@@ -38,12 +40,15 @@ namespace CoZ.Repositories
 
         public Location FindLocation(string id, int x, int y)
         {
-            Location result;
+            Location result = null;
             using (var dbContext = ApplicationDbContext.Create())
             {
                 var character = dbContext.Characters.Single(c => c.UserId == id);
-                var location = character.Map.Single(l => l.XCoord == x && l.YCoord == y);
-                result = location.CopyLocation();
+                var location = character.Map.SingleOrDefault(l => l.XCoord == x && l.YCoord == y);
+                if (location != null)
+                {
+                    result = location.CopyLocation();
+                } 
             }
             return result;
         }
@@ -58,6 +63,11 @@ namespace CoZ.Repositories
             }
         }
 
+        //Gaat er van uit dat er monster/item/location zijn
+            /// <summary>
+            /// Hard remove location, monsters and items
+            /// </summary>
+            /// <param name="location"></param>
         public void DeleteLocation(Location location)
         {
             using (var dbContext = ApplicationDbContext.Create())

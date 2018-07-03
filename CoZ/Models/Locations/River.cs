@@ -42,13 +42,10 @@ namespace CoZ.Models.Locations
             {
                 case 1:
                     return "The river is not very wide, it seems narrow enough to jump across. It doesn't hinder your journey in any way.";
-                    break;
                 case 2:
                     return "The water flows rapidly, some fish swimming desperately against the strong current. If you step carefully, you think you can make it across without getting wet.";
-                    break;
                 case 3:
                     return "The water is no deeper than your knee, and perhaps three or four paces across. The sound of the moving water is relaxing. Perhaps you should take a break...";
-                    break;
                 default: return "Water water water. Why do you have to encounter water. You do NOT want to get wet, but sometimes you have to do things you don't like when you're on an adventure...";
             }
         }

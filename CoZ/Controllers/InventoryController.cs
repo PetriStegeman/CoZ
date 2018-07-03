@@ -1,5 +1,7 @@
 ﻿using CoZ.Models.Items;
 using CoZ.Repositories;
+using CoZ.ViewModels;
+using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -78,12 +80,24 @@ namespace CoZ.Controllers
 
         public ActionResult Index()
         {
-            return View();
+            string id = User.Identity.GetUserId();
+            var inventory = this.ItemRepository.GetInventory(id);
+            var viewModel = new InventoryViewModel(inventory);
+            return View(viewModel);
         }
 
-        public ActionResult Next()
+        public ActionResult ConsumeItem(string itemName)
         {
-            return View("Index");
+            string id = User.Identity.GetUserId();
+            this.ItemRepository.ConsumeItem(id, itemName);
+            return RedirectToAction("Index");
+        }
+
+        public ActionResult EquipItem(string itemName)
+        {
+            string id = User.Identity.GetUserId();
+            this.ItemRepository.EquipItem(id, itemName);
+            return RedirectToAction("Index");
         }
     }
 }

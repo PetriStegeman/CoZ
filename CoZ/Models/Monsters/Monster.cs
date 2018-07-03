@@ -40,9 +40,8 @@ namespace CoZ.Models.Monsters
         //Random Loot and Random Gold assignment for new creature
         public void MonsterInit()
         {
-            //this.Loot = new List<Item>();
-            //ItemFactory.CreateItem(this);
-            this.Gold = RngThreadSafe.Next(1, this.Level * 3);
+            this.Loot = ItemFactory.CreateItem();
+            this.Gold = RngThreadSafe.Next(1, 5);
         }
     }
 }
