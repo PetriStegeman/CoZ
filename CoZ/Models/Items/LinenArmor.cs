@@ -48,6 +48,7 @@ namespace CoZ.Models.Items
             this.Value = 1;
             this.ItemType = EItemType.Armor;
             this.IsSellable = true;
+            this.Hp = 1;
         }
     }
 }

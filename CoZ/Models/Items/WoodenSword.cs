@@ -45,6 +45,7 @@ namespace CoZ.Models.Items
         {
             this.Name = "Wooden Sword";
             this.Description = "Simple Sword";
+            this.Strength = 1;
             this.Value = 1;
             this.ItemType = EItemType.Weapon;
             this.IsSellable = true;

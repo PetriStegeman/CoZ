@@ -92,5 +92,12 @@ namespace CoZ.Controllers
             this.ItemRepository.ConsumeItem(id, itemName);
             return RedirectToAction("Index");
         }
+
+        public ActionResult EquipItem(string itemName)
+        {
+            string id = User.Identity.GetUserId();
+            this.ItemRepository.EquipItem(id, itemName);
+            return RedirectToAction("Index");
+        }
     }
 }

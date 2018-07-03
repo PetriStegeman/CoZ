@@ -21,13 +21,20 @@
             <h3>|-Item Value: @Model.Inventory[i].Value-|</h3>
         </td>
         <td>
-                @if (Model.Inventory[i].ItemType == CoZ.Models.Items.EItemType.Consumable)
-                {
+            @if (Model.Inventory[i].ItemType == CoZ.Models.Items.EItemType.Consumable)
+            {
                 <form action="/Inventory/ConsumeItem/">
-                    <input type="hidden" name="itemName" value="@Model.Inventory[i].ItemName"/>
+                    <input type="hidden" name="itemName" value="@Model.Inventory[i].ItemName" />
                     <input type="submit" value="Consume">
                 </form>
-                }
+            }
+            else if (Model.Inventory[i].IsEquiped == false)
+            {
+                <form action="/Inventory/EquipItem/">
+                    <input type="hidden" name="itemName" value="@Model.Inventory[i].ItemName" />
+                    <input type="submit" value="Equip">
+                </form>
+            }
         </td>
     </tr>
     }

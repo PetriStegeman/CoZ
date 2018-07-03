@@ -35,6 +35,7 @@ namespace CoZ.ViewModels
         public EItemType ItemType { get; set; }
         public int Value { get; set; }
         public string ItemDescription { get; set; }
+        public bool IsEquiped { get; set; }
 
         public InventoryItem() { }
 
@@ -44,6 +45,7 @@ namespace CoZ.ViewModels
             this.Value = item.Value;
             this.ItemType = item.ItemType;
             this.ItemDescription = item.Description;
+            this.IsEquiped = item.IsEquiped;
         }
     }
 }

@@ -106,9 +106,10 @@ namespace CoZ.Controllers
         {
             string id = User.Identity.GetUserId();
             var character = this.CharacterRepository.FindByCharacterId(id);
+            var inventory = this.ItemRepository.GetInventory(id);
             var location = this.LocationRepository.FindCurrentLocation(id);
             var monster = this.MonsterRepository.FindMonsterByLocation(location);
-            var damage = character.Attack(monster);
+            var damage = character.Attack(monster, inventory);
             var result = CreateBattleViewModel(monster, character);
             this.CharacterRepository.UpdateCharacter(character);
             this.MonsterRepository.Updatemonster(monster);

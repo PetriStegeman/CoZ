@@ -97,9 +97,17 @@ namespace CoZ.Controllers
             {
                 weaponName = "There is no weapon equiped.";
             }
+            else
+            {
+                weaponName = weapon.Description;
+            }
             if (armor == null)
             {
                 armorName = "There is no armor equiped.";
+            }
+            else
+            {
+                armorName = armor.Description;
             }
             return new CharacterViewModel(character, weaponName, armorName);
         }
