@@ -35,7 +35,7 @@ namespace CoZ.Repositories
             {
                 var character = dbContext.Characters.Single(c => c.UserId == id);
                 var inventory = character.Inventory.ToList();
-                Potion item = (Potion) inventory.First(w => w.Name == itemName);
+                Potion item = (Potion) inventory.FirstOrDefault(w => w.Name == itemName);
                 if (item != null)
                 {
                     item.Consume(character);

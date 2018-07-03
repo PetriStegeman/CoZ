@@ -86,7 +86,7 @@ namespace CoZ.Controllers
             return View(viewModel);
         }
 
-        public ActionResult ConsumeItem(string itemName)
+        public ActionResult ConsumeItem(string itemName = "Healing Potion")
         {
             string id = User.Identity.GetUserId();
             this.ItemRepository.ConsumeItem(id, itemName);
