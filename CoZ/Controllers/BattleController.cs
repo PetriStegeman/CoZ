@@ -138,7 +138,10 @@ namespace CoZ.Controllers
         public ActionResult GameOver()
         {
             string id = User.Identity.GetUserId();
-            this.CharacterRepository.DeleteCharacter(id);
+            if (this.CharacterRepository.FindByCharacterId(id) != null)
+            {
+                this.CharacterRepository.DeleteCharacter(id);
+            }
             return View();
         }
 
