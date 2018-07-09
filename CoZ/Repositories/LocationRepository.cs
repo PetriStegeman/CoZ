@@ -26,6 +26,16 @@ namespace CoZ.Repositories
             return result;
         }
 
+        public ICollection<Location> GetMap(string id)
+        {
+            using (var dbContext = ApplicationDbContext.Create())
+            {
+                var character = dbContext.Characters.Single(c => c.UserId == id);
+                var output = character.Map;
+                return output;
+            }
+        }
+
         public Location FindCurrentLocation(string id)
         {
             Location result;

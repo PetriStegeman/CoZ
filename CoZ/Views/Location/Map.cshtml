@@ -1,0 +1,56 @@
+﻿@using CoZ.ViewModels
+@using CoZ.Models.Locations
+@model CoZ.ViewModels.MapViewModel
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Map</h2>
+
+<table>
+    @for (int i = 20; i >= 1; i--)
+    {
+    <tr>
+        @for (int j = 1; j <= 20; j++)
+        {
+        <td>
+            @if (j == Model.CharXCoord && i == Model.CharYCoord)
+            {
+                <img src="~/Content/Character.png" />
+            }
+            else if (Model.Locations.Single(l => l.XCoord == j && l.YCoord == i) is Forest)
+            {
+                <img src="~/Content/Forest.png" />
+            }
+            else if (Model.Locations.Single(l => l.XCoord == j && l.YCoord == i) is Mountain)
+            {
+                <img src="~/Content/Mountain.png" />
+            }
+            else if (Model.Locations.Single(l => l.XCoord == j && l.YCoord == i) is StartingLocation)
+            {
+                <img src="~/Content/Village.png" />
+            }
+            else if (Model.Locations.Single(l => l.XCoord == j && l.YCoord == i) is Town)
+            {
+                <img src="~/Content/Village.png" />
+            }
+            else if (Model.Locations.Single(l => l.XCoord == j && l.YCoord == i) is River)
+            {
+                <img src="~/Content/Water.png" />
+            }
+            else
+            {
+                <img src="~/Content/Plains.png" />
+            }
+        </td>
+        }
+    </tr>
+    }
+</table>
+
+<div class="row">
+    <div class="col-md-4">
+        <h2><a class="btn btn-default" href="/Location/Index">Go back to the game &raquo;</a></h2>
+    </div>
+</div>
