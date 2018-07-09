@@ -39,6 +39,10 @@
             {
                 <img src="~/Content/Water.png" />
             }
+            else if (Model.Locations.Single(l => l.XCoord == j && l.YCoord == i) is Lair)
+            {
+                <img src="~/Content/DragonLair.png" />
+            }
             else
             {
                 <img src="~/Content/Plains.png" />

@@ -151,7 +151,7 @@ namespace CoZ.Models
         public Character(string id, string name)
         {
             this.Name = name;
-            this.Map = MapFactory.CreateBigMap();
+            this.Map = MapFactory.CreateMap();
             this.Gold = 5;
             this.Level = 1;
             this.UserId = id;

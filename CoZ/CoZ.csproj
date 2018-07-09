@@ -223,6 +223,7 @@
     <Compile Include="Models\Items\Weapon.cs" />
     <Compile Include="Models\Items\WoodenSword.cs" />
     <Compile Include="Models\Locations\Forest.cs" />
+    <Compile Include="Models\Locations\Lair.cs" />
     <Compile Include="Models\Locations\Lake.cs" />
     <Compile Include="Models\Locations\Location.cs" />
     <Compile Include="Models\Locations\Mountain.cs" />
@@ -264,6 +265,7 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\Character.png" />
+    <Content Include="Content\DragonLair.png" />
     <Content Include="Content\Forest.png" />
     <Content Include="Content\Mountain.png" />
     <Content Include="Content\Plains.png" />

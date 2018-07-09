@@ -24,7 +24,7 @@ namespace CoZ.Models.Monsters
 
         public TheGreatDragonKraltock(Location location)
         {
-            this.Name = "The Geat Dragon Kraltock";
+            this.Name = "Geat Dragon: Kraltock";
             this.Level = 20;
             this.MaxHp = 50;
             this.CurrentHp = this.MaxHp;
@@ -36,12 +36,12 @@ namespace CoZ.Models.Monsters
 
         public TheGreatDragonKraltock()
         {
-            this.Name = "Kobold Warrior";
-            this.Level = RngThreadSafe.Next(3, 6);
-            this.MaxHp = 10 + this.Level;
+            this.Name = "Geat Dragon: Kraltock";
+            this.Level = 20;
+            this.MaxHp = 50;
             this.CurrentHp = this.MaxHp;
-            this.Strength = 1 + this.Level;
-            this.Speed = 2;
+            this.Strength = 15;
+            this.Speed = 7;
             this.MonsterInit();
         }
     }

@@ -81,17 +81,27 @@ namespace CoZ.Repositories
                     {
                         continue;
                     }
-                    var monster = MonsterFactory.CreateMonster(location);
-                    if (monster != null)
+                    else if (location is Lair)
                     {
-                        var item = ItemFactory.CreateItem();
-                        if (item != null)
-                        {
-                            monster.Loot = item;
-                        }
+                        var monster = new TheGreatDragonKraltock(location);
                         dbContext.Monsters.Add(monster);
                         location.Monster = monster;
+                        continue;
                     }
+                    else
+                    {
+                        var monster = MonsterFactory.CreateMonster(location);
+                        if (monster != null)
+                        {
+                            var item = ItemFactory.CreateItem();
+                            if (item != null)
+                            {
+                                monster.Loot = item;
+                            }
+                            dbContext.Monsters.Add(monster);
+                            location.Monster = monster;
+                        }
+                    } 
                 }
                 dbContext.SaveChanges();
             }
