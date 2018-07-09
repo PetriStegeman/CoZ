@@ -256,12 +256,19 @@
     <Compile Include="ViewModels\CharacterViewModel.cs" />
     <Compile Include="ViewModels\InventoryViewModel.cs" />
     <Compile Include="ViewModels\LocationViewModel.cs" />
+    <Compile Include="ViewModels\MapViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\Character.png" />
+    <Content Include="Content\Forest.png" />
+    <Content Include="Content\Mountain.png" />
+    <Content Include="Content\Plains.png" />
+    <Content Include="Content\Village.png" />
+    <Content Include="Content\Water.png" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -329,6 +336,7 @@
     <Content Include="Views\Character\Index.cshtml" />
     <Content Include="Views\Game\Create.cshtml" />
     <Content Include="Views\Location\Market.cshtml" />
+    <Content Include="Views\Location\Map.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

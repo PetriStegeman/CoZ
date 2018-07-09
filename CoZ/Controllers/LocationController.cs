@@ -155,18 +155,32 @@ namespace CoZ.Controllers
             return RedirectToAction("Index");
         }
 
+        public ActionResult Map()
+        {
+            var model = CreateMapViewModel();
+            return View(model);
+        }
+
         public ActionResult Camp()
         {
-            string id = User.Identity.GetUserId();
+            var id = User.Identity.GetUserId();
             var character = this.CharacterRepository.FindByCharacterId(id);
             character.Camp();
             this.CharacterRepository.UpdateCharacter(character);
             return View();
         }
 
+        public MapViewModel CreateMapViewModel()
+        {
+            var id = User.Identity.GetUserId();
+            var character = this.CharacterRepository.FindByCharacterId(id);
+            var map = this.LocationRepository.GetMap(id);
+            return new MapViewModel(map, character.XCoord, character.YCoord);
+        }
+
         public LocationViewModel CreateViewModel(Location location)
         {
-            string id = User.Identity.GetUserId();
+            var id = User.Identity.GetUserId();
             var character = this.CharacterRepository.FindByCharacterId(id);
             bool isMonsterNorth = CheckNorth(id, character);
             bool isMonsterEast = CheckEast(id, character);
