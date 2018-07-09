@@ -122,3 +122,9 @@ D:\Repo\CoZ\CoZ\obj\Debug\CoZ.dll
 D:\Repo\CoZ\CoZ\obj\Debug\CoZ.pdb
 D:\Repo\CoZ\CoZ\obj\Debug\CoZ.Migrations.foreignmap.resources
 D:\Repo\CoZ\CoZ\obj\Debug\CoZ.csproj.GenerateResource.cache
+C:\Users\Alfdaur\Documents\GitHub\CoZ\CoZ\obj\Debug\CoZ.csprojAssemblyReference.cache
+C:\Users\Alfdaur\Documents\GitHub\CoZ\CoZ\obj\Debug\CoZ.Migrations.foreignmap.resources
+C:\Users\Alfdaur\Documents\GitHub\CoZ\CoZ\obj\Debug\CoZ.csproj.GenerateResource.cache
+C:\Users\Alfdaur\Documents\GitHub\CoZ\CoZ\obj\Debug\CoZ.csproj.CoreCompileInputs.cache
+C:\Users\Alfdaur\Documents\GitHub\CoZ\CoZ\obj\Debug\CoZ.dll
+C:\Users\Alfdaur\Documents\GitHub\CoZ\CoZ\obj\Debug\CoZ.pdb
