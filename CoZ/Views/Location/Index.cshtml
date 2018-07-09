@@ -1,41 +1,48 @@
-﻿@using CoZ.Models.Locations
-@model CoZ.Models.Locations.Location
+﻿@using CoZ.ViewModels
+@model CoZ.ViewModels.LocationViewModel
     @{
         ViewBag.Title = "Current Location";
         Layout = "~/Views/Shared/_Layout.cshtml";
     }
 
-    <h2>You find yourself in @Model.ShortDescription</h2>
+    <h2>Your current Location</h2>
 
     <h3>@Model.Description</h3>
-
     <br />
+    <p>@Model.MonsterToNorth</p>
     <br />
+    <p>@Model.MonsterToEast</p>
     <br />
+    <p>@Model.MonsterToSouth</p>
     <br />
-    <br />
-    <br />
-    <br />
-    <br />
-    <br />
+    <p>@Model.MonsterToWest</p>
     <br />
 
     <div class="row">
         <div class="col-md-4">
-            <h2><a class="btn btn-default" href="">Look at your Stats &raquo;</a></h2>
+            <h2><a class="btn btn-default" href="/Character/Index">Look at your Stats &raquo;</a></h2>
         </div>
         <div class="col-md-4">
-            <h2><a class="btn btn-default" href="">Look at your Inventory &raquo;</a></h2>
+            <h2><a class="btn btn-default" href="/Inventory/Index">Look at your Inventory &raquo;</a></h2>
         </div>
     </div>
 
     <div class="row">
         <div class="col-md-4">
-            <h2><a class="btn btn-default" href="">Search for Items &raquo;</a></h2>
         </div>
+        @if (Model.Description.StartsWith("You have reached the town"))
+        {
+        <div class="col-md-4">
+            <h2><a class="btn btn-default" href="/Location/Market">Go to Market &raquo;</a></h2>
+        </div>
+        }
+        else
+        {
         <div class="col-md-4">
             <h2><a class="btn btn-default" href="/Location/Camp">Camp and Rest &raquo;</a></h2>
         </div>
+        }
+
     </div>
 
     <br />

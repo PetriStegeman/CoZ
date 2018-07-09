@@ -22,17 +22,18 @@ namespace CoZ.Utility
         private bool altitudeChanged = false;
         private int currentRiverLength = 1;
         private int currentRiverAltitude = 0;
-        private Map mapHolder = null;
+        private ICollection<Location> mapHolder = null;
         private List<RiverPath> possibleRiverWays = null;
 
         //sets all the coördinates it gets from the FindRiver method to river tiles
-        public void CreateRiver(int coördinateX, int coördinateY, Map map)
+        public void CreateRiver(int coördinateX, int coördinateY, ICollection<Location> map)
         {
             RiverPath FinalRiverPath = FindRiverPath(coördinateX, coördinateY, map);
-            Location[][] worldMap = map.WorldMap.ToArray();
+            ICollection<Location> worldMap = map;
             foreach (coördinate coördinate in FinalRiverPath.riverCoördinates)
             {
-                worldMap[coördinate.X, coördinate.Y] = new River();
+                var tempLocation = worldMap.First(l => l.XCoord == coördinate.X && l.YCoord == coördinateY);
+                tempLocation = new River();
             }
 
             CleanUp();
@@ -40,7 +41,7 @@ namespace CoZ.Utility
 
 
         // returns a set of coördinates on which the river runs
-        private RiverPath FindRiverPath(int coördinateX, int coördinateY, Map map)
+        private RiverPath FindRiverPath(int coördinateX, int coördinateY, ICollection<Location> map)
         {
             //Sets up the system
             Setup(coördinateX, coördinateY, map);
@@ -57,7 +58,7 @@ namespace CoZ.Utility
             return possibleRiverWays[0];
         }
 
-        private void Setup(int coördinateX, int coördinateY, Map map)
+        private void Setup(int coördinateX, int coördinateY, ICollection<Location> map)
         {
             RiverPath startingList = new RiverPath(); // the first route creation
             coördinate startingPosition = new coördinate(coördinateX, coördinateY); // the first coördinate of the first route
@@ -93,7 +94,7 @@ namespace CoZ.Utility
         //Looks if any near tile is a suitable end node and returns all possible paths
         private void SearchNewPaths(int coördinateX, int coördinateY, RiverPath localPath)
         {
-            var currentAltide = mapHolder.WorldMap[coördinateX, coördinateY].Altitude;
+            var currentAltide = mapHolder.First(l => l.XCoord == coördinateX && l.YCoord == coördinateY).Altitude;
             SeekPath(1 + coördinateX, coördinateY, localPath);
             SeekPath(coördinateX - 1, coördinateY, localPath);
             SeekPath(coördinateX, 1 + coördinateY, localPath);
@@ -114,7 +115,7 @@ namespace CoZ.Utility
         {
             if (riverPath.riverCoördinates.Count < currentRiverLength) // checks the old
             { riverPaths.Remove(riverPath); }
-            if (mapHolder.WorldMap[riverPath.LastX(), riverPath.LastY()].Altitude > currentRiverAltitude) // pakt de lokatie van de map zoals aangegeven in de coördinaten
+            if (mapHolder.First(l => l.XCoord == riverPath.LastX() && l.YCoord == riverPath.LastY()).Altitude > currentRiverAltitude) // pakt de lokatie van de map zoals aangegeven in de coördinaten
             { riverPaths.Remove(riverPath); } // removes all riverPaths that don't go downward
             if (CheckCoördinateDuplicacy(riverPath))     //checks for dublicate positions in the path
             { riverPaths.Remove(riverPath); }
@@ -152,7 +153,7 @@ namespace CoZ.Utility
             {
                 if (oldPath.EndCheck(coördinateX, coördinateY, mapHolder))
                 { endNoteFound = true; }
-                if (mapHolder.WorldMap[coördinateX, coördinateY].Altitude < currentRiverAltitude)
+                if (mapHolder.First(l => l.XCoord == coördinateX && l.YCoord == coördinateY).Altitude < currentRiverAltitude)
                 { altitudeChanged = true; }
                 coördinate newCoördinate = new coördinate(coördinateX, coördinateY);
                 possibleRiverWays.Add(oldPath.ReturnNewRiverPath(newCoördinate)); // adds the new route to the list of routes

@@ -29,19 +29,19 @@ namespace CoZ.Models.FactoryItems
         }
 
 
-        public bool MoveCheck(int coördinateX, int coördinateY, int currentRiverAltitude, Map mapHolder)
+        public bool MoveCheck(int coördinateX, int coördinateY, int currentRiverAltitude, ICollection<Location> mapHolder)
         {
-            if (coördinateX >= 0 && coördinateX < mapHolder.WorldMap.Length) { return false; }
-            else if (coördinateY >= 0 && coördinateY < mapHolder.WorldMap.Rank) { return false; }
-            else if (mapHolder.WorldMap[coördinateX, coördinateY].Altitude <= currentRiverAltitude) { return false; }
+            if (coördinateX >= 0 && coördinateX < 20) { return false; }
+            else if (coördinateY >= 0 && coördinateY < 20) { return false; }
+            else if (mapHolder.First(l => l.XCoord == coördinateX && l.YCoord == coördinateY).Altitude <= currentRiverAltitude) { return false; }
             else { return true; }
         }
 
-        public bool EndCheck(int coördinateX, int coördinateY, Map mapHolder)
+        public bool EndCheck(int coördinateX, int coördinateY, ICollection<Location> mapHolder)
         {
-            if (mapHolder.WorldMap[coördinateX, coördinateY] is River) { return true; }
-            else if (mapHolder.WorldMap[coördinateX, coördinateY] is Ocean) { return true; }
-            else if (mapHolder.WorldMap[coördinateX, coördinateY] is Lake) { return true; }
+            if (mapHolder.First(l => l.XCoord == coördinateX && l.YCoord == coördinateY) is River) { return true; }
+            else if (mapHolder.First(l => l.XCoord == coördinateX && l.YCoord == coördinateY) is Ocean) { return true; }
+            else if (mapHolder.First(l => l.XCoord == coördinateX && l.YCoord == coördinateY) is Lake) { return true; }
             else { return false; }
         }
     }

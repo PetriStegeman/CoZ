@@ -1,5 +1,6 @@
 ﻿using CoZ.Models;
 using CoZ.Models.Locations;
+using CoZ.Repositories;
 using CoZ.Utility;
 using Microsoft.AspNet.Identity;
 using System;
@@ -14,6 +15,71 @@ namespace CoZ.Controllers
     [Authorize]
     public class GameController : Controller
     {
+        #region Repositories
+        private LocationRepository locationRepository;
+        protected LocationRepository LocationRepository
+        {
+            get
+            {
+                if (locationRepository == null)
+                {
+                    return new LocationRepository();
+                }
+                else
+                {
+                    return locationRepository;
+                }
+            }
+        }
+
+        private CharacterRepository characterRepository;
+        protected CharacterRepository CharacterRepository
+        {
+            get
+            {
+                if (characterRepository == null)
+                {
+                    return new CharacterRepository();
+                }
+                else
+                {
+                    return characterRepository;
+                }
+            }
+        }
+
+        private MonsterRepository monsterRepository;
+        protected MonsterRepository MonsterRepository
+        {
+            get
+            {
+                if (monsterRepository == null)
+                {
+                    return new MonsterRepository();
+                }
+                else
+                {
+                    return monsterRepository;
+                }
+            }
+        }
+
+        private ItemRepository itemRepository;
+        protected ItemRepository ItemRepository
+        {
+            get
+            {
+                if (itemRepository == null)
+                {
+                    return new ItemRepository();
+                }
+                else
+                {
+                    return itemRepository;
+                }
+            }
+        }
+        #endregion
 
         // GET: Game
         public ActionResult Index()
@@ -22,16 +88,34 @@ namespace CoZ.Controllers
         }
 
         //Generate data to start a new game
+        public ActionResult Initialize(string name)
+        {
+            string id = User.Identity.GetUserId();
+            if (this.CharacterRepository.FindByCharacterId(id) != null)
+            {
+                this.CharacterRepository.DeleteCharacter(id);
+            }
+            this.CharacterRepository.CreateCharacter(id, name);
+            this.MonsterRepository.AddMonsters(id);
+            this.ItemRepository.AddItems(id);
+            AddFinalBoss(id);
+            return RedirectToAction("Index", "Location");
+        }
+
         public ActionResult Create()
         {
-            using (var DbContext = ApplicationDbContext.Create())
+            return View();
+        }
+
+        public void AddFinalBoss(string id)
+        {
+            var location = this.LocationRepository.FindLocation(id, 6, 6);
+            var monster = this.MonsterRepository.FindMonsterByLocation(location);
+            if (monster != null)
             {
-                string id = User.Identity.GetUserId();
-                Character character = new Character(id);
-                DbContext.Characters.Add(character);
-                DbContext.SaveChanges();
+                this.MonsterRepository.DeleteMonster(monster);
             }
-            return RedirectToAction("Index", "Location");
+            this.MonsterRepository.AddFinalBoss(id);
         }
     }
 }

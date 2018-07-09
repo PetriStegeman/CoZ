@@ -1,0 +1,43 @@
+﻿@using CoZ.ViewModels
+@model CoZ.ViewModels.CharacterViewModel
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@Model.Name's stats</h2>
+<br />
+<p>Level: @Model.Level</p>
+<br />
+<p>Hp: @Model.CurrentHp/@Model.MaxHp</p>
+<br />
+<p>Mp: @Model.CurrentMp/@Model.MaxMp</p>
+<br />
+<p>Strength: @Model.Strength</p>
+<br />
+<p>Speed: @Model.Speed</p>
+<br />
+<br />
+<br />
+
+<div class="row">
+    <div class="col-md-4">
+        <h3>Your Gold:</h3>
+        <p>@Model.Gold</p>
+    </div>
+    <div class="col-md-4">
+        <h3>Your Equipment:</h3>
+        <p>Weapon: @Model.WeaponName</p>
+        <p>Armor: @Model.ArmorName</p>
+    </div>
+</div>
+
+<br />
+<br />
+<br />
+
+<div class="row">
+    <div class="col-md-offset-10">
+        <p><a class="btn btn-default" href="/Location/Index">Continue your journey &raquo;</a></p>
+    </div>
+</div>

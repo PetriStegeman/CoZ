@@ -8,54 +8,72 @@ using System.Web;
 
 namespace CoZ.Utility
 {
-    public class MapFactory
+    public static class MapFactory
     {
-        public static Map CreateSmallMap(string id)
+        public static ICollection<Location> CreateSmallMap(string id)
         {
-            Map worldMap = new Map();
-            worldMap.WorldMap = new Collection<Location>();
-            for (int i = 0; i <= 20; i++)
+            ICollection <Location> map = new List<Location>();
+            for (int i = 1; i <= 20; i++)
             {
-                for (int j = 0; j < 20; j++)
+                for (int j = 1; j <= 20; j++)
                 {
-                    Location location = GetTile(i, j);
-                    worldMap.WorldMap.Add(location);
-                }
-            }
-            return worldMap;
-        }
-
-        public static Map CreateMediumMap(string id)
-        {
-            {
-                Map worldMap = new Map();
-                worldMap.WorldMap = new Collection<Location>();
-                for (int i = 0; i <= 40; i++)
-                {
-                    for (int j = 0; j < 40; j++)
+                    if ((i == 20 && j == 20) | (i == 20 && j == 17))
                     {
-                        Location location = GetTile(i, j);
-                        worldMap.WorldMap.Add(location);
+                        continue;
                     }
-                }
-                return worldMap;
-            }
-        }
-
-        public static Map CreateBigMap(string id)
-        {
-            Map result = new Map();
-            ICollection<Location> map = new List<Location>();
-            for (int i = 0; i < 6; i++)
-            {
-                for (int j = 0; j < 6; j++)
-                {
                     Location location = GetTile(i, j);
                     map.Add(location);
                 }
             }
-            result.WorldMap = map;
-            return result;
+            var startLocation = new StartingLocation(20, 20);
+            var town = new Town(20, 17);
+            map.Add(startLocation);
+            map.Add(town);
+            return map;
+        }
+
+        public static ICollection<Location> CreateMediumMap(string id)
+        {
+            ICollection<Location> map = new List<Location>();
+            for (int i = 1; i <= 20; i++)
+            {
+                for (int j = 1; j <= 20; j++)
+                {
+                    if ((i == 20 && j == 20) | (i == 20 && j == 17))
+                    {
+                        continue;
+                    }
+                    Location location = GetTile(i, j);
+                    map.Add(location);
+                }
+            }
+            var startLocation = new StartingLocation(20, 20);
+            var town = new Town(20, 17);
+            map.Add(startLocation);
+            map.Add(town);
+            return map;
+        }
+
+        public static ICollection<Location> CreateBigMap()
+        {
+            ICollection<Location> map = new List<Location>();
+            for (int i = 1; i <= 20; i++)
+            {
+                for (int j = 1; j <= 20; j++)
+                {
+                    if ((i == 20 && j == 20) | (i == 20 && j == 17))
+                    {
+                        continue;
+                    }
+                    Location location = GetTile(i, j);
+                    map.Add(location);
+                }
+            }
+            var startLocation = new StartingLocation(20, 20);
+            var town = new Town(20, 17);
+            map.Add(startLocation);
+            map.Add(town);
+            return map;
         }
 
         private static Location GetTile(int x, int y)
@@ -65,9 +83,9 @@ namespace CoZ.Utility
             {
                 case 1: result = new Forest(x, y); break;
                 case 2: result = new Plains(x, y); break;
-                case 3: result = new Forest(x, y); break;
-                case 4: result = new Forest(x, y); break;
-                default: result = new Forest(x, y); break;
+                case 3: result = new River(x, y); break;
+                case 4: result = new Mountain(x, y); break;
+                default: result = new Lake(x, y); break;
             }
             return result;
         }

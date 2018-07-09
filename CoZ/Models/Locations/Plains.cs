@@ -10,52 +10,45 @@ namespace CoZ.Models.Locations
 {
     public class Plains : Location
     {
+        public override Location CopyLocation()
+        {
+            var location = new Plains();
+            location.LocationId = this.LocationId;
+            location.XCoord = this.XCoord;
+            location.YCoord = this.YCoord;
+            location.Description = this.Description;
+            location.ShortDescription = this.ShortDescription;
+            location.IsVisited = this.IsVisited;
+            location.Altitude = this.Altitude;
+            return location;
+        }
+
         public Plains(int x, int y)
         {
             this.XCoord = x;
             this.YCoord = y;
-            this.Items = new List<Item>();
-            this.Description = "You find yourself in rolling plains";
+            this.Description = "You find yourself on widespread grasslands. " + PlainsDescription();
             this.ShortDescription = "a plains";
-            if (RngThreadSafe.Next(1, 5) == 1)
-            {
-                this.Monsters = new List<Monster> { AddMonster() };
-            }
-        }
-        public Plains()
-        {
-            this.Monsters = new List<Monster>();
-            this.Items = new List<Item>();
-            this.Description = "You find yourself in rolling plains";
-            this.ShortDescription = "a plains";
-            if (RngThreadSafe.Next(1, 5) == 1)
-            {
-                this.Monsters = new List<Monster> { AddMonster() };
-            }
         }
 
-        public override Monster AddMonster()
+        public Plains()
         {
-            Monster result = null;
+            this.Description = "You find yourself on widespread grasslands. " + PlainsDescription();
+            this.ShortDescription = "a plains";
+        }
+
+        private string PlainsDescription()
+        {
             switch (RngThreadSafe.Next(1, 5))
             {
                 case 1:
-                    result = new Boar();
-                    break;
+                    return "Ankle high grass spreads in every direction. There are signs of grazing herd animals everywhere, but no animal in sight. It makes you a bit uncomfortabel.";
                 case 2:
-                    result = new Boar();
-                    break;
+                    return "Waist high grass grows wildly in every direction. You can see trails through the grass where animals and travelers have gone before you, but you better thread safely. You don't know what could be hiding in the grass...";
                 case 3:
-                    result = new Boar();
-                    break;
-                case 4:
-                    result = new Boar();
-                    break;
-                default:
-                    result = new Boar();
-                    break;
+                    return "Grass everywhere. More grass than you can handle. It's so boring, reaching all the way to the horizon. Better move on quickly...";
+                default: return "A pleasant breeze makes the grass move in hypnotizing swaying motions. It makes you want to sit down and just look at it for a while...";
             }
-            return result;
         }
     }
 }

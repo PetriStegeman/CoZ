@@ -1,0 +1,23 @@
+﻿
+@{
+    ViewBag.Title = "Market";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>The town's Market</h2>
+
+<h3>There are various stands selling their wares. It is a quiet town though. These peasants haven't seen a proper weapon in their life. There is an alchemist however, who is willing to brew you a healing potion for 5 gold.</h3>
+
+<br />
+<br />
+<br />
+
+<p>@ViewBag.Message</p>
+<div class="row">
+    <div class="col-md-4">
+        <h2><a class="btn btn-default" href="/Location/BuyPotion">Buy a Healing Potion &raquo;</a></h2>
+    </div>
+    <div class="col-md-4">
+        <h2><a class="btn btn-default" href="/Location/Index">Continue your journey &raquo;</a></h2>
+    </div>
+</div>

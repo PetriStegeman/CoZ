@@ -9,28 +9,45 @@ namespace CoZ.Models.Locations
 {
     public class Lake : Location
     {
-        public override Monster AddMonster()
+        public override Location CopyLocation()
         {
-            Monster result = null;
+            var location = new Lake();
+            location.LocationId = this.LocationId;
+            location.XCoord = this.XCoord;
+            location.YCoord = this.YCoord;
+            location.Description = this.Description;
+            location.ShortDescription = this.ShortDescription;
+            location.IsVisited = this.IsVisited;
+            location.Altitude = this.Altitude;
+            return location;
+        }
+
+        public Lake(int x, int y)
+        {
+            this.XCoord = x;
+            this.YCoord = y;
+            this.Description = "You find yourself on the edge of a lake. " + LakeDescription();
+            this.ShortDescription = "a lake";
+        }
+
+        public Lake()
+        {
+            this.Description = "You find yourself on the edge of a lake. " + LakeDescription();
+            this.ShortDescription = "a lake";
+        }
+
+        private string LakeDescription()
+        {
             switch (RngThreadSafe.Next(1, 5))
             {
                 case 1:
-                    result = new Boar();
-                    break;
+                    return "The waters look calm and inviting. On closer inspection the water looks crystal clear. Going for a short swim might be nice.";
                 case 2:
-                    result = new Boar();
-                    break;
+                    return "It's more of a puddle really. Barely 5 paces across, and by your estimation no deeper than your waist.";
                 case 3:
-                    result = new Boar();
-                    break;
-                case 4:
-                    result = new Boar();
-                    break;
-                default:
-                    result = new Boar();
-                    break;
+                    return "Dark murky waters span almost to the horizon. The water looks very deep. Better thread with care, there is no telling what is hiding in these waters.";
+                default: return "The water looks perfectly still. Too still. Something is not right. You better move on quickly.";
             }
-            return result;
         }
     }
 }
