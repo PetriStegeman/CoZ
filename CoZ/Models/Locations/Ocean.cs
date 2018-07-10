@@ -21,5 +21,30 @@ namespace CoZ.Models.Locations
             location.Altitude = this.Altitude;
             return location;
         }
+
+        public Ocean()
+        { }
+
+        public Ocean(int x, int y)
+        {
+            this.XCoord = x;
+            this.YCoord = y;
+            this.Description = "You find yourself on the wide ocean. " + OceanDescription();
+            this.ShortDescription = "a ocean";
+        }
+
+        private string OceanDescription()
+        {
+            switch (RngThreadSafe.Next(1, 5))
+            {
+                case 1:
+                    return "The ocean is calm and it is quite nice to sea the fish swim besides you.";
+                case 2:
+                    return "The ocean is calm and it is quite nice to sea the fish swim besides you.";
+                case 3:
+                    return "The ocean is calm and it is quite nice to sea the fish swim besides you.";
+                default: return "The ocean is calm and it is quite nice to sea the fish swim besides you.";
+            }
+        }
     }
 }
