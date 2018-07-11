@@ -17,7 +17,7 @@ namespace CoZ.Utility
             {
                 for (int j = 1; j <= 20; j++)
                 {
-                    if ((i == 19 && j == 19) | (i == 19 && j == 17) | (i == 6 && j == 6))
+                    if ((i == 19 && j == 19) | (i == 19 && j == 16) | (i == 6 && j == 6))
                     {
                         continue;
                     }

@@ -23,20 +23,4 @@ namespace CoZ.ViewModels
         }
     }
 
-    public class LocationViewModel
-    {
-        int x;
-        int y;
-        string type;
-
-        LocationViewModel(Location location)
-        {
-            this.x = location.XCoord;
-            this.y = location.YCoord;
-            this.type = location.ToString();
-        }
-
-        LocationViewModel()
-        { }
-    }
 }
