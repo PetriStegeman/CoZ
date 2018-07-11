@@ -21,7 +21,7 @@ namespace CoZ.Utility
                     {
                         continue;
                     }
-                    else if(i == 1 || i == 20 || j == 1 || j == 20)
+                    else if((i == 1 || i == 20) || (j == 1 || j == 20))
                         {
                         Location location = new Ocean(i, j);
                         map.Add(location);
