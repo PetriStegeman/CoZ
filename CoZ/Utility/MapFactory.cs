@@ -39,7 +39,12 @@ namespace CoZ.Utility
             map.Add(startLocation);
             map.Add(town);
             map.Add(lair);
-            return map;
+
+            RiverFactory riverBuilder = new RiverFactory();
+            var finalMap = riverBuilder.CreateRiver(8, 8, map);
+            map = riverBuilder.CreateRiver(17, 12, finalMap);
+            finalMap = riverBuilder.CreateRiver(12, 4, map);
+            return finalMap;
         }
 
         private static Location GetTile(int x, int y)
@@ -49,7 +54,7 @@ namespace CoZ.Utility
             {
                 case 1: result = new Forest(x, y); break;
                 case 2: result = new Plains(x, y); break;
-                case 3: result = new River(x, y); break;
+                case 3: result = new Plains(x, y); break;
                 case 4: result = new Mountain(x, y); break;
                 default: result = new Lake(x, y); break;
             }

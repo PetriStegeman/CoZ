@@ -26,6 +26,7 @@ namespace CoZ.Models.Locations
         {
             this.XCoord = x;
             this.YCoord = y;
+            this.Altitude = 5;
             this.Description = "You find yourself standing on the slopes of a mountain. " + MountainDescription();
             this.ShortDescription = "a mountain";
         }
@@ -34,6 +35,7 @@ namespace CoZ.Models.Locations
         {
             this.Description = "You find yourself standing on the slopes of a mountain. " + MountainDescription();
             this.ShortDescription = "a mountain";
+            this.Altitude = 5;
         }
 
         private string MountainDescription()
