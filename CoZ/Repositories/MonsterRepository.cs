@@ -2,33 +2,29 @@
 using CoZ.Models.Locations;
 using CoZ.Models.Monsters;
 using CoZ.Utility;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
 
 namespace CoZ.Repositories
 {
-    public class MonsterRepository //: Repository
+    public class MonsterRepository
     {
 
         public async Task<Monster> FindMonsterByLocation(Location location)
         {
-            Monster output;
             using (var dbContext = ApplicationDbContext.Create())
             {
                 var monster = await Task.Run(() => dbContext.Locations.SingleOrDefault(d => d.LocationId == location.LocationId).Monster);
                 if (monster == null)
                 {
-                    output = null;
+                    return null;
                 }
                 else
                 {
-                    output = await Task.Run(() => monster.CloneMonster());
+                    return await Task.Run(() => monster.CloneMonster());
                 }
             }
-            return output;
         }
 
         public async Task DeleteMonster(Monster monster)
@@ -61,7 +57,7 @@ namespace CoZ.Repositories
             {
                 var character = await Task.Run(() => dbContext.Characters.Single(c => c.UserId == id));
                 ICollection<Location> map = character.Map;
-                var location = map.Single(l => l.XCoord == 6 && l.YCoord == 6);
+                var location = await Task.Run(() => map.Single(l => l.XCoord == 6 && l.YCoord == 6));
                 var originalLocation = await Task.Run(() => dbContext.Locations.Find(location.LocationId));
                 var newMonster = new TheGreatDragonKraltock(originalLocation);
                 await Task.Run(() => dbContext.Monsters.Add(newMonster));

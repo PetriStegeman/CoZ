@@ -206,9 +206,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201807091353134_rivermethodfixshiz.cs" />
-    <Compile Include="Migrations\201807091353134_rivermethodfixshiz.Designer.cs">
-      <DependentUpon>201807091353134_rivermethodfixshiz.cs</DependentUpon>
+    <Compile Include="Migrations\201807181330546_updatedChar-LocRelation.cs" />
+    <Compile Include="Migrations\201807181330546_updatedChar-LocRelation.Designer.cs">
+      <DependentUpon>201807181330546_updatedChar-LocRelation.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -358,8 +358,8 @@
     <Content Include="Scripts\jquery-3.3.1.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201807091353134_rivermethodfixshiz.resx">
-      <DependentUpon>201807091353134_rivermethodfixshiz.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201807181330546_updatedChar-LocRelation.resx">
+      <DependentUpon>201807181330546_updatedChar-LocRelation.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

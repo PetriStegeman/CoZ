@@ -7,13 +7,13 @@ namespace CoZ.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.2.0-61023")]
-    public sealed partial class rivermethodfixshiz : IMigrationMetadata
+    public sealed partial class updatedCharLocRelation : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(rivermethodfixshiz));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(updatedCharLocRelation));
         
         string IMigrationMetadata.Id
         {
-            get { return "201807091353134_rivermethodfixshiz"; }
+            get { return "201807181330546_updatedChar-LocRelation"; }
         }
         
         string IMigrationMetadata.Source

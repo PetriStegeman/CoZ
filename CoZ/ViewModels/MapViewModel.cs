@@ -8,14 +8,14 @@ namespace CoZ.ViewModels
 {
     public class MapViewModel
     {
-        public ICollection<Location> Locations { get; set; }
+        public IEnumerable<Location> Locations { get; set; }
         public int CharXCoord { get; set; }
         public int CharYCoord { get; set; }
 
 
         public MapViewModel() { }
 
-        public MapViewModel(ICollection<Location> Map, int xCoord, int yCoord)
+        public MapViewModel(IEnumerable<Location> Map, int xCoord, int yCoord)
         {
             this.Locations = Map;
             this.CharXCoord = xCoord;
