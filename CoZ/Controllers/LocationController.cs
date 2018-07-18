@@ -78,7 +78,7 @@ namespace CoZ.Controllers
             }
         }
         #endregion
-
+   
         public async Task<ActionResult> Index()
         {
             string id = User.Identity.GetUserId();

@@ -88,6 +88,17 @@ namespace CoZ.Controllers
             return View();
         }
 
+        public async Task<ActionResult> Continue()
+        {
+            string id = User.Identity.GetUserId();
+            if (await this.CharacterRepository.FindByCharacterId(id) == null)
+            {
+                ViewBag.Message = "You cannot continue the game, please create a new Character.";
+                return View("Index");
+            }
+            else return RedirectToAction("Index");
+        }
+
         //Generate data to start a new game
         public async Task<ActionResult> Initialize(string name)
         {
