@@ -5,6 +5,7 @@ using CoZ.Utility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 
 namespace CoZ.Repositories
@@ -12,79 +13,79 @@ namespace CoZ.Repositories
     public class MonsterRepository //: Repository
     {
 
-        public Monster FindMonsterByLocation(Location location)
+        public async Task<Monster> FindMonsterByLocation(Location location)
         {
             Monster output;
             using (var dbContext = ApplicationDbContext.Create())
             {
-                var monster = dbContext.Locations.SingleOrDefault(d => d.LocationId == location.LocationId).Monster;
+                var monster = await Task.Run(() => dbContext.Locations.SingleOrDefault(d => d.LocationId == location.LocationId).Monster);
                 if (monster == null)
                 {
                     output = null;
                 }
                 else
                 {
-                    output = monster.CloneMonster();
+                    output = await Task.Run(() => monster.CloneMonster());
                 }
             }
             return output;
         }
 
-        public void DeleteMonster(Monster monster)
+        public async Task DeleteMonster(Monster monster)
         {
             using (var dbContext = ApplicationDbContext.Create())
             {
-                var originalMonster = dbContext.Monsters.Find(monster.MonsterId);
+                var originalMonster = await Task.Run(() => dbContext.Monsters.Find(monster.MonsterId));
                 if (originalMonster.Loot != null)
                 {
-                    dbContext.Items.Remove(dbContext.Items.Find(originalMonster.Loot.ItemId));
+                    await Task.Run(() => dbContext.Items.Remove(dbContext.Items.Find(originalMonster.Loot.ItemId)));
                 }
-                dbContext.Monsters.Remove(originalMonster);
-                dbContext.SaveChanges();
+                await Task.Run(() => dbContext.Monsters.Remove(originalMonster));
+                await dbContext.SaveChangesAsync();
             }
         }
 
-        public void Updatemonster(Monster monster)
+        public async Task Updatemonster(Monster monster)
         {
             using (var dbContext = ApplicationDbContext.Create())
             {
-                var originalMonster = dbContext.Monsters.Find(monster.MonsterId);
-                originalMonster.CopyMonster(monster);
-                dbContext.SaveChanges();
+                var originalMonster = await Task.Run(() => dbContext.Monsters.Find(monster.MonsterId));
+                await Task.Run(() => originalMonster.CopyMonster(monster));
+                await dbContext.SaveChangesAsync();
             }
         }
 
-        public void AddFinalBoss(string id)
+        public async Task AddFinalBoss(string id)
         {
             using (var dbContext = ApplicationDbContext.Create())
             {
-                var character = dbContext.Characters.Single(c => c.UserId == id);
+                var character = await Task.Run(() => dbContext.Characters.Single(c => c.UserId == id));
                 ICollection<Location> map = character.Map;
                 var location = map.Single(l => l.XCoord == 6 && l.YCoord == 6);
-                var originalLocation = dbContext.Locations.Find(location.LocationId);
+                var originalLocation = await Task.Run(() => dbContext.Locations.Find(location.LocationId));
                 var newMonster = new TheGreatDragonKraltock(originalLocation);
-                dbContext.Monsters.Add(newMonster);
+                await Task.Run(() => dbContext.Monsters.Add(newMonster));
                 originalLocation.Monster = newMonster;
-                dbContext.SaveChanges();
+                await dbContext.SaveChangesAsync();
             }
         }
 
-        internal void AddMonsters(string id)
+        public async Task AddMonsters(string id)
         {
             using (var dbContext = ApplicationDbContext.Create())
             {
-                var character = dbContext.Characters.Single(c => c.UserId == id);
+                var character = await Task.Run(() => dbContext.Characters.Single(c => c.UserId == id));
                 ICollection<Location> map = character.Map;
                 foreach (var location in map)
                 {
-                    if (location is StartingLocation | location is Town)
+                    if (location is StartingLocation || location is Town)
                     {
                         continue;
                     }
                     else if (location is Lair)
                     {
                         var monster = new TheGreatDragonKraltock(location);
-                        dbContext.Monsters.Add(monster);
+                        await Task.Run(() => dbContext.Monsters.Add(monster));
                         location.Monster = monster;
                         continue;
                     }
@@ -98,12 +99,12 @@ namespace CoZ.Repositories
                             {
                                 monster.Loot = item;
                             }
-                            dbContext.Monsters.Add(monster);
+                            await Task.Run(() => dbContext.Monsters.Add(monster));
                             location.Monster = monster;
                         }
                     } 
                 }
-                dbContext.SaveChanges();
+                await dbContext.SaveChangesAsync();
             }
         }
     }

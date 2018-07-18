@@ -4,97 +4,84 @@ using CoZ.Models.Locations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace CoZ.Repositories
 {
     public class CharacterRepository 
     {
-        public void CreateCharacter(string id, string name)
+        public async Task CreateCharacter(string id, string name)
         {
             using (var dbContext = ApplicationDbContext.Create())
             {
                 var character = new Character(id, name);
-                dbContext.Characters.Add(character);
-                dbContext.SaveChanges();
+                await Task.Run(() => dbContext.Characters.Add(character));
+                await dbContext.SaveChangesAsync();
             }
         }
 
-        public Character FindByCharacterId(string id)
+        public async Task<Character> FindByCharacterId(string id)
         {
             using (var dbContext = ApplicationDbContext.Create())
             {
-                return dbContext.Characters.SingleOrDefault(c => c.UserId == id);
+                return await Task.Run(() => dbContext.Characters.SingleOrDefault(c => c.UserId == id));
             }
         }
 
-        public void DeleteCharacter(string id)
+        public async Task DeleteCharacter(string id)
         {
             using (var dbContext = ApplicationDbContext.Create())
             {
-                var character = dbContext.Characters.SingleOrDefault(c => c.UserId == id);
-                DeleteLocations(dbContext, character);
-                DeleteItems(dbContext, character.Inventory);
-                dbContext.Characters.Remove(character);
-                dbContext.SaveChanges();
+                var character = await Task.Run(() => dbContext.Characters.SingleOrDefault(c => c.UserId == id));
+                await DeleteLocations(dbContext, character);
+                await DeleteItems(dbContext, character.Inventory);
+                await Task.Run(() => dbContext.Characters.Remove(character));
+                await dbContext.SaveChangesAsync();
             }
         }
 
-        private void DeleteLocations(ApplicationDbContext dbContext, Character character)
+        private async Task DeleteLocations(ApplicationDbContext dbContext, Character character)
         {
             IEnumerable<Location> map = character.Map;
             foreach (var location in map.ToList())
             {
                 if (location.Monster != null)
                 {
-                    dbContext.Monsters.Remove(dbContext.Monsters.Find(location.Monster.MonsterId));
+                    await Task.Run(() => dbContext.Monsters.Remove(dbContext.Monsters.Find(location.Monster.MonsterId)));
                 }
-                dbContext.Locations.Remove(dbContext.Locations.Find(location.LocationId));
+                await Task.Run(() => dbContext.Locations.Remove(dbContext.Locations.Find(location.LocationId)));
             }
         }
 
-        private void DeleteItems(ApplicationDbContext dbContext, ICollection<Item> items)
+        private async Task DeleteItems(ApplicationDbContext dbContext, ICollection<Item> items)
         {
             foreach (var item in items.ToList())
             {
                 items.Remove(item);
-                dbContext.Items.Remove(dbContext.Items.Find(item.ItemId));
+                await Task.Run(() => dbContext.Items.Remove(dbContext.Items.Find(item.ItemId)));
             }
         }
 
 
-        public void UpdateCharacter(Character character)
+        public async Task UpdateCharacter(Character character)
         {
             using (var dbContext = ApplicationDbContext.Create())
             {
-                var originalCharacter = dbContext.Characters.Find(character.CharacterId);
-                originalCharacter.CopyCharacter(character);
-                dbContext.SaveChanges();
+                var originalCharacter = await Task.Run(() => dbContext.Characters.Find(character.CharacterId));
+                await Task.Run(() => originalCharacter.CopyCharacter(character));
+                await dbContext.SaveChangesAsync();
             }
         }
 
-        public void GainItem(String id, Item item)
+        public async Task GainItem(String id, Item item)
         {
             using (var dbContext = ApplicationDbContext.Create())
             {
-                var character = dbContext.Characters.SingleOrDefault(c => c.UserId == id);
+                var character = await Task.Run(() => dbContext.Characters.SingleOrDefault(c => c.UserId == id));
                 character.Inventory.Add(item);
-                dbContext.Items.Add(item);
-                dbContext.SaveChanges();
+                await Task.Run(() => dbContext.Items.Add(item));
+                await dbContext.SaveChangesAsync();
             }
         }
-        /* Backup in case of Destruction
-        public void GainItem(String id, Item item)
-        {
-            using (var dbContext = ApplicationDbContext.Create())
-            {
-                var originalItem = dbContext.Items.Find(item.ItemId);
-                var newLoot = originalItem.CloneItem();
-                var character = dbContext.Characters.SingleOrDefault(c => c.UserId == id);
-                character.Inventory.Add(newLoot);
-                dbContext.Items.Add(newLoot);
-                dbContext.SaveChanges();
-            }
-        }
-        */
     }
 }

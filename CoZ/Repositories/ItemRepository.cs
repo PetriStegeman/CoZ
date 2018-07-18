@@ -6,18 +6,19 @@ using CoZ.Utility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 
 namespace CoZ.Repositories
 {
     public class ItemRepository
     {
-        public List<Item> GetInventory(string id)
+        public async Task<List<Item>> GetInventory(string id)
         {
             List<Item> result = new List<Item>();
             using (var dbContext = ApplicationDbContext.Create())
             {
-                var character = dbContext.Characters.Single(c => c.UserId == id);
+                var character = await Task.Run(() => dbContext.Characters.Single(c => c.UserId == id));
                 var inventory = character.Inventory.ToList();
                 result = inventory;
             }
@@ -29,87 +30,87 @@ namespace CoZ.Repositories
         /// </summary>
         /// <param name="id"></param>
         /// <param name="itemName"></param>
-        public void ConsumeItem(string id, string itemName)
+        public async Task ConsumeItem(string id, string itemName)
         {
             using (var dbContext = ApplicationDbContext.Create())
             {
-                var character = dbContext.Characters.Single(c => c.UserId == id);
+                var character = await Task.Run(() => dbContext.Characters.Single(c => c.UserId == id));
                 var inventory = character.Inventory.ToList();
-                Potion item = (Potion) inventory.FirstOrDefault(w => w.Name == itemName);
+                Potion item = await Task.Run(() => (Potion) inventory.FirstOrDefault(w => w.Name == itemName));
                 if (item != null)
                 {
                     item.Consume(character);
                     inventory.Remove(item);
-                    dbContext.Items.Remove(dbContext.Items.Find(item.ItemId));
+                    await Task.Run(() => dbContext.Items.Remove(dbContext.Items.Find(item.ItemId)));
                 }
-                dbContext.SaveChanges();
+                await dbContext.SaveChangesAsync();
             }
         }
 
-        public void EquipItem(string id, string itemName)
+        public async Task EquipItem(string id, string itemName)
         {
             using (var dbContext = ApplicationDbContext.Create())
             {
-                var character = dbContext.Characters.Single(c => c.UserId == id);
+                var character = await Task.Run(() => dbContext.Characters.Single(c => c.UserId == id));
                 var inventory = character.Inventory.ToList();
                 var item = inventory.First(w => w.Name == itemName);
                 if (item is Armor)
                 {
-                    EquipArmor(id, item);
+                    await EquipArmor(id, item);
                 }
                 else if (item is Weapon)
                 {
-                    EquipWeapon(id, item);
+                    await EquipWeapon(id, item);
                 }
             }
         }
 
-        private void EquipArmor(string id, Item item)
+        private async Task EquipArmor(string id, Item item)
         {
-            var equipedArmor = FindEquipedArmor(id);
+            var equipedArmor = await FindEquipedArmor(id);
             if (equipedArmor != null)
             {
                 equipedArmor.IsEquiped = false;
-                UpdateItem(equipedArmor);
+                await UpdateItem(equipedArmor);
             }
             item.IsEquiped = true;
-            UpdateItem(item);
+            await UpdateItem(item);
         }
 
-        private void EquipWeapon(string id, Item item)
+        private async Task EquipWeapon(string id, Item item)
         {
-            var equipedWeapon = FindEquipedWeapon(id);
+            var equipedWeapon = await FindEquipedWeapon(id);
             if (equipedWeapon != null)
             {
                 equipedWeapon.IsEquiped = false;
-                UpdateItem(equipedWeapon);
+                await UpdateItem(equipedWeapon);
             }
             item.IsEquiped = true;
-            UpdateItem(item);
+            await UpdateItem(item);
         }
 
-        public Item FindLoot(Monster monster)
+        public async Task<Item> FindLoot(Monster monster)
         {
             Item result = null;
             using (var dbContext = ApplicationDbContext.Create())
             {
-                var originalMonster = dbContext.Monsters.Find(monster.MonsterId);
+                var originalMonster = await Task.Run(() => dbContext.Monsters.Find(monster.MonsterId));
                 if (originalMonster.Loot != null)
                 {
-                    var item = dbContext.Items.Find(originalMonster.Loot.ItemId);
+                    var item = await Task.Run(() => dbContext.Items.Find(originalMonster.Loot.ItemId));
                     result = item.CloneItem();
                 }
             }
             return result;
         }
 
-        public Item FindEquipedWeapon(string id)
+        public async Task<Item> FindEquipedWeapon(string id)
         {
             Item result = null;
             using (var dbContext = ApplicationDbContext.Create())
             {
-                var character = dbContext.Characters.Single(c => c.UserId == id);
-                var weapon = character.Inventory.SingleOrDefault(w => w.IsEquiped == true && w is Weapon);
+                var character = await Task.Run(() => dbContext.Characters.Single(c => c.UserId == id));
+                var weapon = await Task.Run(() => character.Inventory.SingleOrDefault(w => w.IsEquiped == true && w is Weapon));
                 if (weapon != null)
                 {
                     result = weapon.CloneItem();
@@ -118,13 +119,13 @@ namespace CoZ.Repositories
             return result;
         }
 
-        public Item FindEquipedArmor(string id)
+        public async Task<Item> FindEquipedArmor(string id)
         {
             Item result = null;
             using (var dbContext = ApplicationDbContext.Create())
             {
-                var character = dbContext.Characters.Single(c => c.UserId == id);
-                var armor = character.Inventory.SingleOrDefault(a => a.IsEquiped == true && a is Armor);
+                var character = await Task.Run(() => dbContext.Characters.Single(c => c.UserId == id));
+                var armor =  await Task.Run(() => character.Inventory.SingleOrDefault(a => a.IsEquiped == true && a is Armor));
                 if (armor != null)
                 {
                     result = armor.CloneItem();
@@ -133,32 +134,32 @@ namespace CoZ.Repositories
             return result;
         }
 
-        internal void AddItems(string id)
+        public async Task AddItems(string id)
         {
             using (var dbContext = ApplicationDbContext.Create())
             {
-                var character = dbContext.Characters.Single(c => c.UserId == id);
+                var character = await Task.Run(() => dbContext.Characters.Single(c => c.UserId == id));
                 ICollection<Location> map = character.Map;
                 foreach (var location in map)
                 {
                     var item = ItemFactory.CreateItem();
                     if (location.Monster == null && item != null)
                     {
-                        dbContext.Items.Add(item);
+                        await Task.Run(() => dbContext.Items.Add(item));
                         location.Item = item;
                     }
                 }
-                dbContext.SaveChanges();
+                await dbContext.SaveChangesAsync();
             }
         }
 
-        public void UpdateItem(Item item)
+        public async Task UpdateItem(Item item)
         {
             using (var dbContext = ApplicationDbContext.Create())
             {
-                var originalItem = dbContext.Items.Find(item.ItemId);
+                var originalItem = await Task.Run(() => dbContext.Items.Find(item.ItemId));
                 originalItem.CopyItem(item);
-                dbContext.SaveChanges();
+                await dbContext.SaveChangesAsync();
             }
         }
     }
