@@ -6,6 +6,7 @@ using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
@@ -79,17 +80,17 @@ namespace CoZ.Controllers
         }
         #endregion
 
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
             string id = User.Identity.GetUserId();
-            var character = this.CharacterRepository.FindByCharacterId(id);
-            var weapon = this.ItemRepository.FindEquipedWeapon(id);
-            var armor = this.ItemRepository.FindEquipedArmor(id);
-            var result = CreateViewModel(character, weapon, armor);
+            var character = await this.CharacterRepository.FindByCharacterId(id);
+            var weapon = await this.ItemRepository.FindEquipedWeapon(id);
+            var armor = await this.ItemRepository.FindEquipedArmor(id);
+            var result = await CreateViewModel(character, weapon, armor);
             return View(result);
         }
 
-        private CharacterViewModel CreateViewModel(Character character, Item weapon, Item armor)
+        private async Task<CharacterViewModel> CreateViewModel(Character character, Item weapon, Item armor)
         {
             var weaponName = "";
             var armorName = "";

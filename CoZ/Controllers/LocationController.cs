@@ -4,6 +4,7 @@ using CoZ.Models.Locations;
 using CoZ.Repositories;
 using CoZ.ViewModels;
 using Microsoft.AspNet.Identity;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 
 namespace CoZ.Controllers
@@ -78,12 +79,12 @@ namespace CoZ.Controllers
         }
         #endregion
 
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
             string id = User.Identity.GetUserId();
-            var location = this.LocationRepository.FindCurrentLocation(id);
-            var monster = this.MonsterRepository.FindMonsterByLocation(location);
-            var modelView = CreateViewModel(location);
+            var location = await this.LocationRepository.FindCurrentLocation(id);
+            var monster = await this.MonsterRepository.FindMonsterByLocation(location);
+            var modelView = await CreateViewModel(location);
             if (monster != null)
             {
                 return RedirectToAction("Index", "Battle");
@@ -91,10 +92,10 @@ namespace CoZ.Controllers
             else return View(modelView);
         }
 
-        public ActionResult GoNorth()
+        public async Task<ActionResult> GoNorth()
         {
             string id = User.Identity.GetUserId();
-            var character = this.CharacterRepository.FindByCharacterId(id);
+            var character = await this.CharacterRepository.FindByCharacterId(id);
             if (character.YCoord == 20)
             {
                 character.YCoord = 1;
@@ -103,14 +104,14 @@ namespace CoZ.Controllers
             {
                 character.YCoord += 1;
             }
-            this.CharacterRepository.UpdateCharacter(character);
+            await this.CharacterRepository.UpdateCharacter(character);
             return RedirectToAction("Index");
         }
 
-        public ActionResult GoSouth()
+        public async Task<ActionResult> GoSouth()
         {
             string id = User.Identity.GetUserId();
-            var character = this.CharacterRepository.FindByCharacterId(id);
+            var character = await this.CharacterRepository.FindByCharacterId(id);
             if (character.YCoord == 1)
             {
                 character.YCoord = 20;
@@ -119,14 +120,14 @@ namespace CoZ.Controllers
             {
                 character.YCoord -= 1;
             }
-            this.CharacterRepository.UpdateCharacter(character);
+            await this.CharacterRepository.UpdateCharacter(character);
             return RedirectToAction("Index");
         }
 
-        public ActionResult GoEast()
+        public async Task<ActionResult> GoEast()
         {
             string id = User.Identity.GetUserId();
-            var character = this.CharacterRepository.FindByCharacterId(id);
+            var character = await this.CharacterRepository.FindByCharacterId(id);
             if (character.XCoord == 20)
             {
                 character.XCoord = 1;
@@ -135,14 +136,14 @@ namespace CoZ.Controllers
             {
                 character.XCoord += 1;
             }
-            this.CharacterRepository.UpdateCharacter(character);
+            await this.CharacterRepository.UpdateCharacter(character);
             return RedirectToAction("Index");
         }
 
-        public ActionResult GoWest()
+        public async Task<ActionResult> GoWest()
         {
             string id = User.Identity.GetUserId();
-            var character = this.CharacterRepository.FindByCharacterId(id);
+            var character = await this.CharacterRepository.FindByCharacterId(id);
             if (character.XCoord == 1)
             {
                 character.XCoord = 20;
@@ -151,46 +152,47 @@ namespace CoZ.Controllers
             {
                 character.XCoord -= 1;
             }
-            this.CharacterRepository.UpdateCharacter(character);
+            await this.CharacterRepository.UpdateCharacter(character);
             return RedirectToAction("Index");
         }
 
-        public ActionResult Map()
+        public async Task<ActionResult> Map()
         {
-            var model = CreateMapViewModel();
+            var model = await CreateMapViewModel();
             return View(model);
         }
 
-        public ActionResult Camp()
+        public async Task<ActionResult> Camp()
         {
             var id = User.Identity.GetUserId();
-            var character = this.CharacterRepository.FindByCharacterId(id);
+            var character = await this.CharacterRepository.FindByCharacterId(id);
             character.Camp();
-            this.CharacterRepository.UpdateCharacter(character);
+            await this.CharacterRepository.UpdateCharacter(character);
             return View();
         }
 
-        public MapViewModel CreateMapViewModel()
+        public async Task<MapViewModel> CreateMapViewModel()
         {
             var id = User.Identity.GetUserId();
-            var character = this.CharacterRepository.FindByCharacterId(id);
-            var map = this.LocationRepository.GetMap(id);
+            var character = await this.CharacterRepository.FindByCharacterId(id);
+            var map = await this.LocationRepository.GetMap(id);
             return new MapViewModel(map, character.XCoord, character.YCoord);
         }
 
-        public LocationViewModel CreateViewModel(Location location)
+        public async Task<LocationViewModel> CreateViewModel(Location location)
         {
             var id = User.Identity.GetUserId();
-            var character = this.CharacterRepository.FindByCharacterId(id);
-            bool isMonsterNorth = CheckNorth(id, character);
-            bool isMonsterEast = CheckEast(id, character);
-            bool isMonsterSouth = CheckSouth(id, character);
-            bool isMonsterWest = CheckWest(id, character);
-            LocationViewModel result = new LocationViewModel(location, isMonsterNorth, isMonsterEast, isMonsterSouth, isMonsterWest);
+            var character = await this.CharacterRepository.FindByCharacterId(id);
+            var isMonsterNorth  = CheckNorth(id, character);
+            var isMonsterEast = CheckEast(id, character);
+            var isMonsterSouth = CheckSouth(id, character);
+            var isMonsterWest = CheckWest(id, character);
+            var allBools = await Task.WhenAll(isMonsterNorth, isMonsterEast, isMonsterSouth, isMonsterWest).ConfigureAwait(false);
+            LocationViewModel result = new LocationViewModel(location, isMonsterNorth.Result, isMonsterEast.Result, isMonsterSouth.Result, isMonsterWest.Result);
             return result;
         }
 
-        public bool CheckNorth(string id, Character character)
+        public async Task<bool> CheckNorth(string id, Character character)
         {
             var x = character.XCoord;
             var y = 0;
@@ -202,12 +204,12 @@ namespace CoZ.Controllers
             {
                 y = character.YCoord + 1;
             }
-            var location = this.LocationRepository.FindLocation(id, x, y);
-            var result = this.LocationRepository.AreThereMonstersAtLocation(location);
+            var location = await this.LocationRepository.FindLocation(id, x, y);
+            var result = await this.LocationRepository.AreThereMonstersAtLocation(location);
             return result;
         }
 
-        public bool CheckSouth(string id, Character character)
+        public async Task<bool> CheckSouth(string id, Character character)
         {
             var x = character.XCoord;
             var y = 0;
@@ -219,12 +221,12 @@ namespace CoZ.Controllers
             {
                 y = character.YCoord - 1;
             }
-            var location = this.LocationRepository.FindLocation(id, x, y);
-            var result = this.LocationRepository.AreThereMonstersAtLocation(location);
+            var location = await this.LocationRepository.FindLocation(id, x, y);
+            var result = await this.LocationRepository.AreThereMonstersAtLocation(location);
             return result;
         }
 
-        public bool CheckEast(string id, Character character)
+        public async Task<bool> CheckEast(string id, Character character)
         {
             var x = 0;
             var y = character.YCoord;
@@ -236,12 +238,12 @@ namespace CoZ.Controllers
             {
                 x = character.XCoord + 1;
             }
-            var location = this.LocationRepository.FindLocation(id, x, y);
-            var result = this.LocationRepository.AreThereMonstersAtLocation(location);
+            var location = await this.LocationRepository.FindLocation(id, x, y);
+            var result = await this.LocationRepository.AreThereMonstersAtLocation(location);
             return result;
         }
 
-        public bool CheckWest(string id, Character character)
+        public async Task<bool> CheckWest(string id, Character character)
         {
             var x = 0;
             var y = character.YCoord;
@@ -253,12 +255,12 @@ namespace CoZ.Controllers
             {
                 x = character.XCoord - 1;
             }
-            var location = this.LocationRepository.FindLocation(id, x, y);
-            var result = this.LocationRepository.AreThereMonstersAtLocation(location);
+            var location = await this.LocationRepository.FindLocation(id, x, y);
+            var result = await this.LocationRepository.AreThereMonstersAtLocation(location);
             return result;
         }
 
-        public ActionResult Market(bool? purchase = null)
+        public async Task<ActionResult> Market(bool? purchase = null)
         {
             if (purchase == true)
             {
@@ -271,10 +273,10 @@ namespace CoZ.Controllers
             return View();
         }
 
-        public ActionResult BuyPotion()
+        public async Task<ActionResult> BuyPotion()
         {
             string id = User.Identity.GetUserId();
-            var character = this.CharacterRepository.FindByCharacterId(id);
+            var character = await this.CharacterRepository.FindByCharacterId(id);
             if (character.Gold < 5)
             {
                 ViewBag.Message = "You do not have enough gold.";
@@ -282,8 +284,8 @@ namespace CoZ.Controllers
             else
             {
                 character.Gold -= 5;
-                this.CharacterRepository.UpdateCharacter(character);
-                this.CharacterRepository.GainItem(id, new HealingPotion());
+                await this.CharacterRepository.UpdateCharacter(character);
+                await this.CharacterRepository.GainItem(id, new HealingPotion());
                 ViewBag.Message = "You have purchased the item";
             }
             return View("Market");

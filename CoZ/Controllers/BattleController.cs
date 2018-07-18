@@ -4,6 +4,7 @@ using CoZ.Models.Monsters;
 using CoZ.Repositories;
 using CoZ.ViewModels;
 using Microsoft.AspNet.Identity;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 
 namespace CoZ.Controllers
@@ -77,13 +78,14 @@ namespace CoZ.Controllers
         }
         #endregion
 
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
             string id = User.Identity.GetUserId();
             var character = this.CharacterRepository.FindByCharacterId(id);
             var location = this.LocationRepository.FindCurrentLocation(id);
-            var monster = this.MonsterRepository.FindMonsterByLocation(location);
-            var result = CreateBattleViewModel(monster, character);
+            await Task.WhenAll(character, location).ConfigureAwait(false);
+            var monster = await this.MonsterRepository.FindMonsterByLocation(location.Result);
+            var result = await CreateBattleViewModel(monster, character.Result);
             if (monster == null)
             {
                 return RedirectToAction("Index", "Location");
@@ -92,67 +94,72 @@ namespace CoZ.Controllers
         }
         
         //Redirect the user to the Location view after defeating the monster(s)
-        public ActionResult RunAWay()
+        public async Task<ActionResult> RunAWay()
         {
             string id = User.Identity.GetUserId();
-            var location = this.LocationRepository.FindCurrentLocation(id);
-            var monster = this.MonsterRepository.FindMonsterByLocation(location);
-            this.MonsterRepository.DeleteMonster(monster);
-            this.LocationRepository.UpdateLocation(location);
+            var location = await this.LocationRepository.FindCurrentLocation(id);
+            var monster = await this.MonsterRepository.FindMonsterByLocation(location);
+            await this.MonsterRepository.DeleteMonster(monster);
+            await this.LocationRepository.UpdateLocation(location);
             return RedirectToAction("Index", "Location");
         }
 
-        public ActionResult Attack()
+        public async Task<ActionResult> Attack()
         {
             string id = User.Identity.GetUserId();
-            var character = this.CharacterRepository.FindByCharacterId(id);
+            var character =  this.CharacterRepository.FindByCharacterId(id);
             var inventory = this.ItemRepository.GetInventory(id);
             var location = this.LocationRepository.FindCurrentLocation(id);
-            var monster = this.MonsterRepository.FindMonsterByLocation(location);
-            var damage = character.Attack(monster, inventory);
-            var result = CreateBattleViewModel(monster, character);
-            this.CharacterRepository.UpdateCharacter(character);
-            this.MonsterRepository.Updatemonster(monster);
-            return DetermineBattleOutcome(result, damage);
+            await Task.WhenAll(character, inventory, location).ConfigureAwait(false);
+            var monster = await this.MonsterRepository.FindMonsterByLocation(location.Result);
+            var damage = await Task.Run(() => character.Result.Attack(monster, inventory.Result));
+            var result = await CreateBattleViewModel(monster, character.Result);
+            var updateCharacter = this.CharacterRepository.UpdateCharacter(character.Result);
+            var updateMonster = this.MonsterRepository.Updatemonster(monster);
+            await Task.WhenAll(updateCharacter, updateMonster).ConfigureAwait(false);
+            return await DetermineBattleOutcome(result, damage);
         }
 
-        public ActionResult Victory()
+        public async Task<ActionResult> Victory()
         {
             string id = User.Identity.GetUserId();
             var character = this.CharacterRepository.FindByCharacterId(id);
             var location = this.LocationRepository.FindCurrentLocation(id);
-            var monster = this.MonsterRepository.FindMonsterByLocation(location);
-            var item = this.ItemRepository.FindLoot(monster);
+            await Task.WhenAll(character, location).ConfigureAwait(false);
+            var monster = await this.MonsterRepository.FindMonsterByLocation(location.Result);
+            var item = await this.ItemRepository.FindLoot(monster);
             if (item != null)
             {
                 this.CharacterRepository.GainItem(id, item);
             }
-            character.Victory(monster);
-            var result = CreateBattleViewModel(monster, character, item);
-            this.MonsterRepository.DeleteMonster(monster);
-            this.LocationRepository.UpdateLocation(location);
-            this.CharacterRepository.UpdateCharacter(character);
+            await Task.Run(() => character.Result.Victory(monster));
+            var result = await CreateBattleViewModel(monster, character.Result, item);
+            await this.MonsterRepository.DeleteMonster(monster);
+            var updateLocation = this.LocationRepository.UpdateLocation(location.Result);
+            var updateCharacter = this.CharacterRepository.UpdateCharacter(character.Result);
+            await Task.WhenAll(updateLocation, updateCharacter).ConfigureAwait(false);
             return View(result);
         }
 
-        public ActionResult GameOver()
+        public async Task<ActionResult> GameOver()
         {
             string id = User.Identity.GetUserId();
-            if (this.CharacterRepository.FindByCharacterId(id) != null)
+            if (await this.CharacterRepository.FindByCharacterId(id) != null)
             {
-                this.CharacterRepository.DeleteCharacter(id);
+                await this.CharacterRepository.DeleteCharacter(id);
             }
             return View();
         }
 
-        public ActionResult LevelUp()
+        public async Task<ActionResult> LevelUp()
         {
             bool levelUp = false;
             string id = User.Identity.GetUserId();
             var character = this.CharacterRepository.FindByCharacterId(id);
             var location = this.LocationRepository.FindCurrentLocation(id);
-            levelUp = character.IsLevelUp();
-            this.CharacterRepository.UpdateCharacter(character);
+            await Task.WhenAll(character, location).ConfigureAwait(false);
+            await Task.Run(() => levelUp = character.Result.IsLevelUp());
+            await this.CharacterRepository.UpdateCharacter(character.Result);
             if (levelUp)
             {
                 return View();
@@ -160,7 +167,7 @@ namespace CoZ.Controllers
             else return RedirectToAction("Index", "Location");
         }
 
-        public ActionResult DetermineBattleOutcome(BattleViewModel view, string damage)
+        public async Task<ActionResult> DetermineBattleOutcome(BattleViewModel view, string damage)
         {
             if (view.CharacterCurrentHp <= 0)
             {
@@ -177,7 +184,7 @@ namespace CoZ.Controllers
             }
         }
 
-        public BattleViewModel CreateBattleViewModel(Monster monster, Character character, Item item = null)
+        public async Task<BattleViewModel> CreateBattleViewModel(Monster monster, Character character, Item item = null)
         {
             return new BattleViewModel(monster, character, item);
         }

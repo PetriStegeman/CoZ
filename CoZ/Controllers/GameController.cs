@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
@@ -88,16 +89,17 @@ namespace CoZ.Controllers
         }
 
         //Generate data to start a new game
-        public ActionResult Initialize(string name)
+        public async Task<ActionResult> Initialize(string name)
         {
             string id = User.Identity.GetUserId();
-            if (this.CharacterRepository.FindByCharacterId(id) != null)
+            if (await this.CharacterRepository.FindByCharacterId(id) != null)
             {
-                this.CharacterRepository.DeleteCharacter(id);
+                await this.CharacterRepository.DeleteCharacter(id);
             }
-            this.CharacterRepository.CreateCharacter(id, name);
-            this.MonsterRepository.AddMonsters(id);
-            this.ItemRepository.AddItems(id);
+            await this.CharacterRepository.CreateCharacter(id, name);
+            var addMonsters = this.MonsterRepository.AddMonsters(id);
+            var addItems = this.ItemRepository.AddItems(id);
+            await Task.WhenAll(addMonsters, addItems).ConfigureAwait(false);
             return RedirectToAction("Index", "Location");
         }
 
