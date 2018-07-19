@@ -246,7 +246,6 @@
     <Compile Include="Repositories\ItemRepository.cs" />
     <Compile Include="Repositories\LocationRepository.cs" />
     <Compile Include="Repositories\MonsterRepository.cs" />
-    <Compile Include="Repositories\Repository.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Utility\ItemFactory.cs" />
     <Compile Include="Utility\MapFactory.cs" />

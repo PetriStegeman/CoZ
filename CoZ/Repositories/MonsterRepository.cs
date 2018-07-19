@@ -55,13 +55,10 @@ namespace CoZ.Repositories
         {
             using (var dbContext = ApplicationDbContext.Create())
             {
-                var character = await Task.Run(() => dbContext.Characters.Single(c => c.UserId == id));
-                ICollection<Location> map = character.Map;
-                var location = await Task.Run(() => map.Single(l => l.XCoord == 6 && l.YCoord == 6));
-                var originalLocation = await Task.Run(() => dbContext.Locations.Find(location.LocationId));
-                var newMonster = new TheGreatDragonKraltock(originalLocation);
+                var location = await Task.Run(() => dbContext.Locations.Single(l => l.XCoord == 6 && l.YCoord == 6 && l.Character.UserId == id));
+                var newMonster = new TheGreatDragonKraltock(location);
                 await Task.Run(() => dbContext.Monsters.Add(newMonster));
-                originalLocation.Monster = newMonster;
+                location.Monster = newMonster;
                 await dbContext.SaveChangesAsync();
             }
         }
@@ -70,8 +67,7 @@ namespace CoZ.Repositories
         {
             using (var dbContext = ApplicationDbContext.Create())
             {
-                var character = await Task.Run(() => dbContext.Characters.Single(c => c.UserId == id));
-                ICollection<Location> map = character.Map;
+                var map = await Task.Run(() => dbContext.Locations.Where(l => l.Character.UserId == id).ToList());
                 foreach (var location in map)
                 {
                     if (location is StartingLocation || location is Town)

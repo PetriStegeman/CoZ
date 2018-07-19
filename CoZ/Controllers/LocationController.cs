@@ -14,6 +14,7 @@ namespace CoZ.Controllers
     {
 
         #region Repositories
+        #pragma warning disable
         private LocationRepository locationRepository;
         protected LocationRepository LocationRepository
         {
@@ -77,8 +78,9 @@ namespace CoZ.Controllers
                 }
             }
         }
+        #pragma warning restore
         #endregion
-   
+
         public async Task<ActionResult> Index()
         {
             string id = User.Identity.GetUserId();
@@ -260,7 +262,7 @@ namespace CoZ.Controllers
             return result;
         }
 
-        public async Task<ActionResult> Market(bool? purchase = null)
+        public ActionResult Market(bool? purchase = null)
         {
             if (purchase == true)
             {

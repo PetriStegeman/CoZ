@@ -13,6 +13,7 @@ namespace CoZ.Controllers
     public class BattleController : Controller
     {
         #region Repositories
+        #pragma warning disable
         private LocationRepository locationRepository;
         protected LocationRepository LocationRepository
         {
@@ -76,6 +77,7 @@ namespace CoZ.Controllers
                 }
             }
         }
+        #pragma warning restore
         #endregion
 
         public async Task<ActionResult> Index()
@@ -85,7 +87,7 @@ namespace CoZ.Controllers
             var location = this.LocationRepository.FindCurrentLocation(id);
             await Task.WhenAll(character, location).ConfigureAwait(false);
             var monster = await this.MonsterRepository.FindMonsterByLocation(location.Result);
-            var result = await CreateBattleViewModel(monster, character.Result);
+            var result = CreateBattleViewModel(monster, character.Result);
             if (monster == null)
             {
                 return RedirectToAction("Index", "Location");
@@ -113,11 +115,11 @@ namespace CoZ.Controllers
             await Task.WhenAll(character, inventory, location).ConfigureAwait(false);
             var monster = await this.MonsterRepository.FindMonsterByLocation(location.Result);
             var damage = await Task.Run(() => character.Result.Attack(monster, inventory.Result));
-            var result = await CreateBattleViewModel(monster, character.Result);
+            var result = CreateBattleViewModel(monster, character.Result);
             var updateCharacter = this.CharacterRepository.UpdateCharacter(character.Result);
             var updateMonster = this.MonsterRepository.Updatemonster(monster);
             await Task.WhenAll(updateCharacter, updateMonster).ConfigureAwait(false);
-            return await DetermineBattleOutcome(result, damage);
+            return DetermineBattleOutcome(result, damage);
         }
 
         public async Task<ActionResult> Victory()
@@ -130,10 +132,10 @@ namespace CoZ.Controllers
             var item = await this.ItemRepository.FindLoot(monster);
             if (item != null)
             {
-                this.CharacterRepository.GainItem(id, item);
+                await this.CharacterRepository.GainItem(id, item);
             }
             await Task.Run(() => character.Result.Victory(monster));
-            var result = await CreateBattleViewModel(monster, character.Result, item);
+            var result = CreateBattleViewModel(monster, character.Result, item);
             await this.MonsterRepository.DeleteMonster(monster);
             var updateLocation = this.LocationRepository.UpdateLocation(location.Result);
             var updateCharacter = this.CharacterRepository.UpdateCharacter(character.Result);
@@ -167,7 +169,7 @@ namespace CoZ.Controllers
             else return RedirectToAction("Index", "Location");
         }
 
-        public async Task<ActionResult> DetermineBattleOutcome(BattleViewModel view, string damage)
+        public ActionResult DetermineBattleOutcome(BattleViewModel view, string damage)
         {
             if (view.CharacterCurrentHp <= 0)
             {
@@ -184,7 +186,7 @@ namespace CoZ.Controllers
             }
         }
 
-        public async Task<BattleViewModel> CreateBattleViewModel(Monster monster, Character character, Item item = null)
+        public BattleViewModel CreateBattleViewModel(Monster monster, Character character, Item item = null)
         {
             return new BattleViewModel(monster, character, item);
         }
