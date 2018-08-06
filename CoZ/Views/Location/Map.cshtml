@@ -40,19 +40,83 @@
             }
             else if (Model.Locations.Single(l => l.XCoord == j && l.YCoord == i) is River)
             {
-                <img src="~/Images/MapImages/RiverGrandSplit.png" />
-            }
-            else if (Model.Locations.Single(l => l.XCoord == j && l.YCoord == i) is Lair)
-            {
+                bool NorthRiver = (i == 20 || (Model.Locations.Single(l => l.XCoord == j && l.YCoord == i + 1) is IWater));
+                bool EastRiver = (j == 20 || (Model.Locations.Single(l => l.XCoord == j + 1 && l.YCoord == i) is IWater));
+                bool SouthRiver = (i == 1 || (Model.Locations.Single(l => l.XCoord == j && l.YCoord == i - 1) is IWater));
+                bool WestRiver = ((j == 1) || Model.Locations.Single(l => l.XCoord == j - 1 && l.YCoord == i) is IWater);
+
+                List<bool> amountOfRiverTiles = new List<bool>();
+                amountOfRiverTiles.Add(NorthRiver);
+                amountOfRiverTiles.Add(EastRiver);
+                amountOfRiverTiles.Add(SouthRiver);
+                amountOfRiverTiles.Add(WestRiver);
+
+                int amountOfRiverTilesConnected = 0;
+                foreach (var RiverCheck in amountOfRiverTiles)
+                {
+                    if (RiverCheck)
+                    {
+                        amountOfRiverTilesConnected++;
+                    }
+                }
+                string tile = "";
+                switch (amountOfRiverTilesConnected)
+                {
+                    case 1: tile = endNode(); break;
+                    case 2: tile = ((NorthRiver && SouthRiver)||(EastRiver && WestRiver)) ? twoWayStraight() : twoWayCorner(); break;
+                    case 3: tile = treeWay(); break;
+                    case 4: tile = "/Images/MapImages/RiverGrandSplit.png"; break;
+                    default: tile = "/Images/MapImages/RiverGrandSplit.png"; break;
+                }
+
+                string endNode()
+                {
+                    if (NorthRiver) { return "/Images/MapImages/RiverStartN.png"; }
+                    else if (EastRiver) { return "/Images/MapImages/RiverStartE.png"; }
+                    else if (SouthRiver) { return "/Images/MapImages/RiverStartS.png"; }
+                    else if (WestRiver) { return "/Images/MapImages/RiverStartW.png"; }
+                    else { return "/Images/MapImages/RiverGrandSplit.png"; }
+                }
+
+                string twoWayStraight()
+                {
+                    if (NorthRiver && SouthRiver) { return "/Images/MapImages/RiverStraightNS.png"; }
+                    else if (EastRiver && WestRiver) { return "/Images/MapImages/RiverStraightEW.png"; }
+                    else { return "/Images/MapImages/RiverGrandSplit.png"; }
+                }
+
+                string twoWayCorner()
+                {
+                    if (NorthRiver && EastRiver) { return "/Images/MapImages/RiverCornerNE.png"; }
+                    else if (EastRiver && SouthRiver) { return "/Images/MapImages/RiverCornerSE.png"; }
+                    else if (SouthRiver && WestRiver) { return "/Images/MapImages/RiverCornerSW.png"; }
+                    else if (NorthRiver && WestRiver) { return "/Images/MapImages/RiverCornerNW.png"; }
+                    else { return "/Images/MapImages/RiverGrandSplit.png"; }
+                }
+
+                string treeWay()
+                {
+                    if (!NorthRiver) { return "/Images/MapImages/RiverSplitS.png"; }
+                    else if (!EastRiver) { return "/Images/MapImages/RiverSplitW.png"; }
+                    else if (!SouthRiver) { return "/Images/MapImages/RiverSplitN.png"; }
+                    else if (!WestRiver) { return "/Images/MapImages/RiverSplitE.png"; }
+                    else { return "/Images/MapImages/RiverGrandSplit.png"; }
+                }
+
+                //tile = "\"" + tile + "\"";
+                <img src=@tile />
+                }
+                else if (Model.Locations.Single(l => l.XCoord == j && l.YCoord == i) is Lair)
+                {
                 <img src="~/Images/MapImages/DragonLair.png" />
-            }
-            else if (Model.Locations.Single(l => l.XCoord == j && l.YCoord == i) is Plains)
-            {
+                }
+                else if (Model.Locations.Single(l => l.XCoord == j && l.YCoord == i) is Plains)
+                {
                 <img src="~/Images/MapImages/grassFiller.png" />
-            }
-            else if (Model.Locations.Single(l => l.XCoord == j && l.YCoord == i) is Lake)
-            {
-                <img src="~/Images/MapImages/OceanFiller.png"/>
+                }
+                else if (Model.Locations.Single(l => l.XCoord == j && l.YCoord == i) is Lake)
+                {
+                <img src="~/Images/MapImages/OceanFiller.png" />
             }
             else if (Model.Locations.Single(l => l.XCoord == j && l.YCoord == i) is Ocean)
             {
@@ -118,16 +182,59 @@
 
                 string side()
                 {
-                    if (!NorthOcean) { return "/Images/MapImages/OceanSideN.png"; }
-                    else if (!EastOcean) { return "/Images/MapImages/OceanSideE.png"; }
-                    else if (!SouthOcean) { return "/Images/MapImages/OceanSideS.png"; }
-                    else if (!WestOcean) { return "/Images/MapImages/OceanSideW.png"; }
+                    if (!NorthOcean)
+                    {
+                        if ((i == 20 || (Model.Locations.Single(l => l.XCoord == j && l.YCoord == i + 1) is IWater)))
+                        {
+                            return "/Images/MapImages/RiverEndingS.png";
+                        }
+                        else
+                        {
+                            return "/Images/MapImages/OceanSideN.png";
+                        }
+                    }
+                    else if (!EastOcean)
+                    {
+                        if ((j == 20 || (Model.Locations.Single(l => l.XCoord == j + 1 && l.YCoord == i) is IWater)))
+                        {
+                            return "/Images/MapImages/RiverEndingW.png";
+                        }
+                        else
+                        {
+                            return "/Images/MapImages/OceanSideE.png";
+                        }
+
+                    }
+                    else if (!SouthOcean)
+                    {
+                        if ((i == 1 || (Model.Locations.Single(l => l.XCoord == j && l.YCoord == i - 1) is IWater)))
+                        {
+                            return "/Images/MapImages/RiverEndingN.png";
+                        }
+                        else
+                        {
+                            return "/Images/MapImages/OceanSideS.png";
+                        }
+
+                    }
+                    else if (!WestOcean)
+                    {
+                        if ((j == 1 || (Model.Locations.Single(l => l.XCoord == j - 1 && l.YCoord == i) is IWater)))
+                        {
+                            return "/Images/MapImages/RiverEndingE.png";
+                        }
+                        else
+                        {
+                            return "/Images/MapImages/OceanSideW.png";
+                        }
+
+                    }
                     else { return "/Images/MapImages/OceanFiller.png"; }
                 }
 
                 //tile = "\"" + tile + "\"";
                 <img src=@tile />
-            }
+                }
         </td>
         }
 </tr>

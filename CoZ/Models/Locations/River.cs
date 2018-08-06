@@ -7,7 +7,7 @@ using System.Web;
 
 namespace CoZ.Models.Locations
 {
-    public class River : Location
+    public class River : Location, IWater
     {
         public override Location CopyLocation()
         {
