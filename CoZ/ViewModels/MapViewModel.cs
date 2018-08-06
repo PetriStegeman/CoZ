@@ -22,4 +22,5 @@ namespace CoZ.ViewModels
             this.CharYCoord = yCoord;
         }
     }
+
 }

@@ -120,8 +120,9 @@ D:\Repo\CoZ\CoZ\obj\Debug\CoZ.csproj.CoreCompileInputs.cache
 D:\Repo\CoZ\CoZ\obj\Debug\CoZ.csproj.CopyComplete
 D:\Repo\CoZ\CoZ\obj\Debug\CoZ.dll
 D:\Repo\CoZ\CoZ\obj\Debug\CoZ.pdb
+D:\Repo\CoZ\CoZ\obj\Debug\CoZ.Migrations.inventoryTEST1.resources
+D:\Repo\CoZ\CoZ\obj\Debug\CoZ.csproj.GenerateResource.cache
 C:\Users\Alfdaur\Documents\GitHub\CoZ\CoZ\obj\Debug\CoZ.csprojAssemblyReference.cache
-C:\Users\Alfdaur\Documents\GitHub\CoZ\CoZ\obj\Debug\CoZ.csproj.GenerateResource.cache
 C:\Users\Alfdaur\Documents\GitHub\CoZ\CoZ\obj\Debug\CoZ.csproj.CoreCompileInputs.cache
 C:\Users\Alfdaur\Documents\GitHub\CoZ\CoZ\obj\Debug\CoZ.dll
 C:\Users\Alfdaur\Documents\GitHub\CoZ\CoZ\obj\Debug\CoZ.pdb
@@ -242,7 +243,6 @@ C:\Users\Alfdaur\Documents\GitHub\CoZ\CoZ\bin\Microsoft.AI.DependencyCollector.x
 C:\Users\Alfdaur\Documents\GitHub\CoZ\CoZ\bin\Microsoft.AI.WindowsServer.xml
 C:\Users\Alfdaur\Documents\GitHub\CoZ\CoZ\bin\Microsoft.AI.Web.xml
 C:\Users\Alfdaur\Documents\GitHub\CoZ\CoZ\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
-C:\Users\Alfdaur\Documents\GitHub\CoZ\CoZ\obj\Debug\CoZ.Migrations.inventoryTEST1.resources
 C:\Users\Alfdaur\Documents\GitHub\CoZ\CoZ\obj\Debug\CoZ.csproj.CopyComplete
-D:\Repo\CoZ\CoZ\obj\Debug\CoZ.Migrations.rivermethodfixshiz.resources
-D:\Repo\CoZ\CoZ\obj\Debug\CoZ.csproj.GenerateResource.cache
+C:\Users\Alfdaur\Documents\GitHub\CoZ\CoZ\obj\Debug\CoZ.Migrations.naam.resources
+C:\Users\Alfdaur\Documents\GitHub\CoZ\CoZ\obj\Debug\CoZ.csproj.GenerateResource.cache
