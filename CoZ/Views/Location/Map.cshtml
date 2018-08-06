@@ -9,12 +9,15 @@
 <h2>Map</h2>
 
 <table>
+
     @for (int i = 20; i >= 1; i--)
     {
     <tr>
         @for (int j = 1; j <= 20; j++)
         {
         <td>
+            @*<img src="~/Images/MapImages/@{Model.Images[i, j]}.png" />*@
+
             @if (j == Model.CharXCoord && i == Model.CharYCoord)
             {
                 <img src="~/Images/MapImages/Character.png" />
@@ -46,81 +49,84 @@
             else if (Model.Locations.Single(l => l.XCoord == j && l.YCoord == i) is Plains)
             {
                 <img src="~/Images/MapImages/grassFiller.png" />
-                }
-                else if (Model.Locations.Single(l => l.XCoord == j && l.YCoord == i) is Ocean)
+            }
+            else if (Model.Locations.Single(l => l.XCoord == j && l.YCoord == i) is Lake)
+            {
+                <img src="~/Images/MapImages/OceanFiller.png"/>
+            }
+            else if (Model.Locations.Single(l => l.XCoord == j && l.YCoord == i) is Ocean)
+            {
+
+                bool NorthOcean = (i == 20 || (Model.Locations.Single(l => l.XCoord == j && l.YCoord == i + 1) is Ocean));
+                bool NorthEastOcean = ((j == 20 || i == 20) || (Model.Locations.Single(l => l.XCoord == j + 1 && l.YCoord == i + 1) is Ocean));
+                bool EastOcean = (j == 20 || (Model.Locations.Single(l => l.XCoord == j + 1 && l.YCoord == i) is Ocean));
+                bool SouthEastOcean = ((j == 20 || i == 1) || (Model.Locations.Single(l => l.XCoord == j + 1 && l.YCoord == i - 1) is Ocean));
+                bool SouthOcean = (i == 1 || (Model.Locations.Single(l => l.XCoord == j && l.YCoord == i - 1) is Ocean));
+                bool SouthWestOcean = ((j == 1 || i == 1) || (Model.Locations.Single(l => (l.XCoord == j - 1) && (l.YCoord == i - 1)) is Ocean));
+                bool WestOcean = ((j == 1) || Model.Locations.Single(l => l.XCoord == j - 1 && l.YCoord == i) is Ocean);
+                bool NorthWestOcean = ((j == 1 || i == 20) || (Model.Locations.Single(l => l.XCoord == j - 1 && l.YCoord == i + 1) is Ocean));
+
+                List<bool> amountOfWaterTiles = new List<bool>();
+                amountOfWaterTiles.Add(NorthOcean);
+                amountOfWaterTiles.Add(NorthEastOcean);
+                amountOfWaterTiles.Add(EastOcean);
+                amountOfWaterTiles.Add(SouthEastOcean);
+                amountOfWaterTiles.Add(SouthOcean);
+                amountOfWaterTiles.Add(SouthWestOcean);
+                amountOfWaterTiles.Add(WestOcean);
+                amountOfWaterTiles.Add(NorthWestOcean);
+
+                int amountOfWaterTilesConnected = 0;
+                foreach (var oceanCheck in amountOfWaterTiles)
                 {
-
-                    bool NorthOcean = (i == 20 || (Model.Locations.Single(l => l.XCoord == j && l.YCoord == i + 1) is Ocean));
-                    bool NorthEastOcean = ((j == 20 || i == 20) || (Model.Locations.Single(l => l.XCoord == j + 1 && l.YCoord == i + 1) is Ocean));
-                    bool EastOcean = (j == 20 || (Model.Locations.Single(l => l.XCoord == j + 1 && l.YCoord == i) is Ocean));
-                    bool SouthEastOcean = ((j == 20 || i == 1) || (Model.Locations.Single(l => l.XCoord == j + 1 && l.YCoord == i - 1) is Ocean));
-                    bool SouthOcean = (i == 1 || (Model.Locations.Single(l => l.XCoord == j && l.YCoord == i - 1) is Ocean));
-                    bool SouthWestOcean = ((j == 1 || i == 1) || (Model.Locations.Single(l => (l.XCoord == j - 1) && (l.YCoord == i - 1)) is Ocean));
-                    bool WestOcean = ((j == 1) || Model.Locations.Single(l => l.XCoord == j - 1 && l.YCoord == i) is Ocean);
-                    bool NorthWestOcean = ((j == 1 || i == 20) || (Model.Locations.Single(l => l.XCoord == j-1 && l.YCoord == i+1) is Ocean));
-
-            List<bool> amountOfWaterTiles = new List<bool>();
-            amountOfWaterTiles.Add(NorthOcean);
-            amountOfWaterTiles.Add(NorthEastOcean);
-            amountOfWaterTiles.Add(EastOcean);
-            amountOfWaterTiles.Add(SouthEastOcean);
-            amountOfWaterTiles.Add(SouthOcean);
-            amountOfWaterTiles.Add(SouthWestOcean);
-            amountOfWaterTiles.Add(WestOcean);
-            amountOfWaterTiles.Add(NorthWestOcean);
-
-            int amountOfWaterTilesConnected = 0;
-            foreach (var oceanCheck in amountOfWaterTiles)
-            {
-                if (oceanCheck)
-                {
-                    amountOfWaterTilesConnected++;
-                    continue;
+                    if (oceanCheck)
+                    {
+                        amountOfWaterTilesConnected++;
+                    }
                 }
-            }
-            string tile = "";
-            switch (amountOfWaterTilesConnected)
-            {
-                case 1: tile = (!NorthWestOcean || !NorthEastOcean || !SouthWestOcean || !SouthEastOcean) ? innerCorner() : side(); break;
-                case 2:
-                case 3:
-                case 4:
-                case 5:
-                case 6: tile = side(); break;
-                case 7: tile = (NorthWestOcean || NorthEastOcean || SouthWestOcean || SouthEastOcean) ? outerCorner() : side(); break;
-                case 8: tile = "/Images/MapImages/OceanFiller.png"; break;
-                    //default: tile = "/Images/MapImages/OceanFiller.png"; break;
-            }
+                string tile = "";
+                switch (amountOfWaterTilesConnected)
+                {
+                    case 1: tile = (!NorthWestOcean || !NorthEastOcean || !SouthWestOcean || !SouthEastOcean) ? innerCorner() : side(); break;
+                    case 2:
+                    case 3:
+                    case 4:
+                    case 5:
+                    case 6: tile = side(); break;
+                    case 7: tile = (NorthWestOcean || NorthEastOcean || SouthWestOcean || SouthEastOcean) ? outerCorner() : side(); break;
+                    case 8: tile = "/Images/MapImages/OceanFiller.png"; break;
+                        //default: tile = "/Images/MapImages/OceanFiller.png"; break;
+                }
 
-            string innerCorner()
-            {
-                if (!NorthEastOcean) { return "/Images/MapImages/OceanInnerCornerNW.png"; }
-                else if (!SouthEastOcean) { return "/Images/MapImages/OceanInnerCornerSE.png"; }
-                else if (!SouthWestOcean) { return "/Images/MapImages/OceanInnerCornerSW.png"; }
-                else if (!NorthWestOcean) { return "/Images/MapImages/OceanInnerCornerNE.png"; }
-                else { return "/Images/MapImages/OceanFiller.png"; }
-            }
+                string innerCorner()
+                {
+                    if (!NorthEastOcean) { return "/Images/MapImages/OceanInnerCornerNW.png"; }
+                    else if (!SouthEastOcean) { return "/Images/MapImages/OceanInnerCornerSE.png"; }
+                    else if (!SouthWestOcean) { return "/Images/MapImages/OceanInnerCornerSW.png"; }
+                    else if (!NorthWestOcean) { return "/Images/MapImages/OceanInnerCornerNE.png"; }
+                    else { return "/Images/MapImages/OceanFiller.png"; }
+                }
 
-            string outerCorner()
-            {
-                if (!NorthEastOcean) { return "/Images/MapImages/OceanOuterCornerNE.png"; }
-                else if (!SouthEastOcean) { return "/Images/MapImages/OceanOuterCornerSE.png"; }
-                else if (!SouthWestOcean) { return "/Images/MapImages/OceanOuterCornerSW.png"; }
-                else if (!NorthWestOcean) { return "/Images/MapImages/OceanOuterCornerNW.png"; }
-                else { return "/Images/MapImages/OceanFiller.png"; }
-            }
+                string outerCorner()
+                {
+                    if (!NorthEastOcean) { return "/Images/MapImages/OceanOuterCornerNE.png"; }
+                    else if (!SouthEastOcean) { return "/Images/MapImages/OceanOuterCornerSE.png"; }
+                    else if (!SouthWestOcean) { return "/Images/MapImages/OceanOuterCornerSW.png"; }
+                    else if (!NorthWestOcean) { return "/Images/MapImages/OceanOuterCornerNW.png"; }
+                    else { return "/Images/MapImages/OceanFiller.png"; }
+                }
 
-            string side()
-            {
-                if (!NorthOcean) { return "/Images/MapImages/OceanSideN.png"; }
-                else if (!EastOcean) { return "/Images/MapImages/OceanSideE.png"; }
-                else if (!SouthOcean) { return "/Images/MapImages/OceanSideS.png"; }
-                else if (!WestOcean) { return "/Images/MapImages/OceanSideW.png"; }
-                else { return "/Images/MapImages/OceanFiller.png"; }
-            }
+                string side()
+                {
+                    if (!NorthOcean) { return "/Images/MapImages/OceanSideN.png"; }
+                    else if (!EastOcean) { return "/Images/MapImages/OceanSideE.png"; }
+                    else if (!SouthOcean) { return "/Images/MapImages/OceanSideS.png"; }
+                    else if (!WestOcean) { return "/Images/MapImages/OceanSideW.png"; }
+                    else { return "/Images/MapImages/OceanFiller.png"; }
+                }
 
-            //tile = "\"" + tile + "\"";
-                <img src = @tile />
+                //tile = "\"" + tile + "\"";
+                <img src=@tile />
             }
         </td>
         }

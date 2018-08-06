@@ -11,7 +11,7 @@ namespace CoZ.Utility
     {
         //DEZE CLASS IS NIET THREAD SAFE
         //TODO MAAK THREAD SAFE
-        
+
         //River Logic Demands:
         //Starts at the source (check)
         //Searches the neares tile that's of a lower 
@@ -19,8 +19,15 @@ namespace CoZ.Utility
         //Isn't allowed to go up in Altitude (check)
         //Searches for a route to another river, ocean or lake tile (check)
 
-        private bool endNoteFound = false;
+        public RiverFactory()
+        {
+                
+        }
+
+        private bool endNodeFound = false;
         private bool altitudeChanged = false;
+        private bool madeALake = false;
+        coördinate lakeCoördinate;
         private int currentRiverLength = 0;
         private int currentRiverAltitude = 0;
         private List<RiverPath> possibleRiverWays = new List<RiverPath>();
@@ -39,7 +46,22 @@ namespace CoZ.Utility
                 map.Add(newRiverTile);
             }
 
+            if (madeALake)
+            {
+                map = MakeALake(lakeCoördinate, map);
+            }
+
             CleanUp();
+
+            return map;
+        }
+
+        private ICollection<Location> MakeALake(coördinate lakeCoördinate, ICollection<Location> map)
+        {
+            var tempLocation = map.Single(l => l.XCoord == lakeCoördinate.X && l.YCoord == lakeCoördinate.Y);
+            map.Remove(tempLocation);
+            var ñêwLäkè = new Lake(lakeCoördinate.X, lakeCoördinate.Y);
+            map.Add(ñêwLäkè);
 
             return map;
         }
@@ -52,7 +74,7 @@ namespace CoZ.Utility
             List<RiverPath> possibleRiverWays = Setup(coördinateX, coördinateY, map);
 
             //Starts searching for a way to a river, ocean or lake
-            possibleRiverWays = StartSearchingForEndnode(possibleRiverWays,map);
+            possibleRiverWays = RecursiveRiverCreator(possibleRiverWays,map);
             List<RiverPath> newRiverWays = new List<RiverPath>();
             foreach (RiverPath RiverPath in possibleRiverWays)
             {
@@ -60,8 +82,8 @@ namespace CoZ.Utility
                 { newRiverWays.Add(RiverPath); }
             }
 
-            SelectRandomPath(newRiverWays);
-            return possibleRiverWays[0];
+            //SelectRandomPath(newRiverWays);
+            return newRiverWays[0];
         }
 
         private List<RiverPath> Setup(int coördinateX, int coördinateY, ICollection<Location> map)
@@ -75,54 +97,95 @@ namespace CoZ.Utility
             return startingList;
         }
         
-        //Starts searching for a way to a river, ocean or lake
-        private List<RiverPath> StartSearchingForEndnode(List<RiverPath> allPaths, ICollection<Location> map)
+        private List<RiverPath> RecursiveRiverCreator(List<RiverPath> inputList, ICollection<Location> inputMap)
         {
-            possibleRiverWays = allPaths;
+            List<RiverPath> RecursiveRiverList = new List<RiverPath>();
+            RecursiveRiverList = createNewRiverBranches(inputList, inputMap, RecursiveRiverList);
 
-            do
+            if (RecursiveRiverList.Count == 0)
             {
-                List<RiverPath> newPaths = new List<RiverPath>();
-
-                foreach (RiverPath oldPath in possibleRiverWays) // only uses the paths of the current lenght and skips the new paths
-                {
-                    newPaths = SearchNewPaths(oldPath.LastX(), oldPath.LastY(), oldPath, map); //roept de RiverSearch uit op een paar coördinaten vanuit de int[]
-                    
-                }
-
-                foreach (RiverPath newPath in newPaths)
-                { possibleRiverWays.Add(newPath); }
-
-                possibleRiverWays = newPaths;
-                currentRiverLength++;
-                List<RiverPath> updatedlist = new List<RiverPath>();
-                updatedlist = CleanRiverPaths(possibleRiverWays, map);
-                possibleRiverWays = updatedlist;
-                //possibleRiverWays = CleanRiverPaths(possibleRiverWays, map);
-                if (altitudeChanged) { SelectRandomPath(possibleRiverWays); }      
-                
-                //break bij 0 nieuwer rivieren bij iteratie
-                // recuring method?
-                //break bij 20, zet meer tegel op een van de rivier lokaties en draai opnieuw met zelfde seed
+                return NoEndPointFound(inputList, inputMap);
             }
-            while (!endNoteFound); // keeps running till an end of the river can be found
+            if (endNodeFound)
+            {
+                List<RiverPath> returnPath = new List<RiverPath>();
+                //doSomehting;                
+                returnPath = RecursiveRiverList.Where(l => l.hasAnEndNode == true).ToList<RiverPath>();
+                //RecursiveRiverList = CleanRiverPaths(returnPath, inputMap);
+                if (returnPath.Count == 0)
+                {
+                    System.Console.WriteLine("error");
+                }
+                return returnPath;
+            }
+            if (altitudeChanged)
+            {
+                altitudeChanged = false;
+                List<RiverPath> newList = CleanRiverPaths(RecursiveRiverList, inputMap);
+                List<RiverPath> updatedList = new List<RiverPath>();
+                if (newList.Count == 0)
+                {
+                    System.Console.WriteLine("error");
+                }
+                updatedList.Add(SelectRandomPath(newList));
+                return RecursiveRiverCreator(updatedList, inputMap);
+            }
+            else
+            {
+                currentRiverLength++;
+                RecursiveRiverList = CleanRiverPaths(RecursiveRiverList, inputMap);
+                if (RecursiveRiverList.Count == 0)
+                {
+                    System.Console.WriteLine("error");
+                }
+                return RecursiveRiverCreator(RecursiveRiverList, inputMap);
+            }
+        }
 
-            return possibleRiverWays;
+        private List<RiverPath> NoEndPointFound(List<RiverPath> inputList, ICollection<Location> inputMap)
+        {
+            coördinate lastCoördinate = inputList[0].riverCoördinates[inputList[0].riverCoördinates.Count - 1];
+            lakeCoördinate = lastCoördinate;
+
+            inputMap = MakeALake(lastCoördinate, inputMap);
+
+            coördinate firstCoördinate = inputList[0].riverCoördinates[0];
+            List<RiverPath> possibleRiverWays = Setup(firstCoördinate.X, firstCoördinate.Y, inputMap);
+
+            madeALake = true;
+            return RecursiveRiverCreator(possibleRiverWays, inputMap);
+        }
+
+        private List<RiverPath> createNewRiverBranches(List<RiverPath> inputList, ICollection<Location> inputMap, List<RiverPath> RecursiveRiverList)
+        {
+            List<RiverPath> tempList = new List<RiverPath>();
+            foreach (RiverPath oldPath in inputList) // only uses the paths of the current lenght and skips the new paths
+            {
+                List<RiverPath> newPaths = SearchNewPaths(oldPath, inputMap); //roept de RiverSearch uit op een paar coördinaten vanuit de int[]                    
+                foreach (RiverPath newPath in newPaths)
+                {
+                    tempList.Add(newPath);
+                }
+            }
+
+            return tempList;
         }
 
         //Looks if any near tile is a suitable end node and returns all possible paths
-        private List<RiverPath> SearchNewPaths(int coördinateX, int coördinateY, RiverPath localPath, ICollection<Location> map)
+        private List<RiverPath> SearchNewPaths(RiverPath localPath, ICollection<Location> map)
         {
+            var coordX = localPath.LastX();
+            var coordY = localPath.LastY();
             List<RiverPath> newPaths = new List<RiverPath>();
-            var currentAltide = map.First(l => l.XCoord == coördinateX && l.YCoord == coördinateY).Altitude;
-            if (localPath.MoveCheck(1 + coördinateX, coördinateY, currentRiverAltitude, map))
-            { newPaths.Add(SeekPath(1 + coördinateX, coördinateY, localPath, map)); }
-            if (localPath.MoveCheck(coördinateX - 1, coördinateY, currentRiverAltitude, map))
-            { newPaths.Add(SeekPath(coördinateX - 1, coördinateY, localPath, map)); }
-            if (localPath.MoveCheck(coördinateX, 1 + coördinateY, currentRiverAltitude, map))
-            { newPaths.Add(SeekPath(coördinateX, 1 + coördinateY, localPath, map)); }
-            if (localPath.MoveCheck(coördinateX, coördinateY - 1, currentRiverAltitude, map))
-            { newPaths.Add(SeekPath(coördinateX, coördinateY - 1, localPath, map)); }
+            currentRiverAltitude = map.First(l => l.XCoord == coordX && l.YCoord == coordY).Altitude;
+            if (localPath.MoveCheck(1 + coordX, coordY, currentRiverAltitude, map))
+            { newPaths.Add(AddPath(1 + coordX, coordY, localPath, map)); }
+            if (localPath.MoveCheck(coordX - 1, coordY, currentRiverAltitude, map))
+            { newPaths.Add(AddPath(coordX - 1, coordY, localPath, map)); }
+            if (localPath.MoveCheck(coordX, 1 + coordY, currentRiverAltitude, map))
+            { newPaths.Add(AddPath(coordX, 1 + coordY, localPath, map)); }
+            if (localPath.MoveCheck(coordX, coordY - 1, currentRiverAltitude, map))
+            { newPaths.Add(AddPath(coordX, coordY - 1, localPath, map)); }
 
             return newPaths;
         }
@@ -135,7 +198,9 @@ namespace CoZ.Utility
             foreach (RiverPath coördinates in riverPaths)
             {
                 if (CheckIfOldHighgroundOrInverting(riverPaths, coördinates, map))
-                newList.Add(coördinates);
+                {
+                    newList.Add(coördinates);
+                }
             }
             return newList;
         }
@@ -166,31 +231,41 @@ namespace CoZ.Utility
             return false;
         }
 
-        // sets the PossibleWays list to only contain one of the possible ways, randomly
         private RiverPath SelectRandomPath(List<RiverPath> PossibleRiverPaths)
         {
             altitudeChanged = false;
-            int randomInt = RngThreadSafe.Next(0, ((PossibleRiverPaths.Count == 0)?1:(PossibleRiverPaths.Count)));
+            int randomInt = (PossibleRiverPaths.Count == 0) ? 0:RngThreadSafe.Next(0, (PossibleRiverPaths.Count));
             RiverPath chosenRiverPath = PossibleRiverPaths[randomInt];
-            return chosenRiverPath; // selects a random possible route for the river
+            return chosenRiverPath;
         }
 
-        private RiverPath SeekPath(int coördinateX, int coördinateY, RiverPath oldPath, ICollection<Location> map)
+        private RiverPath AddPath(int coördinateX, int coördinateY, RiverPath oldPath, ICollection<Location> map)
         {
-                if (oldPath.EndCheck(coördinateX, coördinateY, map))
-                { endNoteFound = true; }
-                if (map.First(l => l.XCoord == coördinateX && l.YCoord == coördinateY).Altitude < currentRiverAltitude)
-                { altitudeChanged = true; }
-                coördinate newCoördinate = new coördinate(coördinateX, coördinateY);
-                RiverPath newRiverPath = new RiverPath(oldPath, newCoördinate);
-                return newRiverPath;
+            bool endNodeFoundChecker = false;            
+            coördinate newCoördinate = new coördinate(coördinateX, coördinateY);
+            RiverPath newRiverPath = new RiverPath(oldPath, newCoördinate);
+
+            if (oldPath.EndCheck(coördinateX, coördinateY, map))
+            {
+                endNodeFound = true;
+                endNodeFoundChecker = true;
+            }
+            if (map.First(l => l.XCoord == coördinateX && l.YCoord == coördinateY).Altitude < currentRiverAltitude)
+            {
+                altitudeChanged = true;
+            }
+            if (endNodeFoundChecker)
+            {
+                newRiverPath.hasAnEndNode = true;
+            }
+            return newRiverPath;
         }
 
-        //cleanes the RiverFactory up to pre usage state
         private void CleanUp()
         {
-            endNoteFound = false;
+            endNodeFound = false;
             altitudeChanged = false;
+            madeALake = false;
             currentRiverLength = 1;
             currentRiverAltitude = 0;
             possibleRiverWays = null;

@@ -9,6 +9,7 @@ namespace CoZ.Models.FactoryItems
     public class RiverPath
     {
         public List<coördinate> riverCoördinates { get; set; }
+        public bool hasAnEndNode { get; set; }
 
         public int LastX()
         {
@@ -51,13 +52,47 @@ namespace CoZ.Models.FactoryItems
 
         public bool EndCheck(int coördinateX, int coördinateY, ICollection<Location> map)
         {
-            if (map.First(l => l.XCoord == coördinateX && l.YCoord == coördinateY) is River) { return true; }
-            else if (map.First(l => l.XCoord == coördinateX && l.YCoord == coördinateY) is Ocean) { return true; }
-            else if (map.First(l => l.XCoord == coördinateX && l.YCoord == coördinateY) is Lake) { return true; }
-            else { return false; }
+            if (map.First(l => l.XCoord == coördinateX && l.YCoord == coördinateY) is River)
+            {
+                this.hasAnEndNode = true;
+                return true;
+            }
+            else if (map.First(l => l.XCoord == coördinateX && l.YCoord == coördinateY) is Ocean)
+            {
+                this.hasAnEndNode = true;
+                return true;
+            }
+            else if (map.First(l => l.XCoord == coördinateX && l.YCoord == coördinateY) is Lake)
+            {
+                this.hasAnEndNode = true;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 
+    /*public endNodeFoundChecker(this RiverPath riverPath)
+    {
+        bool check;
+        check = ;
+        foreach (coördinate coördinate in riverPath.riverCoördinates)
+        {
+
+        }
+
+
+        if (check)
+            return false;
+        else
+        {
+            return true;
+        }
+        
+    }
+    */
 
     public class coördinate
     {

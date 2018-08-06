@@ -41,7 +41,7 @@ namespace CoZ.Utility
             map.Add(lair);
 
             RiverFactory riverBuilder = new RiverFactory();
-            var finalMap = riverBuilder.CreateRiver(8, 8, map);
+            var finalMap = riverBuilder.CreateRiver(10, 10, map);
             map = riverBuilder.CreateRiver(17, 12, finalMap);
             finalMap = riverBuilder.CreateRiver(12, 4, map);
             return finalMap;
