@@ -239,3 +239,6 @@ CoZ/obj/Debug/CoZ.dll
 CoZ/obj/Debug/CoZ.pdb
 CoZ/obj/Debug/DesignTimeResolveAssemblyReferencesInput.cache
 .vs/config/applicationhost.config
+.vs/CoZ/v15/Server/sqlite3/storage.ide-shm
+.vs/CoZ/v15/Server/sqlite3/storage.ide-wal
+.vs/CoZ/v15/.suo
