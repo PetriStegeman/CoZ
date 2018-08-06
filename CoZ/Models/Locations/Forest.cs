@@ -27,6 +27,7 @@ namespace CoZ.Models.Locations
         {
             this.XCoord = x;
             this.YCoord = y;
+            this.Altitude = 0;
             this.Description = "You find yourself in a forest. " + ForestDescription();
             this.ShortDescription = "a forest";
         }

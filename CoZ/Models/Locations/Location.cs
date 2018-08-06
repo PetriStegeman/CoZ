@@ -33,5 +33,9 @@ namespace CoZ.Models.Locations
 
         public abstract Location CopyLocation();
 
+        public override string ToString()
+        {
+            return this.ShortDescription;
+        }
     }
 }

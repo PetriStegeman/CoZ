@@ -17,14 +17,23 @@ namespace CoZ.Utility
             {
                 for (int j = 1; j <= 20; j++)
                 {
-                    if ((i == 20 && j == 20) | (i == 20 && j == 17) | (i == 6 && j == 6))
+                    if ((i == 19 && j == 19) | (i == 19 && j == 16) | (i == 6 && j == 6))
                     {
                         continue;
                     }
-                    Location location = GetTile(i, j);
-                    map.Add(location);
+                    else if((i == 1 || i == 20) || (j == 1 || j == 20))
+                        {
+                        Location location = new Ocean(i, j);
+                        map.Add(location);
+                    }
+                    else
+                    {
+                        Location location = GetTile(i, j);
+                        map.Add(location);
+                    }
                 }
             }
+
             var mountainRange = MountainFactory.CreateMountainRange(5, 15, 8, map);
             UpdateMap(map, mountainRange);
             var mountainRangeTwo = MountainFactory.CreateMountainRange(10, 10, 8, map);
@@ -37,13 +46,17 @@ namespace CoZ.Utility
                     location.AddAltitudeToLocation(map);
                 }
             }
-            return map;
+            RiverFactory riverBuilder = new RiverFactory();
+            var finalMap = riverBuilder.CreateRiver(10, 10, map);
+            map = riverBuilder.CreateRiver(17, 12, finalMap);
+            finalMap = riverBuilder.CreateRiver(12, 4, map);
+            return finalMap;
         }
 
         private static void AddSpecialLocations(ICollection<Location> map)
         {
-            var startLocation = new StartingLocation(20, 20);
-            var town = new Town(20, 17);
+            var startLocation = new StartingLocation(19, 19);
+            var town = new Town(19, 16);
             var lair = new Lair(6, 6);
             map.Add(startLocation);
             map.Add(town);
@@ -110,7 +123,8 @@ namespace CoZ.Utility
             {
                 case 1: result = new Forest(x, y); break;
                 case 2: result = new Plains(x, y); break;
-                case 3: result = new River(x, y); break;
+                case 3: result = new Plains(x, y); break;
+                case 4: result = new Forest(x, y); break;
                 default: result = new Lake(x, y); break;
             }
             return result;
