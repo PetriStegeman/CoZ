@@ -49,7 +49,7 @@ namespace CoZ.Models
         private int CharacterDamage(Monster monster, Character character, List<Item> inventory)
         {
             int characterDamage = 0;
-            if (RngThreadSafe.Next(1, 10) >= 4 - (monster.Speed - character.Speed))
+            if (RngThreadSafe.Next(1, 10) >= 4 - (character.Speed - monster.Speed))
             {
                 Weapon weapon = (Weapon)inventory.SingleOrDefault(w => w.IsEquiped == true && w is Weapon);
                 if (weapon != null)
@@ -66,7 +66,7 @@ namespace CoZ.Models
         private int MonsterDamage(Monster monster, Character character, List<Item> inventory)
         {
             int monsterDamage = 0;
-            if (RngThreadSafe.Next(1, 10) >= 4 - (character.Speed - monster.Speed))
+            if (RngThreadSafe.Next(1, 10) >= 4 - (monster.Speed - character.Speed))
             {
                 Armor armor = (Armor)inventory.SingleOrDefault(w => w.IsEquiped == true && w is Armor);
                 if (armor != null)

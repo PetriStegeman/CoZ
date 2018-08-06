@@ -10,10 +10,18 @@ namespace CoZ.Utility
 {
     public static class MonsterFactory
     {
-        //20% chance to add Monster to Monsterlist of Location
+        private const int _noChance = 1;
+        private const int _fullChance = 100;
+        private const int percentChance = 50;
+        
+        /// <summary>
+        /// Randomly creates monster based on percentage value
+        /// </summary>
+        /// <param name="location">location to add the monster to</param>
+        /// <returns></returns>
         public static Monster CreateMonster(Location location)
         {
-            if (RngThreadSafe.Next(1, 100) <= 50)
+            if (RngThreadSafe.Next(_noChance, _fullChance) <= percentChance)
             {
                 return GetMonster(location);
             }

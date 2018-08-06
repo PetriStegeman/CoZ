@@ -5,6 +5,7 @@ using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
@@ -78,25 +79,25 @@ namespace CoZ.Controllers
         }
         #endregion
 
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
             string id = User.Identity.GetUserId();
-            var inventory = this.ItemRepository.GetInventory(id);
+            var inventory = await this.ItemRepository.GetInventory(id);
             var viewModel = new InventoryViewModel(inventory);
             return View(viewModel);
         }
 
-        public ActionResult ConsumeItem(string itemName = "Healing Potion")
+        public async Task<ActionResult> ConsumeItem(string itemName = "Healing Potion")
         {
             string id = User.Identity.GetUserId();
-            this.ItemRepository.ConsumeItem(id, itemName);
+            await this.ItemRepository.ConsumeItem(id, itemName);
             return RedirectToAction("Index");
         }
 
-        public ActionResult EquipItem(string itemName)
+        public async Task<ActionResult> EquipItem(string itemName)
         {
             string id = User.Identity.GetUserId();
-            this.ItemRepository.EquipItem(id, itemName);
+            await this.ItemRepository.EquipItem(id, itemName);
             return RedirectToAction("Index");
         }
     }
