@@ -55,7 +55,7 @@ namespace CoZ.Repositories
         {
             using (var dbContext = ApplicationDbContext.Create())
             {
-                var location = await Task.Run(() => dbContext.Locations.Single(l => l.XCoord == 6 && l.YCoord == 6 && l.Character.UserId == id));
+                var location = await Task.Run(() => dbContext.Locations.SingleOrDefault(l => l.XCoord == 6 && l.YCoord == 6 && l.Character.UserId == id));
                 var newMonster = new TheGreatDragonKraltock(location);
                 await Task.Run(() => dbContext.Monsters.Add(newMonster));
                 location.Monster = newMonster;

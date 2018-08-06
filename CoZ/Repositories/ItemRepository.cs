@@ -17,7 +17,7 @@ namespace CoZ.Repositories
         {
             using (var dbContext = ApplicationDbContext.Create())
             {
-                var character = await Task.Run(() => dbContext.Characters.Single(c => c.UserId == id));
+                var character = await Task.Run(() => dbContext.Characters.SingleOrDefault(c => c.UserId == id));
                 var inventory = character.Inventory.ToList();
                 return inventory;
             }
@@ -32,7 +32,7 @@ namespace CoZ.Repositories
         {
             using (var dbContext = ApplicationDbContext.Create())
             {
-                var character = await Task.Run(() => dbContext.Characters.Single(c => c.UserId == id));
+                var character = await Task.Run(() => dbContext.Characters.SingleOrDefault(c => c.UserId == id));
                 var inventory = character.Inventory.ToList();
                 Potion item = await Task.Run(() => (Potion) inventory.FirstOrDefault(w => w.Name == itemName));
                 if (item != null)
@@ -49,7 +49,7 @@ namespace CoZ.Repositories
         {
             using (var dbContext = ApplicationDbContext.Create())
             {
-                var character = await Task.Run(() => dbContext.Characters.Single(c => c.UserId == id));
+                var character = await Task.Run(() => dbContext.Characters.AsParallel().SingleOrDefault(c => c.UserId == id));
                 var inventory = character.Inventory.ToList();
                 var item = inventory.First(w => w.Name == itemName);
                 if (item is Armor)
@@ -105,8 +105,8 @@ namespace CoZ.Repositories
         {
             using (var dbContext = ApplicationDbContext.Create())
             {
-                var character = await Task.Run(() => dbContext.Characters.Single(c => c.UserId == id));
-                var weapon = await Task.Run(() => character.Inventory.SingleOrDefault(w => w.IsEquiped == true && w is Weapon));
+                var character = await Task.Run(() => dbContext.Characters.AsParallel().SingleOrDefault(c => c.UserId == id));
+                var weapon = await Task.Run(() => character.Inventory.AsParallel().SingleOrDefault(w => w.IsEquiped == true && w is Weapon));
                 if (weapon != null)
                 {
                     return weapon.CloneItem();
@@ -119,8 +119,8 @@ namespace CoZ.Repositories
         {
             using (var dbContext = ApplicationDbContext.Create())
             {
-                var character = await Task.Run(() => dbContext.Characters.Single(c => c.UserId == id));
-                var armor =  await Task.Run(() => character.Inventory.SingleOrDefault(a => a.IsEquiped == true && a is Armor));
+                var character = await Task.Run(() => dbContext.Characters.AsParallel().SingleOrDefault(c => c.UserId == id));
+                var armor =  await Task.Run(() => character.Inventory.AsParallel().SingleOrDefault(a => a.IsEquiped == true && a is Armor));
                 if (armor != null)
                 {
                     return armor.CloneItem();
@@ -133,7 +133,7 @@ namespace CoZ.Repositories
         {
             using (var dbContext = ApplicationDbContext.Create())
             {
-                var character = await Task.Run(() => dbContext.Characters.Single(c => c.UserId == id));
+                var character = await Task.Run(() => dbContext.Characters.AsParallel().SingleOrDefault(c => c.UserId == id));
                 ICollection<Location> map = character.Map;
                 foreach (var location in map)
                 {

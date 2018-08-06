@@ -36,8 +36,8 @@ namespace CoZ.Repositories
             Location result;
             using (var dbContext = ApplicationDbContext.Create())
             {
-                var character = await Task.Run(() => dbContext.Characters.Single(c => c.UserId == id));
-                var location = await Task.Run(() => character.Map.Single(l => l.XCoord == character.XCoord && l.YCoord == character.YCoord));
+                var character = await Task.Run(() => dbContext.Characters.SingleOrDefault(c => c.UserId == id));
+                var location = await Task.Run(() => character.Map.SingleOrDefault(l => l.XCoord == character.XCoord && l.YCoord == character.YCoord));
                 result = await Task.Run(() => location.CopyLocation());
             }
             return result;
@@ -47,7 +47,7 @@ namespace CoZ.Repositories
         {
             using (var dbContext = ApplicationDbContext.Create())
             {
-                var location = await Task.Run(() => dbContext.Locations.Single(l => l.XCoord == x && l.YCoord == y && l.Character.UserId == id));
+                var location = await Task.Run(() => dbContext.Locations.SingleOrDefault(l => l.XCoord == x && l.YCoord == y && l.Character.UserId == id));
                 return location;
             }
         }
