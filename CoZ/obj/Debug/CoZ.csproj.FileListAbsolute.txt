@@ -244,5 +244,3 @@ C:\Users\Alfdaur\Documents\GitHub\CoZ\CoZ\bin\Microsoft.AI.Web.xml
 C:\Users\Alfdaur\Documents\GitHub\CoZ\CoZ\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
 C:\Users\Alfdaur\Documents\GitHub\CoZ\CoZ\obj\Debug\CoZ.Migrations.inventoryTEST1.resources
 C:\Users\Alfdaur\Documents\GitHub\CoZ\CoZ\obj\Debug\CoZ.csproj.CopyComplete
-D:\Repo\CoZ\CoZ\obj\Debug\CoZ.Migrations.updatedCharLocRelation.resources
-D:\Repo\CoZ\CoZ\obj\Debug\CoZ.csproj.GenerateResource.cache

@@ -1,10 +1,6 @@
-﻿using CoZ.Models;
-using CoZ.Models.Locations;
-using System;
+﻿using CoZ.Models.Locations;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
-using System.Web;
 
 namespace CoZ.Utility
 {
@@ -33,12 +29,45 @@ namespace CoZ.Utility
                     }
                 }
             }
+            AddMountainsToMap(map);           
+            AddAltitudeToMap(map);
+            AddSpecialLocations(map);
+            var newOceans = FindNewOceans(map);
+            UpdateMap(map, newOceans);
+            RiverFactory riverBuilder = new RiverFactory();
+            var finalMap = riverBuilder.CreateRiver(10, 10, map);
+            map = riverBuilder.CreateRiver(17, 12, finalMap);
+            finalMap = riverBuilder.CreateRiver(12, 4, map);
+            return finalMap;
+        }
 
+        private static List<Location> FindNewOceans(ICollection<Location> map)
+        {
+            var newOceans = map.Where(l => l.Altitude < 0).ToList();
+            var result = new List<Location>();
+            foreach (var location in newOceans)
+            {
+                result.Add(new Ocean(location.XCoord, location.YCoord));
+            }
+            return result;
+        }
+
+        private static void AddMountainsToMap(ICollection<Location> map)
+        {
             var mountainRange = MountainFactory.CreateMountainRange(5, 15, 8, map);
             UpdateMap(map, mountainRange);
-            var mountainRangeTwo = MountainFactory.CreateMountainRange(10, 10, 8, map);
+            var mountainRangeTwo = MountainFactory.CreateMountainRange(10, 10, 20, map);
             UpdateMap(map, mountainRangeTwo);
-            AddSpecialLocations(map);
+            var mountainRangeThree = MountainFactory.CreateMountainRange(15, 5, 8, map);
+            UpdateMap(map, mountainRangeThree);
+            var mountainRangeFour = MountainFactory.CreateMountainRange(5, 5, 8, map);
+            UpdateMap(map, mountainRangeFour);
+            var mountainRangeFive = MountainFactory.CreateMountainRange(15, 15, 8, map);
+            UpdateMap(map, mountainRangeFive);
+        }
+
+        private static void AddAltitudeToMap(ICollection<Location> map)
+        {
             foreach (var location in map)
             {
                 if (!(location is Ocean))
@@ -46,11 +75,6 @@ namespace CoZ.Utility
                     location.AddAltitudeToLocation(map);
                 }
             }
-            RiverFactory riverBuilder = new RiverFactory();
-            var finalMap = riverBuilder.CreateRiver(10, 10, map);
-            map = riverBuilder.CreateRiver(17, 12, finalMap);
-            finalMap = riverBuilder.CreateRiver(12, 4, map);
-            return finalMap;
         }
 
         private static void AddSpecialLocations(ICollection<Location> map)
@@ -67,7 +91,7 @@ namespace CoZ.Utility
         {
             int numberOfMountainsNearby = MountainsNearby(map, location);
             int numberOfOceansNearby = OceansNearby(map, location);
-            location.Altitude = location.Altitude + numberOfMountainsNearby * 5 - numberOfOceansNearby * 10;
+            location.Altitude = location.Altitude + numberOfMountainsNearby * 5 - numberOfOceansNearby * 5;
         }
 
         private static int MountainsNearby(ICollection<Location> map, Location location)
@@ -114,6 +138,13 @@ namespace CoZ.Utility
                 map.Remove(oldLocation);
                 map.Add(location);
             }
+        }
+
+        private static void UpdateMap(ICollection<Location> map, Location locationToAdd)
+        {
+                var oldLocation = map.SingleOrDefault(l => l.XCoord == locationToAdd.XCoord && l.YCoord == locationToAdd.YCoord);
+                map.Remove(oldLocation);
+                map.Add(locationToAdd);
         }
 
         private static Location GetTile(int x, int y)
