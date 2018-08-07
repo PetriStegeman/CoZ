@@ -6,30 +6,27 @@ using System.Threading.Tasks;
 
 namespace CoZ.Repositories
 {
-    public class LocationRepository //: Repository
+    public class LocationRepository
     {
 
         public async Task<bool> AreThereMonstersAtLocation(Location location)
         {
-            bool result = false;
             using (var dbContext = ApplicationDbContext.Create())
             {
                 var originalLocation = await Task.Run(() => dbContext.Locations.Find(location.LocationId));
-                var monster = originalLocation.Monster;
-                if (monster != null)
+                if (originalLocation.Monster != null)
                 {
-                    result = true;
+                    return true;
                 }
             }
-            return result;
+            return false;
         }
 
-        public async Task<ICollection<Location>> GetMap(string id)
+        public async Task<IEnumerable<Location>> GetMap(string id)
         {
             using (var dbContext = ApplicationDbContext.Create())
             {
-                var character = await Task.Run(() => dbContext.Characters.Single(c => c.UserId == id));
-                var output = character.Map;
+                var output = await Task.Run(() => dbContext.Locations.Where(l => l.Character.UserId == id).ToList());
                 return output;
             }
         }
@@ -39,26 +36,20 @@ namespace CoZ.Repositories
             Location result;
             using (var dbContext = ApplicationDbContext.Create())
             {
-                var character = await Task.Run(() => dbContext.Characters.Single(c => c.UserId == id));
-                var location = await Task.Run(() => character.Map.Single(l => l.XCoord == character.XCoord && l.YCoord == character.YCoord));
-                result = location.CopyLocation();
+                var character = await Task.Run(() => dbContext.Characters.SingleOrDefault(c => c.UserId == id));
+                var location = await Task.Run(() => character.Map.SingleOrDefault(l => l.XCoord == character.XCoord && l.YCoord == character.YCoord));
+                result = await Task.Run(() => location.CopyLocation());
             }
             return result;
         }
 
         public async Task<Location> FindLocation(string id, int x, int y)
         {
-            Location result = null;
             using (var dbContext = ApplicationDbContext.Create())
             {
-                var character = await Task.Run(() => dbContext.Characters.Single(c => c.UserId == id));
-                var location = await Task.Run(() => character.Map.SingleOrDefault(l => l.XCoord == x && l.YCoord == y));
-                if (location != null)
-                {
-                    result = location.CopyLocation();
-                } 
+                var location = await Task.Run(() => dbContext.Locations.SingleOrDefault(l => l.XCoord == x && l.YCoord == y && l.Character.UserId == id));
+                return location;
             }
-            return result;
         }
 
         public async Task UpdateLocation(Location location)
@@ -66,16 +57,11 @@ namespace CoZ.Repositories
             using (var dbContext = ApplicationDbContext.Create())
             {
                 var originalLocation = await Task.Run(() => dbContext.Locations.Find(location.LocationId));
-                originalLocation.CloneLocation(location);
+                await Task.Run(() => originalLocation.CloneLocation(location));
                 await dbContext.SaveChangesAsync();
             }
         }
 
-        //Gaat er van uit dat er monster/item/location zijn
-            /// <summary>
-            /// Hard remove location, monsters and items
-            /// </summary>
-            /// <param name="location"></param>
         public async Task DeleteLocation(Location location)
         {
             using (var dbContext = ApplicationDbContext.Create())

@@ -1,10 +1,6 @@
-﻿using CoZ.Models;
-using CoZ.Models.Locations;
-using System;
+﻿using CoZ.Models.Locations;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
-using System.Web;
 
 namespace CoZ.Utility
 {
@@ -12,7 +8,7 @@ namespace CoZ.Utility
     {
         public static ICollection<Location> CreateMap()
         {
-            ICollection <Location> map = new List<Location>();
+            ICollection<Location> map = new List<Location>();
             for (int i = 1; i <= 20; i++)
             {
                 for (int j = 1; j <= 20; j++)
@@ -33,18 +29,122 @@ namespace CoZ.Utility
                     }
                 }
             }
+            AddMountainsToMap(map);           
+            AddAltitudeToMap(map);
+            AddSpecialLocations(map);
+            var newOceans = FindNewOceans(map);
+            UpdateMap(map, newOceans);
+            RiverFactory riverBuilder = new RiverFactory();
+            var finalMap = riverBuilder.CreateRiver(10, 10, map);
+            map = riverBuilder.CreateRiver(17, 12, finalMap);
+            finalMap = riverBuilder.CreateRiver(12, 4, map);
+            return finalMap;
+        }
+
+        private static List<Location> FindNewOceans(ICollection<Location> map)
+        {
+            var newOceans = map.Where(l => l.Altitude < 0).ToList();
+            var result = new List<Location>();
+            foreach (var location in newOceans)
+            {
+                result.Add(new Ocean(location.XCoord, location.YCoord));
+            }
+            return result;
+        }
+
+        private static void AddMountainsToMap(ICollection<Location> map)
+        {
+            var mountainRange = MountainFactory.CreateMountainRange(5, 15, 8, map);
+            UpdateMap(map, mountainRange);
+            var mountainRangeTwo = MountainFactory.CreateMountainRange(10, 10, 20, map);
+            UpdateMap(map, mountainRangeTwo);
+            var mountainRangeThree = MountainFactory.CreateMountainRange(15, 5, 8, map);
+            UpdateMap(map, mountainRangeThree);
+            var mountainRangeFour = MountainFactory.CreateMountainRange(5, 5, 8, map);
+            UpdateMap(map, mountainRangeFour);
+            var mountainRangeFive = MountainFactory.CreateMountainRange(15, 15, 8, map);
+            UpdateMap(map, mountainRangeFive);
+        }
+
+        private static void AddAltitudeToMap(ICollection<Location> map)
+        {
+            foreach (var location in map)
+            {
+                if (!(location is Ocean))
+                {
+                    location.AddAltitudeToLocation(map);
+                }
+            }
+        }
+
+        private static void AddSpecialLocations(ICollection<Location> map)
+        {
             var startLocation = new StartingLocation(19, 19);
             var town = new Town(19, 16);
             var lair = new Lair(6, 6);
             map.Add(startLocation);
             map.Add(town);
             map.Add(lair);
+        }
 
-            RiverFactory riverBuilder = new RiverFactory();
-            var finalMap = riverBuilder.CreateRiver(10, 10, map);
-            map = riverBuilder.CreateRiver(17, 12, finalMap);
-            finalMap = riverBuilder.CreateRiver(12, 4, map);
-            return finalMap;
+        private static void AddAltitudeToLocation(this Location location, ICollection<Location> map)
+        {
+            int numberOfMountainsNearby = MountainsNearby(map, location);
+            int numberOfOceansNearby = OceansNearby(map, location);
+            location.Altitude = location.Altitude + numberOfMountainsNearby * 5 - numberOfOceansNearby * 5;
+        }
+
+        private static int MountainsNearby(ICollection<Location> map, Location location)
+        {
+            return map.Where(l =>
+                    (l.XCoord == location.XCoord + 1 && l.YCoord == location.YCoord && l is Mountain) ||
+                    (l.XCoord == location.XCoord + 1 && l.YCoord == location.YCoord + 1 && l is Mountain) ||
+                    (l.XCoord == location.XCoord + 2 && l.YCoord == location.YCoord && l is Mountain) ||
+                    (l.XCoord == location.XCoord - 1 && l.YCoord == location.YCoord && l is Mountain) ||
+                    (l.XCoord == location.XCoord - 1 && l.YCoord == location.YCoord - 1 && l is Mountain) ||
+                    (l.XCoord == location.XCoord - 2 && l.YCoord == location.YCoord && l is Mountain) ||
+                    (l.XCoord == location.XCoord && l.YCoord == location.YCoord + 1 && l is Mountain) ||
+                    (l.XCoord == location.XCoord - 1 && l.YCoord == location.YCoord + 1 && l is Mountain) ||
+                    (l.XCoord == location.XCoord && l.YCoord == location.YCoord + 2 && l is Mountain) ||
+                    (l.XCoord == location.XCoord && l.YCoord == location.YCoord - 1 && l is Mountain) ||
+                    (l.XCoord == location.XCoord + 1 && l.YCoord == location.YCoord - 1 && l is Mountain) ||
+                    (l.XCoord == location.XCoord && l.YCoord == location.YCoord - 2 && l is Mountain)
+                ).Count();
+        }
+
+        private static int OceansNearby(ICollection<Location> map, Location location)
+        {
+            return map.Where(l =>
+                    (l.XCoord == location.XCoord + 1 && l.YCoord == location.YCoord && l is Ocean) ||
+                    (l.XCoord == location.XCoord + 1 && l.YCoord == location.YCoord + 1 && l is Ocean) ||
+                    (l.XCoord == location.XCoord + 2 && l.YCoord == location.YCoord && l is Ocean) ||
+                    (l.XCoord == location.XCoord - 1 && l.YCoord == location.YCoord && l is Ocean) ||
+                    (l.XCoord == location.XCoord - 1 && l.YCoord == location.YCoord - 1 && l is Ocean) ||
+                    (l.XCoord == location.XCoord - 2 && l.YCoord == location.YCoord && l is Ocean) ||
+                    (l.XCoord == location.XCoord && l.YCoord == location.YCoord + 1 && l is Ocean) ||
+                    (l.XCoord == location.XCoord - 1 && l.YCoord == location.YCoord + 1 && l is Ocean) ||
+                    (l.XCoord == location.XCoord && l.YCoord == location.YCoord + 2 && l is Ocean) ||
+                    (l.XCoord == location.XCoord && l.YCoord == location.YCoord - 1 && l is Ocean) ||
+                    (l.XCoord == location.XCoord + 1 && l.YCoord == location.YCoord - 1 && l is Ocean) ||
+                    (l.XCoord == location.XCoord && l.YCoord == location.YCoord - 2 && l is Ocean)
+                ).Count();
+        }
+
+        private static void UpdateMap(ICollection<Location> map, List<Location> locationsToAdd)
+        {
+            foreach (var location in locationsToAdd)
+            {
+                var oldLocation = map.SingleOrDefault(l => l.XCoord == location.XCoord && l.YCoord == location.YCoord);
+                map.Remove(oldLocation);
+                map.Add(location);
+            }
+        }
+
+        private static void UpdateMap(ICollection<Location> map, Location locationToAdd)
+        {
+                var oldLocation = map.SingleOrDefault(l => l.XCoord == locationToAdd.XCoord && l.YCoord == locationToAdd.YCoord);
+                map.Remove(oldLocation);
+                map.Add(locationToAdd);
         }
 
         private static Location GetTile(int x, int y)
@@ -55,7 +155,7 @@ namespace CoZ.Utility
                 case 1: result = new Forest(x, y); break;
                 case 2: result = new Plains(x, y); break;
                 case 3: result = new Plains(x, y); break;
-                case 4: result = new Mountain(x, y); break;
+                case 4: result = new Forest(x, y); break;
                 default: result = new Lake(x, y); break;
             }
             return result;

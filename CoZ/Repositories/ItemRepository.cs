@@ -15,14 +15,12 @@ namespace CoZ.Repositories
     {
         public async Task<List<Item>> GetInventory(string id)
         {
-            List<Item> result = new List<Item>();
             using (var dbContext = ApplicationDbContext.Create())
             {
-                var character = await Task.Run(() => dbContext.Characters.Single(c => c.UserId == id));
+                var character = await Task.Run(() => dbContext.Characters.SingleOrDefault(c => c.UserId == id));
                 var inventory = character.Inventory.ToList();
-                result = inventory;
+                return inventory;
             }
-            return result;
         }
 
         /// <summary>
@@ -34,7 +32,7 @@ namespace CoZ.Repositories
         {
             using (var dbContext = ApplicationDbContext.Create())
             {
-                var character = await Task.Run(() => dbContext.Characters.Single(c => c.UserId == id));
+                var character = await Task.Run(() => dbContext.Characters.SingleOrDefault(c => c.UserId == id));
                 var inventory = character.Inventory.ToList();
                 Potion item = await Task.Run(() => (Potion) inventory.FirstOrDefault(w => w.Name == itemName));
                 if (item != null)
@@ -51,7 +49,7 @@ namespace CoZ.Repositories
         {
             using (var dbContext = ApplicationDbContext.Create())
             {
-                var character = await Task.Run(() => dbContext.Characters.Single(c => c.UserId == id));
+                var character = await Task.Run(() => dbContext.Characters.AsParallel().SingleOrDefault(c => c.UserId == id));
                 var inventory = character.Inventory.ToList();
                 var item = inventory.First(w => w.Name == itemName);
                 if (item is Armor)
@@ -91,54 +89,51 @@ namespace CoZ.Repositories
 
         public async Task<Item> FindLoot(Monster monster)
         {
-            Item result = null;
             using (var dbContext = ApplicationDbContext.Create())
             {
                 var originalMonster = await Task.Run(() => dbContext.Monsters.Find(monster.MonsterId));
                 if (originalMonster.Loot != null)
                 {
                     var item = await Task.Run(() => dbContext.Items.Find(originalMonster.Loot.ItemId));
-                    result = item.CloneItem();
+                    return item.CloneItem();
                 }
+                else return null;
             }
-            return result;
         }
 
         public async Task<Item> FindEquipedWeapon(string id)
         {
-            Item result = null;
             using (var dbContext = ApplicationDbContext.Create())
             {
-                var character = await Task.Run(() => dbContext.Characters.Single(c => c.UserId == id));
-                var weapon = await Task.Run(() => character.Inventory.SingleOrDefault(w => w.IsEquiped == true && w is Weapon));
+                var character = await Task.Run(() => dbContext.Characters.AsParallel().SingleOrDefault(c => c.UserId == id));
+                var weapon = await Task.Run(() => character.Inventory.AsParallel().SingleOrDefault(w => w.IsEquiped == true && w is Weapon));
                 if (weapon != null)
                 {
-                    result = weapon.CloneItem();
+                    return weapon.CloneItem();
                 }
+                else return null;
             }
-            return result;
         }
 
         public async Task<Item> FindEquipedArmor(string id)
         {
-            Item result = null;
             using (var dbContext = ApplicationDbContext.Create())
             {
-                var character = await Task.Run(() => dbContext.Characters.Single(c => c.UserId == id));
-                var armor =  await Task.Run(() => character.Inventory.SingleOrDefault(a => a.IsEquiped == true && a is Armor));
+                var character = await Task.Run(() => dbContext.Characters.AsParallel().SingleOrDefault(c => c.UserId == id));
+                var armor =  await Task.Run(() => character.Inventory.AsParallel().SingleOrDefault(a => a.IsEquiped == true && a is Armor));
                 if (armor != null)
                 {
-                    result = armor.CloneItem();
+                    return armor.CloneItem();
                 }
+                else return null;
             }
-            return result;
         }
 
         public async Task AddItems(string id)
         {
             using (var dbContext = ApplicationDbContext.Create())
             {
-                var character = await Task.Run(() => dbContext.Characters.Single(c => c.UserId == id));
+                var character = await Task.Run(() => dbContext.Characters.AsParallel().SingleOrDefault(c => c.UserId == id));
                 ICollection<Location> map = character.Map;
                 foreach (var location in map)
                 {

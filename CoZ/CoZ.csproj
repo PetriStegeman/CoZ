@@ -206,11 +206,6 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201807101202363_naam.cs" />
-    <Compile Include="Migrations\201807101202363_naam.Designer.cs">
-      <DependentUpon>201807101202363_naam.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Character.cs" />
     <Compile Include="Models\FactoryItems\RiverPath.cs" />
@@ -224,6 +219,7 @@
     <Compile Include="Models\Items\Weapon.cs" />
     <Compile Include="Models\Items\WoodenSword.cs" />
     <Compile Include="Models\Locations\Forest.cs" />
+    <Compile Include="Models\Locations\IWater.cs" />
     <Compile Include="Models\Locations\Lair.cs" />
     <Compile Include="Models\Locations\Lake.cs" />
     <Compile Include="Models\Locations\Location.cs" />
@@ -246,7 +242,6 @@
     <Compile Include="Repositories\ItemRepository.cs" />
     <Compile Include="Repositories\LocationRepository.cs" />
     <Compile Include="Repositories\MonsterRepository.cs" />
-    <Compile Include="Repositories\Repository.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Utility\ItemFactory.cs" />
     <Compile Include="Utility\MapFactory.cs" />
@@ -265,49 +260,17 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\Character.png" />
+    <Content Include="Content\DragonLair.png" />
+    <Content Include="Content\Forest.png" />
+    <Content Include="Content\Mountain.png" />
+    <Content Include="Content\Plains.png" />
+    <Content Include="Content\Village.png" />
+    <Content Include="Content\Water.png" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
-    <Content Include="Images\MapImages\Castle.png" />
-    <Content Include="Images\MapImages\Character.png" />
-    <Content Include="Images\MapImages\DragonLair.png" />
-    <Content Include="Images\MapImages\Forrest.png" />
-    <Content Include="Images\MapImages\grassFiller.png" />
-    <Content Include="Images\MapImages\Mountain.png" />
-    <Content Include="Images\MapImages\OceanFiller.png" />
-    <Content Include="Images\MapImages\OceanInnerCornerNE.png" />
-    <Content Include="Images\MapImages\OceanInnerCornerNW.png" />
-    <Content Include="Images\MapImages\OceanInnerCornerSE.png" />
-    <Content Include="Images\MapImages\OceanInnerCornerSW.png" />
-    <Content Include="Images\MapImages\OceanOuterCornerNE.png" />
-    <Content Include="Images\MapImages\OceanOuterCornerNW.png" />
-    <Content Include="Images\MapImages\OceanOuterCornerSE.png" />
-    <Content Include="Images\MapImages\OceanOuterCornerSW.png" />
-    <Content Include="Images\MapImages\OceanSideE.png" />
-    <Content Include="Images\MapImages\OceanSideN.png" />
-    <Content Include="Images\MapImages\OceanSideS.png" />
-    <Content Include="Images\MapImages\OceanSideW.png" />
-    <Content Include="Images\MapImages\RiverCornerNE.png" />
-    <Content Include="Images\MapImages\RiverCornerNW.png" />
-    <Content Include="Images\MapImages\RiverCornerSE.png" />
-    <Content Include="Images\MapImages\RiverCornerSW.png" />
-    <Content Include="Images\MapImages\RiverEndingE.png" />
-    <Content Include="Images\MapImages\RiverEndingN.png" />
-    <Content Include="Images\MapImages\RiverEndingS.png" />
-    <Content Include="Images\MapImages\RiverEndingW.png" />
-    <Content Include="Images\MapImages\RiverGrandSplit.png" />
-    <Content Include="Images\MapImages\RiverStartE.png" />
-    <Content Include="Images\MapImages\RiverStartN.png" />
-    <Content Include="Images\MapImages\RiverStartS.png" />
-    <Content Include="Images\MapImages\RiverStartW.png" />
-    <Content Include="Images\MapImages\RiverStraightEW.png" />
-    <Content Include="Images\MapImages\RiverStraightNS.png" />
-    <Content Include="Images\MapImages\RiverTSplitE.png" />
-    <Content Include="Images\MapImages\RiverTSplitN.png" />
-    <Content Include="Images\MapImages\RiverTSplitS.png" />
-    <Content Include="Images\MapImages\RiverTSplitW.png" />
-    <Content Include="Images\MapImages\Village.png" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="ApplicationInsights.config">
@@ -388,11 +351,6 @@
     <None Include="packages.config" />
     <Content Include="Scripts\jquery-3.3.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.3.1.min.map" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Migrations\201807101202363_naam.resx">
-      <DependentUpon>201807101202363_naam.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

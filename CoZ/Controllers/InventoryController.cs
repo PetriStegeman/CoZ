@@ -14,6 +14,7 @@ namespace CoZ.Controllers
     public class InventoryController : Controller
     {
         #region Repositories
+        #pragma warning disable
         private LocationRepository locationRepository;
         protected LocationRepository LocationRepository
         {
@@ -77,6 +78,7 @@ namespace CoZ.Controllers
                 }
             }
         }
+        #pragma warning restore
         #endregion
 
         public async Task<ActionResult> Index()

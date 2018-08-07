@@ -18,6 +18,7 @@ namespace CoZ.Models.Locations
         public int Altitude { get; set; }
         public virtual Item Item { get; set; }
         public virtual Monster Monster { get; set; }
+        public virtual Character Character { get; set; }
 
         public void CloneLocation(Location desiredResult)
         {

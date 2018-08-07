@@ -57,7 +57,7 @@ namespace CoZ.Repositories
         {
             foreach (var item in items.ToList())
             {
-                items.Remove(item);
+                await Task.Run(() => items.Remove(item));
                 await Task.Run(() => dbContext.Items.Remove(dbContext.Items.Find(item.ItemId)));
             }
         }
@@ -78,7 +78,7 @@ namespace CoZ.Repositories
             using (var dbContext = ApplicationDbContext.Create())
             {
                 var character = await Task.Run(() => dbContext.Characters.SingleOrDefault(c => c.UserId == id));
-                character.Inventory.Add(item);
+                await Task.Run(() => character.Inventory.Add(item));
                 await Task.Run(() => dbContext.Items.Add(item));
                 await dbContext.SaveChangesAsync();
             }

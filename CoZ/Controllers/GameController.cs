@@ -17,6 +17,7 @@ namespace CoZ.Controllers
     public class GameController : Controller
     {
         #region Repositories
+        #pragma warning disable
         private LocationRepository locationRepository;
         protected LocationRepository LocationRepository
         {
@@ -80,6 +81,7 @@ namespace CoZ.Controllers
                 }
             }
         }
+        #pragma warning restore
         #endregion
 
         // GET: Game

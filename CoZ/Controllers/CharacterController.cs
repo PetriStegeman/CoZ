@@ -15,6 +15,7 @@ namespace CoZ.Controllers
     public class CharacterController : Controller
     {
         #region Repositories
+        #pragma warning disable
         private LocationRepository locationRepository;
         protected LocationRepository LocationRepository
         {
@@ -78,6 +79,7 @@ namespace CoZ.Controllers
                 }
             }
         }
+        #pragma warning restore
         #endregion
 
         public async Task<ActionResult> Index()
@@ -86,11 +88,11 @@ namespace CoZ.Controllers
             var character = await this.CharacterRepository.FindByCharacterId(id);
             var weapon = await this.ItemRepository.FindEquipedWeapon(id);
             var armor = await this.ItemRepository.FindEquipedArmor(id);
-            var result = await CreateViewModel(character, weapon, armor);
+            var result = CreateViewModel(character, weapon, armor);
             return View(result);
         }
 
-        private async Task<CharacterViewModel> CreateViewModel(Character character, Item weapon, Item armor)
+        private CharacterViewModel CreateViewModel(Character character, Item weapon, Item armor)
         {
             var weaponName = "";
             var armorName = "";

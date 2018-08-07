@@ -2,33 +2,29 @@
 using CoZ.Models.Locations;
 using CoZ.Models.Monsters;
 using CoZ.Utility;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
 
 namespace CoZ.Repositories
 {
-    public class MonsterRepository //: Repository
+    public class MonsterRepository
     {
 
         public async Task<Monster> FindMonsterByLocation(Location location)
         {
-            Monster output;
             using (var dbContext = ApplicationDbContext.Create())
             {
                 var monster = await Task.Run(() => dbContext.Locations.SingleOrDefault(d => d.LocationId == location.LocationId).Monster);
                 if (monster == null)
                 {
-                    output = null;
+                    return null;
                 }
                 else
                 {
-                    output = await Task.Run(() => monster.CloneMonster());
+                    return await Task.Run(() => monster.CloneMonster());
                 }
             }
-            return output;
         }
 
         public async Task DeleteMonster(Monster monster)
@@ -59,13 +55,10 @@ namespace CoZ.Repositories
         {
             using (var dbContext = ApplicationDbContext.Create())
             {
-                var character = await Task.Run(() => dbContext.Characters.Single(c => c.UserId == id));
-                ICollection<Location> map = character.Map;
-                var location = map.Single(l => l.XCoord == 6 && l.YCoord == 6);
-                var originalLocation = await Task.Run(() => dbContext.Locations.Find(location.LocationId));
-                var newMonster = new TheGreatDragonKraltock(originalLocation);
+                var location = await Task.Run(() => dbContext.Locations.SingleOrDefault(l => l.XCoord == 6 && l.YCoord == 6 && l.Character.UserId == id));
+                var newMonster = new TheGreatDragonKraltock(location);
                 await Task.Run(() => dbContext.Monsters.Add(newMonster));
-                originalLocation.Monster = newMonster;
+                location.Monster = newMonster;
                 await dbContext.SaveChangesAsync();
             }
         }
@@ -74,8 +67,7 @@ namespace CoZ.Repositories
         {
             using (var dbContext = ApplicationDbContext.Create())
             {
-                var character = await Task.Run(() => dbContext.Characters.Single(c => c.UserId == id));
-                ICollection<Location> map = character.Map;
+                var map = await Task.Run(() => dbContext.Locations.Where(l => l.Character.UserId == id).ToList());
                 foreach (var location in map)
                 {
                     if (location is StartingLocation || location is Town)
