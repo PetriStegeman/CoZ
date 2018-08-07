@@ -5,10 +5,26 @@
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<style>
+    .parent {
+        position: relative;
+        top: 0;
+        left: 0;
+    }
+    .img1 {
+        position: relative;
+        top: 0;
+        right: 0;
+    }
+    .character {
+        position: absolute;
+        right: 32px;
+    }
+</style>
 
 <h2>Map</h2>
 
-<table>
+<table class="parent">
 
     @for (int i = 20; i >= 1; i--)
     {
@@ -18,25 +34,21 @@
         <td>
             @*<img src="~/Images/MapImages/@{Model.Images[i, j]}.png" />*@
 
-            @if (j == Model.CharXCoord && i == Model.CharYCoord)
+            @if (Model.Locations.Single(l => l.XCoord == j && l.YCoord == i) is Forest)
             {
-                <img src="~/Images/MapImages/Character.png" />
-            }
-            else if (Model.Locations.Single(l => l.XCoord == j && l.YCoord == i) is Forest)
-            {
-                <img src="~/Images/MapImages/Forrest.png" />
+                <img class="img1" src="~/Images/MapImages/Forrest.png" />
             }
             else if (Model.Locations.Single(l => l.XCoord == j && l.YCoord == i) is Mountain)
             {
-                <img src="~/Images/MapImages/Mountain.png" />
+                <img class="img1" src="~/Images/MapImages/Mountain.png" />
             }
             else if (Model.Locations.Single(l => l.XCoord == j && l.YCoord == i) is StartingLocation)
             {
-                <img src="~/Images/MapImages/Village.png" />
+                <img class="img1" src="~/Images/MapImages/Village.png" />
             }
             else if (Model.Locations.Single(l => l.XCoord == j && l.YCoord == i) is Town)
             {
-                <img src="~/Images/MapImages/Village.png" />
+                <img class="img1" src="~/Images/MapImages/Village.png" />
             }
             else if (Model.Locations.Single(l => l.XCoord == j && l.YCoord == i) is River)
             {
@@ -63,7 +75,7 @@
                 switch (amountOfRiverTilesConnected)
                 {
                     case 1: tile = endNode(); break;
-                    case 2: tile = ((NorthRiver && SouthRiver)||(EastRiver && WestRiver)) ? twoWayStraight() : twoWayCorner(); break;
+                    case 2: tile = ((NorthRiver && SouthRiver) || (EastRiver && WestRiver)) ? twoWayStraight() : twoWayCorner(); break;
                     case 3: tile = treeWay(); break;
                     case 4: tile = "/Images/MapImages/RiverGrandSplit.png"; break;
                     default: tile = "/Images/MapImages/RiverGrandSplit.png"; break;
@@ -104,19 +116,19 @@
                 }
 
                 //tile = "\"" + tile + "\"";
-                <img src=@tile />
-                }
-                else if (Model.Locations.Single(l => l.XCoord == j && l.YCoord == i) is Lair)
-                {
-                <img src="~/Images/MapImages/DragonLair.png" />
-                }
-                else if (Model.Locations.Single(l => l.XCoord == j && l.YCoord == i) is Plains)
-                {
-                <img src="~/Images/MapImages/grassFiller.png" />
-                }
-                else if (Model.Locations.Single(l => l.XCoord == j && l.YCoord == i) is Lake)
-                {
-                <img src="~/Images/MapImages/OceanFiller.png" />
+                <img class="img1" src=@tile />
+            }
+            else if (Model.Locations.Single(l => l.XCoord == j && l.YCoord == i) is Lair)
+            {
+                <img class="img1" src="~/Images/MapImages/DragonLair.png" />
+            }
+            else if (Model.Locations.Single(l => l.XCoord == j && l.YCoord == i) is Plains)
+            {
+                <img class="img1" src="~/Images/MapImages/grassFiller.png" />
+            }
+            else if (Model.Locations.Single(l => l.XCoord == j && l.YCoord == i) is Lake)
+            {
+                <img class="img1" src="~/Images/MapImages/OceanFiller.png" />
             }
             else if (Model.Locations.Single(l => l.XCoord == j && l.YCoord == i) is Ocean)
             {
@@ -233,8 +245,12 @@
                 }
 
                 //tile = "\"" + tile + "\"";
-                <img src=@tile />
-                }
+                <img class="img1" src=@tile />
+            }
+            @if (j == Model.CharXCoord && i == Model.CharYCoord)
+            {
+                <img src="~/Images/MapImages/Character.png" class="character" />
+            }
         </td>
         }
 </tr>
