@@ -18,7 +18,7 @@ namespace CoZ.Utility
         {       
             List<Location> mountainRange = new List<Location>();
             mountainRange.Add(new Mountain(coordinateX, coordinateY));
-            for (int i = 0; i < size; i++)                
+            for (int i = 1; i < size; i++)                
             {
                 var tileToExpandFrom = NextTile(mountainRange, map);
                 var newMountain = NewMountain(tileToExpandFrom.XCoord, tileToExpandFrom.YCoord, mountainRange, map);
@@ -41,11 +41,12 @@ namespace CoZ.Utility
         //Randomly select a location surrounding the tile you expand from
         private static Location NewMountain(int x, int y, List<Location> mountainRange, ICollection<Location> map)
         {
-            var possibleNewMountains = map.Where(l => 
-                    (l.XCoord == x+1 && l.YCoord == y && !(l is Mountain)) ||
+            var possibleNewMountains = map.Where(l =>
+                    (mountainRange.SingleOrDefault(d => d.XCoord == l.XCoord && d.YCoord == l.YCoord) == null) && 
+                    ((l.XCoord == x+1 && l.YCoord == y && !(l is Mountain)) ||
                     (l.XCoord == x-1 && l.YCoord == y && !(l is Mountain)) ||
                     (l.XCoord == x && l.YCoord == y+1 && !(l is Mountain)) ||
-                    (l.XCoord == x && l.YCoord == y-1 && !(l is Mountain))
+                    (l.XCoord == x && l.YCoord == y-1 && !(l is Mountain))) 
                 ).ToList();
             if (possibleNewMountains.Count() == 0)
             {
