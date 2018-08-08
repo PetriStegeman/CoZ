@@ -13,27 +13,21 @@ namespace CoZ.Utility
             {
                 for (int j = 1; j <= 20; j++)
                 {
-                    if ((i == 10 && j == 16) | (i == 10 && j == 13) | (i == 6 && j == 6))
-                    {
-                        continue;
-                    }
-                    else if((i == 1 || i == 20) || (j == 1 || j == 20))
-                        {
-                        Location location = new Ocean(i, j);
-                        map.Add(location);
-                    }
-                    else
-                    {
-                        Location location = GetTile(i, j);
-                        map.Add(location);
-                    }
+                    Location location = GetTile(i, j);
+                    map.Add(location);
                 }
             }
-            AddMountainsToMap(map);           
+            AddOceansToMap(map);
+            AddMountainsToMap(map);
             AddAltitudeToMap(map);
-            AddSpecialLocations(map);
-            var newOceans = FindNewOceans(map);
-            UpdateMap(map, newOceans);
+            AddSpecialLocationsToMap(map);
+            AddExtraOceansToMap(map);
+            AddRiversToMap(map);
+            return map;
+        }
+
+        private static ICollection<Location> AddRiversToMap(ICollection<Location> map)
+        {
             RiverFactory riverBuilder = new RiverFactory();
             var finalMap = riverBuilder.CreateRiver(10, 10, map);
             map = riverBuilder.CreateRiver(15, 12, finalMap);
@@ -41,7 +35,7 @@ namespace CoZ.Utility
             return finalMap;
         }
 
-        private static List<Location> FindNewOceans(ICollection<Location> map)
+        private static ICollection<Location> AddExtraOceansToMap(ICollection<Location> map)
         {
             var newOceans = map.Where(l => l.Altitude < 0).ToList();
             var result = new List<Location>();
@@ -49,6 +43,19 @@ namespace CoZ.Utility
             {
                 result.Add(new Ocean(location.XCoord, location.YCoord));
             }
+            UpdateMap(map, result);
+            return result;
+        }
+
+        private static ICollection<Location> AddOceansToMap(ICollection<Location> map)
+        {
+            var oceans = map.Where(o => o.XCoord == 1 || o.XCoord == 20 || o.YCoord == 1 || o.YCoord == 20);
+            var result = new List<Location>();
+            foreach (var ocean in oceans)
+            {
+                result.Add(new Ocean(ocean.XCoord, ocean.YCoord));
+            }
+            UpdateMap(map, result);
             return result;
         }
 
@@ -77,14 +84,14 @@ namespace CoZ.Utility
             }
         }
 
-        private static void AddSpecialLocations(ICollection<Location> map)
+        private static ICollection<Location> AddSpecialLocationsToMap(ICollection<Location> map)
         {
-            var startLocation = new StartingLocation(10, 16);
-            var town = new Town(10, 13);
-            var lair = new Lair(6, 6);
-            map.Add(startLocation);
-            map.Add(town);
-            map.Add(lair);
+            var result = new List<Location>();
+            result.Add(new StartingLocation(10, 16));
+            result.Add(new Town(10, 13));
+            result.Add(new Lair(6, 6));
+            UpdateMap(map, result);
+            return result;
         }
 
         private static void AddAltitudeToLocation(this Location location, ICollection<Location> map)
@@ -150,12 +157,10 @@ namespace CoZ.Utility
         private static Location GetTile(int x, int y)
         {
             Location result = null;
-            switch (RngThreadSafe.Next(1,5))
+            switch (RngThreadSafe.Next(1,3))
             {
                 case 1: result = new Forest(x, y); break;
                 case 2: result = new Plains(x, y); break;
-                case 3: result = new Plains(x, y); break;
-                case 4: result = new Forest(x, y); break;
                 default: result = new Lake(x, y); break;
             }
             return result;
