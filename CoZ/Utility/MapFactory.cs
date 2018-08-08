@@ -13,7 +13,7 @@ namespace CoZ.Utility
             {
                 for (int j = 1; j <= 20; j++)
                 {
-                    if ((i == 19 && j == 19) | (i == 19 && j == 16) | (i == 6 && j == 6))
+                    if ((i == 10 && j == 16) | (i == 10 && j == 13) | (i == 6 && j == 6))
                     {
                         continue;
                     }
@@ -36,8 +36,8 @@ namespace CoZ.Utility
             UpdateMap(map, newOceans);
             RiverFactory riverBuilder = new RiverFactory();
             var finalMap = riverBuilder.CreateRiver(10, 10, map);
-            map = riverBuilder.CreateRiver(17, 12, finalMap);
-            finalMap = riverBuilder.CreateRiver(12, 4, map);
+            map = riverBuilder.CreateRiver(15, 12, finalMap);
+            finalMap = riverBuilder.CreateRiver(12, 6, map);
             return finalMap;
         }
 
@@ -79,8 +79,8 @@ namespace CoZ.Utility
 
         private static void AddSpecialLocations(ICollection<Location> map)
         {
-            var startLocation = new StartingLocation(19, 19);
-            var town = new Town(19, 16);
+            var startLocation = new StartingLocation(10, 16);
+            var town = new Town(10, 13);
             var lair = new Lair(6, 6);
             map.Add(startLocation);
             map.Add(town);

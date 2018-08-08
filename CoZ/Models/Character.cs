@@ -155,8 +155,8 @@ namespace CoZ.Models
             this.Gold = 5;
             this.Level = 1;
             this.UserId = id;
-            this.XCoord = 19;
-            this.YCoord = 19;
+            this.XCoord = 10;
+            this.YCoord = 16;
             this.CurrentHp = 12;
             this.MaxHp = 12;
             this.Strength = 3;

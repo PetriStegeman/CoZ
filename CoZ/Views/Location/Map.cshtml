@@ -18,13 +18,14 @@
     }
     .character {
         position: absolute;
-        right: 32px;
+        top: 0;
+        right: 0;
     }
 </style>
 
 <h2>Map</h2>
-
-<table class="parent">
+<robert>
+<table>
 
     @for (int i = 20; i >= 1; i--)
     {
@@ -32,6 +33,7 @@
         @for (int j = 1; j <= 20; j++)
         {
         <td>
+            <div class="parent">
             @*<img src="~/Images/MapImages/@{Model.Images[i, j]}.png" />*@
 
             @if (Model.Locations.Single(l => l.XCoord == j && l.YCoord == i) is Forest)
@@ -160,26 +162,28 @@
                         amountOfWaterTilesConnected++;
                     }
                 }
+
                 string tile = "";
                 switch (amountOfWaterTilesConnected)
                 {
-                    case 1: tile = (!NorthWestOcean || !NorthEastOcean || !SouthWestOcean || !SouthEastOcean) ? innerCorner() : side(); break;
+                    case 0:
+                    case 1: tile = ((NorthOcean) || (EastOcean) || (SouthOcean) || (WestOcean)) ?   side(): innerCorner(); break;
                     case 2:
                     case 3:
                     case 4:
-                    case 5:
+                    case 5: tile = ((!NorthOcean&&!EastOcean)||(!EastOcean&&!SouthOcean)||(!SouthOcean&&!WestOcean)||(!WestOcean&&!NorthOcean))?innerCorner():side(); break;
                     case 6: tile = side(); break;
-                    case 7: tile = (NorthWestOcean || NorthEastOcean || SouthWestOcean || SouthEastOcean) ? outerCorner() : side(); break;
+                    case 7: tile = (!NorthWestOcean || !NorthEastOcean || !SouthWestOcean || !SouthEastOcean) ? outerCorner() : side(); break;
                     case 8: tile = "/Images/MapImages/OceanFiller.png"; break;
-                        //default: tile = "/Images/MapImages/OceanFiller.png"; break;
+                    default: tile = "/Images/MapImages/OceanFiller.png"; break;
                 }
 
                 string innerCorner()
                 {
-                    if (!NorthEastOcean) { return "/Images/MapImages/OceanInnerCornerNW.png"; }
-                    else if (!SouthEastOcean) { return "/Images/MapImages/OceanInnerCornerSE.png"; }
-                    else if (!SouthWestOcean) { return "/Images/MapImages/OceanInnerCornerSW.png"; }
-                    else if (!NorthWestOcean) { return "/Images/MapImages/OceanInnerCornerNE.png"; }
+                    if ((!NorthWestOcean)&&(!NorthOcean)&&(!WestOcean)) { return "/Images/MapImages/OceanInnerCornerNW.png"; }
+                    else if ((!SouthEastOcean) && (!SouthOcean) && (!EastOcean)) { return "/Images/MapImages/OceanInnerCornerSE.png"; }
+                    else if ((!SouthWestOcean) && (!SouthOcean) && (!WestOcean)) { return "/Images/MapImages/OceanInnerCornerSW.png"; }
+                    else if ((!NorthEastOcean) && (!NorthOcean) && (!EastOcean)) { return "/Images/MapImages/OceanInnerCornerNE.png"; }
                     else { return "/Images/MapImages/OceanFiller.png"; }
                 }
 
@@ -251,11 +255,13 @@
             {
                 <img src="~/Images/MapImages/Character.png" class="character" />
             }
+            </div>
         </td>
         }
 </tr>
     }
 </table>
+    </robert>
 
 <div class="row">
     <div class="col-md-4">
