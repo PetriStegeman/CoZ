@@ -9,11 +9,17 @@ namespace CoZ.Utility
 {
     public static class RandomLandFactory
     {
+        /// <summary>
+        /// Generates a map of size x and y with an adjustable land-water ratio
+        /// </summary>
+        /// <param name="xSize"></param>
+        /// <param name="ySize"></param>
+        /// <param name="landWaterRatio"></param>
+        /// <returns></returns>
         public static List<Location> CreateRandomLand(int xSize, int ySize, int landWaterRatio)
         {
-            List < coordinate > map= FillTheSidesWithWater(xSize, ySize);
-
-
+            List <coordinate> map = FillTheSidesWithWater(xSize, ySize);
+            
             int CenterX = xSize / 2;
             int CenterY = ySize / 2;
             coordinate CenterOfLandMass = new coordinate(CenterX, CenterY);
@@ -46,9 +52,7 @@ namespace CoZ.Utility
                 AddNewTile(Thule, map);
                 AddNewTile(Mu, map);
             }
-
             
-
             return ReturnMap(Zork, map);
         }
         

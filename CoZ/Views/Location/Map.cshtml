@@ -27,10 +27,10 @@
 <robert>
 <table>
 
-    @for (int i = 20; i >= 1; i--)
+    @for (int i = 40; i >= 1; i--)
     {
     <tr>
-        @for (int j = 1; j <= 20; j++)
+        @for (int j = 1; j <= 40; j++)
         {
         <td>
             <div class="parent">
@@ -54,8 +54,8 @@
             }
             else if (Model.Locations.Single(l => l.XCoord == j && l.YCoord == i) is River)
             {
-                bool NorthRiver = (i == 20 || (Model.Locations.Single(l => l.XCoord == j && l.YCoord == i + 1) is IWater));
-                bool EastRiver = (j == 20 || (Model.Locations.Single(l => l.XCoord == j + 1 && l.YCoord == i) is IWater));
+                bool NorthRiver = (i == 40 || (Model.Locations.Single(l => l.XCoord == j && l.YCoord == i + 1) is IWater));
+                bool EastRiver = (j == 40 || (Model.Locations.Single(l => l.XCoord == j + 1 && l.YCoord == i) is IWater));
                 bool SouthRiver = (i == 1 || (Model.Locations.Single(l => l.XCoord == j && l.YCoord == i - 1) is IWater));
                 bool WestRiver = ((j == 1) || Model.Locations.Single(l => l.XCoord == j - 1 && l.YCoord == i) is IWater);
 
@@ -135,14 +135,14 @@
             else if (Model.Locations.Single(l => l.XCoord == j && l.YCoord == i) is Ocean)
             {
 
-                bool NorthOcean = (i == 20 || (Model.Locations.Single(l => l.XCoord == j && l.YCoord == i + 1) is Ocean));
-                bool NorthEastOcean = ((j == 20 || i == 20) || (Model.Locations.Single(l => l.XCoord == j + 1 && l.YCoord == i + 1) is Ocean));
-                bool EastOcean = (j == 20 || (Model.Locations.Single(l => l.XCoord == j + 1 && l.YCoord == i) is Ocean));
-                bool SouthEastOcean = ((j == 20 || i == 1) || (Model.Locations.Single(l => l.XCoord == j + 1 && l.YCoord == i - 1) is Ocean));
+                bool NorthOcean = (i == 40 || (Model.Locations.Single(l => l.XCoord == j && l.YCoord == i + 1) is Ocean));
+                bool NorthEastOcean = ((j == 40 || i == 40) || (Model.Locations.Single(l => l.XCoord == j + 1 && l.YCoord == i + 1) is Ocean));
+                bool EastOcean = (j == 40 || (Model.Locations.Single(l => l.XCoord == j + 1 && l.YCoord == i) is Ocean));
+                bool SouthEastOcean = ((j == 40 || i == 1) || (Model.Locations.Single(l => l.XCoord == j + 1 && l.YCoord == i - 1) is Ocean));
                 bool SouthOcean = (i == 1 || (Model.Locations.Single(l => l.XCoord == j && l.YCoord == i - 1) is Ocean));
                 bool SouthWestOcean = ((j == 1 || i == 1) || (Model.Locations.Single(l => (l.XCoord == j - 1) && (l.YCoord == i - 1)) is Ocean));
                 bool WestOcean = ((j == 1) || Model.Locations.Single(l => l.XCoord == j - 1 && l.YCoord == i) is Ocean);
-                bool NorthWestOcean = ((j == 1 || i == 20) || (Model.Locations.Single(l => l.XCoord == j - 1 && l.YCoord == i + 1) is Ocean));
+                bool NorthWestOcean = ((j == 1 || i == 40) || (Model.Locations.Single(l => l.XCoord == j - 1 && l.YCoord == i + 1) is Ocean));
 
                 List<bool> amountOfWaterTiles = new List<bool>();
                 amountOfWaterTiles.Add(NorthOcean);
@@ -200,7 +200,7 @@
                 {
                     if (!NorthOcean)
                     {
-                        if ((i == 20 || (Model.Locations.Single(l => l.XCoord == j && l.YCoord == i + 1) is IWater)))
+                        if ((i == 40 || (Model.Locations.Single(l => l.XCoord == j && l.YCoord == i + 1) is IWater)))
                         {
                             return "/Images/MapImages/RiverEndingS.png";
                         }
@@ -211,7 +211,7 @@
                     }
                     else if (!EastOcean)
                     {
-                        if ((j == 20 || (Model.Locations.Single(l => l.XCoord == j + 1 && l.YCoord == i) is IWater)))
+                        if ((j == 40 || (Model.Locations.Single(l => l.XCoord == j + 1 && l.YCoord == i) is IWater)))
                         {
                             return "/Images/MapImages/RiverEndingW.png";
                         }
