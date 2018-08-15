@@ -8,14 +8,14 @@ namespace CoZ.Utility
     {
         public static ICollection<Location> CreateMap()
         {
-            ICollection<Location> map = RandomLandFactory.CreateRandomLand(40, 40, 3); //new List<Location>();
+            ICollection<Location> map = RandomLandFactory.CreateRandomLand(20, 20, 3); //new List<Location>();
             
              
-            //AddMountainsToMap(map);
-            //AddAltitudeToMap(map);
-            //AddSpecialLocationsToMap(map);
-            //AddExtraOceansToMap(map);
-            //AddRiversToMap(map);
+            AddMountainsToMap(map);
+            AddAltitudeToMap(map);
+            AddSpecialLocationsToMap(map);
+            AddExtraOceansToMap(map);
+            AddRiversToMap(map);
             
             return map;
         }
@@ -43,7 +43,7 @@ namespace CoZ.Utility
 
         private static ICollection<Location> AddOceansToMap(ICollection<Location> map)
         {
-            var oceans = map.Where(o => o.XCoord == 1 || o.XCoord == 240 || o.YCoord == 1 || o.YCoord == 40);
+            var oceans = map.Where(o => o.XCoord == 1 || o.XCoord == 20 || o.YCoord == 1 || o.YCoord == 20);
             var result = new List<Location>();
             foreach (var ocean in oceans)
             {
