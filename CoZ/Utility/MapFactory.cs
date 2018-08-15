@@ -8,8 +8,9 @@ namespace CoZ.Utility
     {
         public static ICollection<Location> CreateMap()
         {
-            ICollection<Location> map = new List<Location>();
-            for (int i = 1; i <= 20; i++)
+            ICollection<Location> map = RandomLandFactory.CreateRandomLand(20, 20, 3); //new List<Location>();
+            /*
+             * for (int i = 1; i <= 20; i++)
             {
                 for (int j = 1; j <= 20; j++)
                 {
@@ -23,6 +24,7 @@ namespace CoZ.Utility
             AddSpecialLocationsToMap(map);
             AddExtraOceansToMap(map);
             AddRiversToMap(map);
+            */
             return map;
         }
 

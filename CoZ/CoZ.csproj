@@ -208,6 +208,8 @@
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Character.cs" />
+    <Compile Include="Models\FactoryItems\Continent.cs" />
+    <Compile Include="Models\FactoryItems\coordinate.cs" />
     <Compile Include="Models\FactoryItems\RiverPath.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\Items\Armor.cs" />
@@ -247,6 +249,7 @@
     <Compile Include="Utility\MapFactory.cs" />
     <Compile Include="Utility\MonsterFactory.cs" />
     <Compile Include="Utility\MountainFactory.cs" />
+    <Compile Include="Utility\RandomLandFactory.cs" />
     <Compile Include="Utility\RiverFactory.cs" />
     <Compile Include="Utility\RngThreadSafe.cs" />
     <Compile Include="ViewModels\BattleViewModel.cs" />
