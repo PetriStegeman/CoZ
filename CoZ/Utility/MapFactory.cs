@@ -8,21 +8,15 @@ namespace CoZ.Utility
     {
         public static ICollection<Location> CreateMap()
         {
-            ICollection<Location> map = new List<Location>();
-            for (int i = 1; i <= 20; i++)
-            {
-                for (int j = 1; j <= 20; j++)
-                {
-                    Location location = GetTile(i, j);
-                    map.Add(location);
-                }
-            }
-            AddOceansToMap(map);
+            ICollection<Location> map = RandomLandFactory.CreateRandomLand(20, 20, 3); //new List<Location>();
+            
+             
             AddMountainsToMap(map);
             AddAltitudeToMap(map);
             AddSpecialLocationsToMap(map);
             AddExtraOceansToMap(map);
             AddRiversToMap(map);
+            
             return map;
         }
 
