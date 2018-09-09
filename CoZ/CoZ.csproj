@@ -247,6 +247,7 @@
     <Compile Include="Utility\MapFactory.cs" />
     <Compile Include="Utility\MonsterFactory.cs" />
     <Compile Include="Utility\MountainFactory.cs" />
+    <Compile Include="Utility\QuasiRandomNumbers.cs" />
     <Compile Include="Utility\RiverFactory.cs" />
     <Compile Include="Utility\RngThreadSafe.cs" />
     <Compile Include="ViewModels\BattleViewModel.cs" />

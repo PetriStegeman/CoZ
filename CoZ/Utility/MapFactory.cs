@@ -8,6 +8,8 @@ namespace CoZ.Utility
     {
         public static ICollection<Location> CreateMap()
         {
+            var random = QuasiRandomNumbers.CreateQuasiRandomNumbers(40, 40, 6);
+
             ICollection<Location> map = new List<Location>();
             for (int i = 1; i <= 20; i++)
             {

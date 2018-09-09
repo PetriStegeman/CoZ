@@ -8,7 +8,7 @@ namespace CoZ.Models.FactoryItems
 {
     public class RiverPath
     {
-        public List<coördinate> riverCoördinates { get; set; }
+        public List<coordinate> riverCoördinates { get; set; }
         public bool hasAnEndNode { get; set; }
 
         public int LastX()
@@ -23,20 +23,20 @@ namespace CoZ.Models.FactoryItems
 
         public RiverPath()
         {
-            this.riverCoördinates = new List<coördinate>();
+            this.riverCoördinates = new List<coordinate>();
         }
 
-        public RiverPath(coördinate coördinate)
+        public RiverPath(coordinate coördinate)
         {
-            this.riverCoördinates = new List<coördinate>();
+            this.riverCoördinates = new List<coordinate>();
             this.riverCoördinates.Add(coördinate);
         }
 
-        public RiverPath(RiverPath riverPath, coördinate newCoördinate)
+        public RiverPath(RiverPath riverPath, coordinate newCoördinate)
         {
-            this.riverCoördinates = new List<coördinate>();
-            foreach (coördinate oldCoördinate in riverPath.riverCoördinates)
-            { riverCoördinates.Add(new coördinate(oldCoördinate.X, oldCoördinate.Y)); }
+            this.riverCoördinates = new List<coordinate>();
+            foreach (coordinate oldCoördinate in riverPath.riverCoördinates)
+            { riverCoördinates.Add(new coordinate(oldCoördinate.X, oldCoördinate.Y)); }
 
             this.riverCoördinates.Add(newCoördinate);
         }
@@ -94,12 +94,12 @@ namespace CoZ.Models.FactoryItems
     }
     */
 
-    public class coördinate
+    public class coordinate
     {
         public int X { get; set; }
         public int Y { get; set; }
 
-        public coördinate(int x, int y)
+        public coordinate(int x, int y)
         {
             this.X = x;
             this.Y = y;
